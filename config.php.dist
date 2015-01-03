@@ -1,0 +1,18 @@
+<?php
+
+//define('DEBUG', 1);
+
+define('LOG_DIR', '../tex_logs');
+
+// Setting up directories
+// Relative to www/render.php
+define('TMP_DIR', 'tmp/');
+define('CACHE_SUCCESS_DIR', '_cache/');
+define('CACHE_FAIL_DIR', '_error/');
+
+define('TEX_PATH', '/home/tex/tl-2013/bin/i386-linux/');
+define('SVGO_PATH', '../node_modules/svgo/bin');
+
+// Setting up rendering scale
+// Do not forget to clear the cache dir when changing this.
+define('OUTER_SCALE', 1.25);

@@ -1,0 +1,20 @@
+{
+  "name": "s2cms/latex_renderer",
+  "description": "S2 Latex Service",
+  "version": "0.1.0",
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery": "~1.11.2",
+    "jquery-autosize": "~1.18.17",
+    "Stickyfill": "~1.1.1",
+    "social-likes": "~3.0.10"
+  }
+}

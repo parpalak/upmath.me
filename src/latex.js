@@ -1,0 +1,116 @@
+/**
+ * Replaces LaTeX formulae with pictures
+ * Inspired by http://www.codecogs.com/latex/htmlequations.php
+ * @copyright 2012-2015 Roman Parpalak
+ */
+
+(function (w, d)
+{
+	var url = 'http://tex.s2cms.ru',
+		im = d.implementation, 
+		ext = im && im.hasFeature("http://www.w3.org/TR/SVG11/feature#BasicStructure", "1.1") ? 'svg' : 'png';
+
+	(function (fn)
+	{
+		var done = !1, top = !0, root = d.documentElement, w3 = !!d.addEventListener,
+
+		add = w3 ? 'addEventListener' : 'attachEvent',
+		rem = w3 ? 'removeEventListener' : 'detachEvent',
+		pre = w3 ? '' : 'on',
+
+		init = function(e) {
+			if (e.type == 'readystatechange' && d.readyState != 'complete') return;
+			(e.type == 'load' ? w : d)[rem](pre + e.type, init, false);
+			if (!done && (done = !0)) fn.call(w, e.type || e);
+		},
+
+		poll = function() {
+			try { root.doScroll('left'); } catch(e) { setTimeout(poll, 50); return; }
+			init('poll');
+		};
+
+		if (d.readyState == 'complete') fn.call(w, 'lazy');
+		else {
+			if (d.createEventObject && root.doScroll) {
+				try { top = !w.frameElement; } catch(e) { }
+				if (top) poll();
+			}
+			d[add](pre + 'DOMContentLoaded', init, !1);
+			d[add](pre + 'readystatechange', init, !1);
+			w[add](pre + 'load', init, !1);
+		}
+	})(function () {processTree(d.body);});
+
+	function image (f)
+	{
+		var s = (ext == 'svg'),
+			i = d.createElement(s ? 'object' : 'img');
+
+		i.setAttribute(s ? 'data' : 'src', url + '/' + ext + '/' + encodeURIComponent(f));
+		s && i.setAttribute('type', 'image/svg+xml');
+		i.setAttribute('style', s ? 'width:0.2em; height:0.2em;' : 'vertical-align:middle; border:0; position: relative; z-index:-1; top:-4px;');
+		!s && i.setAttribute('alt', f);
+
+		return i;
+	}
+
+	function processTree (eItem)
+	{
+		var eNext = eItem.firstChild;
+
+		while (eNext)
+		{
+			var eCur = eNext, sNn = eCur.nodeName;
+			eNext = eNext.nextSibling;
+
+			if (eCur.nodeType == 1 && sNn != 'SCRIPT' && sNn != 'TEXTAREA' && sNn != 'OBJECT')
+				processTree(eCur);
+			else if (eCur.nodeType == 3)
+			{
+				var as = (' ' + eCur.nodeValue + ' ').split(/\$\$/g),
+					n = as.length, i, s;
+				if (n > 2)
+				{
+					as[0] = as[0].substring(1);
+					as[n - 1] = as[n - 1].substring(0, as[n - 1].length - 1);
+
+					for (i = 0; i < n; i++)
+					{
+						if (i % 2)
+						{
+							if (i + 1 < n)
+								s = image(as[i]);
+							else
+								s = d.createTextNode('$$' + as[i]);
+						}
+						else
+							s = d.createTextNode(as[i]);
+						eItem.insertBefore(s, eCur);
+					}
+
+					eItem.removeChild(eCur);
+				}
+			}
+		}
+	}
+
+	var ao;
+	w.addEventListener && w.addEventListener('message', function (e)
+	{
+		if (e.origin == url)
+		{
+			if (!ao)
+				ao = d.getElementsByTagName('object');
+
+			var s = e.data.split('|'),
+				v = s.shift(), x = s.shift(), y = s.shift(),
+				i = ao.length;
+
+			s = s.join('|');
+			for (; i-- ;)
+				if (ao[i].data == s || decodeURIComponent(ao[i].data) == s)
+					ao[i].setAttribute('style', 'vertical-align: -' + v + 'pt; width: ' + x + 'pt; height: ' + y + 'pt;');
+		}
+	}, !1);
+
+})(window, document);

@@ -1,0 +1,21 @@
+{
+  "name": "s2cms/latex_renderer",
+  "description": "S2 Latex Service",
+  "version": "0.1.0",
+  "minimum-stability": "stable",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Roman Parpalak",
+      "email": "roman@written.ru"
+    }
+  ],
+  "require": {
+    "katzgrau/klogger": "1.0.*"
+  },
+  "autoload": {
+    "psr-0": {
+      "": "lib"
+    }
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "name": "s2_latex_renderer",
+  "description": "S2 Latex Service",
+  "version": "0.1.0",
+  "dependencies": {
+    "svgo": "~0.5.0"
+  },
+  "devDependencies": {
+    "grunt": "~0.4.5",
+    "grunt-contrib-concat": "~0.5.0",
+    "grunt-contrib-uglify": "~0.7.0",
+    "grunt-contrib-copy": "~0.7.0",
+    "grunt-contrib-cssmin": "~0.11.0",
+    "grunt-fingerprint": "~0.2.0",
+    "grunt-shell": "~1.1.1",
+    "grunt-text-replace": "~0.4.0",
+    "grunt-file-creator": "~0.1.2"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Roman Parpalak",
+  "license": "MIT"
+}
