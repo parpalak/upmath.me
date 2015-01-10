@@ -7,7 +7,7 @@
 (function (w, d)
 {
 	var url = 'http://tex.s2cms.ru',
-		im = d.implementation, 
+		im = d.implementation,
 		ext = im && im.hasFeature("http://www.w3.org/TR/SVG11/feature#BasicStructure", "1.1") ? 'svg' : 'png';
 
 	(function (fn)
@@ -79,12 +79,26 @@
 						if (i % 2)
 						{
 							if (i + 1 < n)
+							{
 								s = image(as[i]);
+
+								var after = as[i + 1].substring(0, 2);
+								if (/[,.;!?)] /.test(after))
+								{
+									as[i + 1] = as[i + 1].substring(1);
+
+									var nobr = d.createElement('nobr');
+									nobr.appendChild(s);
+									s = nobr;
+									s.appendChild(d.createTextNode(after.substring(0, 1)));
+								}
+							}
 							else
 								s = d.createTextNode('$$' + as[i]);
 						}
 						else
 							s = d.createTextNode(as[i]);
+
 						eItem.insertBefore(s, eCur);
 					}
 
