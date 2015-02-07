@@ -44,9 +44,9 @@
 	function image (f)
 	{
 		var s = (ext == 'svg'),
-			i = d.createElement(s ? 'object' : 'img');
+			i = d.createElement(s ? 'embed' : 'img');
 
-		i.setAttribute(s ? 'data' : 'src', url + '/' + ext + '/' + encodeURIComponent(f));
+		i.setAttribute('src', url + '/' + ext + '/' + encodeURIComponent(f));
 		s && i.setAttribute('type', 'image/svg+xml');
 		i.setAttribute('style', s ? 'width:0.2em; height:0.2em;' : 'vertical-align:middle; border:0; position: relative; z-index:-1; top:-4px;');
 		!s && i.setAttribute('alt', f);
@@ -63,7 +63,7 @@
 			var eCur = eNext, sNn = eCur.nodeName;
 			eNext = eNext.nextSibling;
 
-			if (eCur.nodeType == 1 && sNn != 'SCRIPT' && sNn != 'TEXTAREA' && sNn != 'OBJECT')
+			if (eCur.nodeType == 1 && sNn != 'SCRIPT' && sNn != 'TEXTAREA' && sNn != 'EMBED')
 				processTree(eCur);
 			else if (eCur.nodeType == 3)
 			{
@@ -114,7 +114,7 @@
 		if (e.origin == url)
 		{
 			if (!ao)
-				ao = d.getElementsByTagName('object');
+				ao = d.getElementsByTagName('embed');
 
 			var s = e.data.split('|'),
 				v = s.shift(), x = s.shift(), y = s.shift(),
@@ -122,7 +122,7 @@
 
 			s = s.join('|');
 			for (; i-- ;)
-				if (ao[i].data == s || decodeURIComponent(ao[i].data) == s)
+				if (ao[i].src == s || decodeURIComponent(ao[i].src) == s)
 					ao[i].setAttribute('style', 'vertical-align: -' + v + 'pt; width: ' + x + 'pt; height: ' + y + 'pt;');
 		}
 	}, !1);
