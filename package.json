@@ -1,6 +1,7 @@
 {
   "name": "s2_latex_renderer",
   "description": "S2 Latex Service",
+  "private": true,
   "version": "0.1.0",
   "dependencies": {
     "svgo": "~0.5.0"
