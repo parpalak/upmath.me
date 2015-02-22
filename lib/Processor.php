@@ -42,7 +42,7 @@ class Processor
 		$this->svg_commands[] = $command;
 	}
 
-	public function getContent ()
+	public function prepareContent ()
 	{
 		if ($this->cache_exists)
 		{

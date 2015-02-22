@@ -11,7 +11,7 @@
 require '../vendor/autoload.php';
 require '../config.php';
 
-$isDebug = defined('DEBUG');
+$isDebug = defined('DEBUG') && DEBUG;
 error_reporting($isDebug ? E_ALL : -1);
 
 // Setting up external commands
@@ -24,8 +24,8 @@ define('GZIP', 'gzip -cn6 %1$s > %1$s.gz');
 
 function error400 ($error = 'Invalid formula')
 {
-    header($_SERVER['SERVER_PROTOCOL'].' 400 Bad Request');
-    include '400.php';
+	header($_SERVER['SERVER_PROTOCOL'].' 400 Bad Request');
+	include '400.php';
 }
 
 
@@ -33,12 +33,12 @@ function error400 ($error = 'Invalid formula')
 ini_set('max_execution_time', 10);
 header('X-Powered-By: S2 Latex Service');
 
-$templater = new Templater('../tpl/');
+$templater = new Templater(TPL_DIR);
 
 $renderer = new Renderer($templater, TMP_DIR, LATEX_COMMAND, DVISVG_COMMAND, DVIPNG_COMMAND);
-$renderer->setLogDir(LOG_DIR);
-if ($isDebug)
-	$renderer->setDebug(true);
+if (defined('LOG_DIR'))
+	$renderer->setLogDir(LOG_DIR);
+$renderer->setDebug($isDebug);
 
 $processor = new Processor($renderer, CACHE_SUCCESS_DIR, CACHE_FAIL_DIR);
 $processor->addSVGCommand(SVGO);
@@ -54,7 +54,7 @@ catch (Exception $e)
 	die;
 }
 
-if ($processor->getContent())
+if ($processor->prepareContent())
 	$processor->echoContent();
 else
 	error400($isDebug ? $processor->getError() : 'Invalid formula');

@@ -69,7 +69,7 @@ class Renderer implements RendererInterface
 			throw $e;
 		}
 
-		$latex_error = !file_exists($tmp_name . '.dvi') /*|| $status['exitcode'] !== 0*/;
+		$is_latex_error = !file_exists($tmp_name . '.dvi') /*|| $status['exitcode'] !== 0*/;
 
 		if (!file_exists($tmp_name . '.dvi') || isset($status['status_kill']))
 		{
@@ -84,7 +84,7 @@ class Renderer implements RendererInterface
 			}
 		}
 
-		if ($latex_error)
+		if ($is_latex_error)
 		{
 			if ($this->is_debug)
 			{
@@ -103,14 +103,21 @@ class Renderer implements RendererInterface
 		$svg = ob_get_clean();
 
 		// $svg = '...<!--start 19.8752 31.3399 -->...';
-		preg_match('#<!--start ([\d.]+) ([\d.]+) -->#', $svg, $match_start);
-		preg_match('#<!--bbox ([\d.]+) ([\d.]+) ([\d.]+) ([\d.]+) -->#', $svg, $match_bbox);
-		$depth = OUTER_SCALE * (- $match_start[2] + $match_bbox[2] + $match_bbox[4]);
-		$height = OUTER_SCALE * $match_bbox[4];
-		$width = OUTER_SCALE * $match_bbox[3];
+		$is_start = preg_match('#<!--start ([\d.]+) ([\d.]+) -->#', $svg, $match_start);
+		$is_bbox = preg_match('#<!--bbox ([\d.]+) ([\d.]+) ([\d.]+) ([\d.]+) -->#', $svg, $match_bbox);
+		if ($is_start && $is_bbox)
+		{
+			// SVG contains info about image size and baseline position.
+			$depth = OUTER_SCALE * (- $match_start[2] + $match_bbox[2] + $match_bbox[4]);
+			$height = OUTER_SCALE * $match_bbox[4];
+			$width = OUTER_SCALE * $match_bbox[3];
 
-		$script = '<script type="text/ecmascript">if(window.parent.postMessage)window.parent.postMessage("'.$depth.'|'.$width.'|'.$height.'|"+window.location,"*");</script>'."\n";
-		$this->svg = str_replace('<defs>', $script . '<defs>', $svg);
+			// Embed script providing that info to parent.
+			$script = '<script type="text/ecmascript">if(window.parent.postMessage)window.parent.postMessage("'.$depth.'|'.$width.'|'.$height.'|"+window.location,"*");</script>'."\n";
+			$svg = str_replace('<defs>', $script . '<defs>', $svg);
+		}
+
+		$this->svg = $svg;
 
 		// DVI -> PNG
 		exec(sprintf($this->png_command, $tmp_name, $tmp_name));
