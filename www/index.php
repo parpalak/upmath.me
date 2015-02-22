@@ -18,6 +18,11 @@ $script_url = $service_url.'latex.js';
 $lang = $_SERVER['HTTP_HOST'] == 'tex.s2cms.com' ? 'en' : 'ru';
 $i18n = include 'lang.' . $lang . '.php';
 
+$lang_links = [
+	'ru' => 'http://tex.s2cms.ru/',
+	'en' => 'http://tex.s2cms.com/',
+];
+
 function __ ($key)
 {
 	global $i18n;
@@ -30,19 +35,34 @@ function __ ($key)
 <meta charset="utf-8">
 <title><?php echo __('title'); ?></title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="stylesheet" href="css/style.min.css">
+<link rel="stylesheet" href="css/style.min.css?<?php echo FINGERPRINT; ?>">
 <script src="latex.js"></script>
 <body>
 	<div class="section" id="moto">
 		<div class="section-content">
 			<h1><?php echo __('header'); ?></h1>
+			<div class="lang-block">
+<?php
+
+foreach ($lang_links as $link_lang => $link_url)
+{
+	if ($link_lang != $lang)
+	{
+?>
+				<a class="lang-link" href="<?php echo $link_url; ?>"><?php echo $link_lang; ?></a>
+<?php
+	}
+}
+
+?>
+			</div>
 		</div>
 	</div>
 
 	<div class="header sticky">
 		<div class="section-content header-content">
 			<div class="nav">
-				<a class="nav-item" href="http://s2cms.ru/"><span class="nav-link"><?php echo __('link-s2'); ?></span></a><!--
+				<?php if ($lang == 'ru') { ?><a class="nav-item" href="http://s2cms.ru/"><span class="nav-link"><?php echo __('link-s2'); ?></span></a><?php } ?><!--
 			 --><a class="nav-item inside" href="#editor"><span class="nav-link"><?php echo __('equation editor'); ?></span></a><!--
 			 --><a class="nav-item inside" href="#samples"><span class="nav-link"><?php echo __('examples'); ?></span></a><!--
 			 --><a class="nav-item inside" href="#faq"><span class="nav-link"><?php echo __('link-faq'); ?></span></a><!--

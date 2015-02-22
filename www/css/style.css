@@ -40,13 +40,16 @@ a:active, a:hover {
 #moto,
 a.nav-item {
 	color: #fff;
+	transition: background 0.2s ease-out;
 	}
+	a.nav-item:hover {
+		background: #7D9FFD;
+		}
 
 .nav-link {
 	border-color: #fff;
 	border-color: rgba(255, 255, 255, 0.6);
-	}
-a.nav-item:hover { background: #7D9FFD; }
+}
 .load-error {
 	border-color: #f00;
 }
@@ -116,7 +119,7 @@ h3 {
 	}
 h2+h3 {margin-top: 0;}
 .section {
-	padding: 1px 2.5%;
+	padding: 1px 1em;
 	}
 	.section-content {
 		max-width: 850px;
@@ -145,10 +148,26 @@ h2+h3 {margin-top: 0;}
 				border: 0;
 				}
 	#moto {
-		padding: 5px 2% 45px;
+		padding: 5px 1em 45px;
 		margin-bottom: -45px;
-	}
-
+		position: relative;
+		}
+		.lang-block {
+			position: absolute;
+			right: 1.1em;
+			top: 0.9em;
+			}
+			a.lang-link {
+				color: #fff;
+				border: 1px solid #fff;
+				padding: 1px 4px 2px;
+				text-transform: uppercase;
+				opacity: 0.5;
+				transition: opacity 0.3s ease-out;
+				}
+				a.lang-link:hover {
+					opacity: 1;
+					}
 .editor-text, .editor-result {
 	width: 100%;
 	-webkit-box-sizing: border-box;
