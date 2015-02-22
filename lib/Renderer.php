@@ -10,6 +10,8 @@
 
 class Renderer implements RendererInterface
 {
+	const SVG_PRECISION = 5;
+
 	/**
 	 * @var TemplaterInterface
 	 */
@@ -108,9 +110,9 @@ class Renderer implements RendererInterface
 		if ($is_start && $is_bbox)
 		{
 			// SVG contains info about image size and baseline position.
-			$depth = OUTER_SCALE * (- $match_start[2] + $match_bbox[2] + $match_bbox[4]);
-			$height = OUTER_SCALE * $match_bbox[4];
-			$width = OUTER_SCALE * $match_bbox[3];
+			$depth = round(OUTER_SCALE * (- $match_start[2] + $match_bbox[2] + $match_bbox[4]), self::SVG_PRECISION);
+			$height = round(OUTER_SCALE * $match_bbox[4], self::SVG_PRECISION);
+			$width = round(OUTER_SCALE * $match_bbox[3], self::SVG_PRECISION);
 
 			// Embed script providing that info to parent.
 			$script = '<script type="text/ecmascript">if(window.parent.postMessage)window.parent.postMessage("'.$depth.'|'.$width.'|'.$height.'|"+window.location,"*");</script>'."\n";

@@ -123,7 +123,7 @@
 			s = s.join('|');
 			for (; i-- ;)
 				if (ao[i].src == s || decodeURIComponent(ao[i].src) == s)
-					ao[i].setAttribute('style', 'vertical-align: -' + v + 'pt; width: ' + x + 'pt; height: ' + y + 'pt;');
+					ao[i].setAttribute('style', 'vertical-align: ' + (-v) + 'pt; width: ' + x + 'pt; height: ' + y + 'pt;');
 		}
 	}, !1);
 
