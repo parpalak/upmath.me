@@ -31,6 +31,7 @@ function __ ($key)
 <title><?php echo __('title'); ?></title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="css/style.min.css">
+<script src="latex.js"></script>
 <body>
 	<div class="section" id="moto">
 		<div class="section-content">
@@ -129,7 +130,6 @@ foreach ($samples_embedding[$lang] as $hint => $sample)
 		</div>
 	</div>
 
-	<script src="latex.js"></script>
 	<script src="js/jquery.min.js?<?php echo FINGERPRINT; ?>"></script>
 	<script src="js/scripts.min.js?<?php echo FINGERPRINT; ?>"></script>
 	<script>
