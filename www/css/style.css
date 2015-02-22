@@ -154,8 +154,8 @@ h2+h3 {margin-top: 0;}
 		}
 		.lang-block {
 			position: absolute;
-			right: 1.1em;
-			top: 0.9em;
+			right: 18px;
+			top: 15px;
 			}
 			a.lang-link {
 				color: #fff;
