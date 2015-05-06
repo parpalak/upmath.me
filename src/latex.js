@@ -6,7 +6,7 @@
 
 (function (w, d)
 {
-	var url = 'http://tex.s2cms.ru',
+	var url = '//tex.s2cms.ru',
 		im = d.implementation,
 		ext = im && im.hasFeature("http://www.w3.org/TR/SVG11/feature#BasicStructure", "1.1") ? 'svg' : 'png';
 
@@ -111,20 +111,20 @@
 	var ao;
 	w.addEventListener && w.addEventListener('message', function (e)
 	{
-		if (e.origin == url)
-		{
-			if (!ao)
-				ao = d.getElementsByTagName('embed');
+		if (e.origin.replace(/^https?:/, '') != url)
+			return;
 
-			var s = e.data.split('|'),
-				v = s.shift(), x = s.shift(), y = s.shift(),
-				i = ao.length;
+		if (!ao)
+			ao = d.getElementsByTagName('embed');
 
-			s = s.join('|');
-			for (; i-- ;)
-				if (ao[i].src == s || decodeURIComponent(ao[i].src) == s)
-					ao[i].setAttribute('style', 'vertical-align: ' + (-v) + 'pt; width: ' + x + 'pt; height: ' + y + 'pt;');
-		}
+		var s = e.data.split('|'),
+			v = s.shift(), x = s.shift(), y = s.shift(),
+			i = ao.length;
+
+		s = s.join('|');
+		for (; i-- ;)
+			if (ao[i].src == s || decodeURIComponent(ao[i].src) == s)
+				ao[i].setAttribute('style', 'vertical-align: ' + (-v) + 'pt; width: ' + x + 'pt; height: ' + y + 'pt;');
 	}, !1);
 
 })(window, document);
