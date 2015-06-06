@@ -4,7 +4,7 @@ module.exports = function(grunt) {
 		concat: {
 			main: {
 				src: [
-					'bower_components/jquery-autosize/jquery.autosize.js',
+					'bower_components/autosize/dist/autosize.js',
 					'bower_components/Stickyfill/dist/stickyfill.min.js',
 					'bower_components/social-likes/src/social-likes.js',
 					'www/js/init_editor.js'

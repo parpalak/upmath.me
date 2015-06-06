@@ -12,8 +12,8 @@
     "tests"
   ],
   "dependencies": {
-    "jquery": "~1.11.2",
-    "jquery-autosize": "~1.18.17",
+    "jquery": "~2.1.4",
+    "autosize": "~3.0.6",
     "Stickyfill": "~1.1.1",
     "social-likes": "~3.0.10"
   }

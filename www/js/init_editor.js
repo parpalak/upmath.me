@@ -48,7 +48,7 @@ function initTexEditor (serviceURL)
 		}, 10);
 	});
 
-	$source.autosize();
+	autosize($source);
 
 	$('#editor-preview').error(function () {
 		if (text !== '')
