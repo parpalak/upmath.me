@@ -107,7 +107,7 @@ foreach ($samples as $hint => $sample)
 				<div class="sample-rendered">$$<?php echo $sample; ?>$$</div>
 				<button class="add-formula"><?php echo __('add to editor'); ?></button>
 			</div>
-<?
+<?php
 }
 ?>
 		</div>
@@ -135,7 +135,7 @@ foreach ($samples_embedding[$lang] as $hint => $sample)
 				<div class="sample-source sample-box"><?php echo $escaped; ?></div>
 				<div class="sample-rendered"><?php echo $sample; ?></div>
 			</div>
-<?
+<?php
 }
 ?>
 			<?php echo __('embedding section 3'); ?>
