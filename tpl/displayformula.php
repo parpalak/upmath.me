@@ -2,6 +2,7 @@
 \batchmode
 \usepackage{amsmath}
 \usepackage{amssymb}
+\newcommand{\R}{\mathbb{R}}
 <?php if (strpos($formula, '\\xymatrix') !== false || strpos($formula, '\\begin{xy}') !== false) {?>
 \usepackage[all]{xy}
 <?php } ?>

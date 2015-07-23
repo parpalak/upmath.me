@@ -2,6 +2,7 @@
 \batchmode
 \usepackage{amsmath}
 \usepackage{amssymb}
+\newcommand{\R}{\mathbb{R}}
 <?php if (!empty($extra_packages)) {?>
 \usepackage{<?php echo implode(',', $extra_packages); ?>}
 <?php } ?>
