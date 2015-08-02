@@ -83,6 +83,22 @@ module.exports = function(grunt) {
 					done();
 				}
 			}
+		},
+		watch: {
+			scripts: {
+				files: ['www/js/*.js'],
+				tasks: ['concat', 'uglify', 'fingerprint'],
+				options: {
+					spawn: false
+				}
+			},
+			src: {
+				files: ['src/latex.js'],
+				tasks: ['replace'],
+				options: {
+					spawn: false
+				}
+			}
 		}
 	});
 
@@ -94,6 +110,7 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks('grunt-shell');
 	grunt.loadNpmTasks('grunt-text-replace');
 	grunt.loadNpmTasks('grunt-file-creator');
+	grunt.loadNpmTasks('grunt-contrib-watch');
 
 	grunt.registerTask('default', [
 		'concat',
