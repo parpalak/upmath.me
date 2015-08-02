@@ -1,3 +1,7 @@
+upstream php-sock {
+	server unix:/var/run/php5-fpm.sock;
+}
+
 upstream php-tex-sock {
 	server unix:/var/run/php5-fpm-tex.sock;
 }
@@ -11,8 +15,8 @@ server {
 	error_log /var/www/tex.s2cms.ru/logs/error.log error;
 
 	location ~ ^(?s)/(?<ext>svg|png)/(?<formula>.*)$ {
-		gzip_static  on;
-		gzip_vary  on;
+		gzip_static   on;
+		gzip_vary     on;
 		gzip_proxied  expired no-cache no-store private auth;
 
 		#expires 1d;
@@ -33,29 +37,41 @@ server {
 	}
 
 	location /latex.js {
-		gzip_static  on;
-		gzip_vary  on;
+		gzip_static   on;
+		gzip_vary     on;
+		gzip_proxied  expired no-cache no-store private auth;
+	}
+
+    location /css {
+		gzip_static   on;
+		gzip_vary     on;
+		gzip_proxied  expired no-cache no-store private auth;
+    }
+
+    location /js {
+		gzip_static   on;
+		gzip_vary     on;
 		gzip_proxied  expired no-cache no-store private auth;
 	}
 
 	location / {
-		index	   index.html index.php;
+		index           index.html index.php;
 	}
+
+    location /g/ {
+        try_files       $uri $uri/ /index.php;
+    }
 
 	location ~ \.php$ {
 		try_files       $uri =404;
-		include	 /etc/nginx/fastcgi_params;
+		include	        /etc/nginx/fastcgi_params;
 		fastcgi_pass    php-sock;
 	}
 
 	location @s2_latex_renderer {
-		include	 /etc/nginx/fastcgi_params;
+		include	        /etc/nginx/fastcgi_params;
 		fastcgi_pass    php-tex-sock;
 		fastcgi_param   SCRIPT_FILENAME $document_root/render.php;
 		fastcgi_param   SCRIPT_NAME /render.php;
-	}
-
-	location ~ /\.ht {
-		deny  all;
 	}
 }
