@@ -43,7 +43,7 @@ return [
 			<p>
 				The website converts mathematical expressions into pictures ready for use in web.
 				You don’t have to create ones in a graphical editor and to upload somewhere.
-				Add pictures to discussions in blogs or forums or send links in private correspondence.
+				Add pictures to discussions in blogs or forums or send links via messengers.
 			</p>
 
 			<h3>Is it for free?</h3>
@@ -88,7 +88,7 @@ return [
 				&copy; 2014 <a href="http://written.ru/">Roman Parpalak</a>.
 				<script>var mailto="roman%"+"40written.ru";document.write('Drop me a line: <a href="mailto:'+unescape(mailto)+'">' + unescape(mailto) + '</a>.');</script>
 				&nbsp;
-				<div class="social-likes social-likes_flat" data-zeroes="yes">
+				<div class="social-likes social-likes_flat" data-zeroes="yes" data-url="http://tex.s2cms.com/">
 					<div class="facebook" title="Share">&nbsp;</div>
 					<div class="twitter" data-via="r_parpalak" title="Tweet">&nbsp;</div>
 				</div>

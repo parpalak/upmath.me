@@ -87,7 +87,7 @@ return [
 				&copy; <a href="http://written.ru/">Роман Парпалак</a>, 2014.
 				<script>var mailto="roman%"+"40written.ru";document.write('Пишите: <a href="mailto:'+unescape(mailto)+'">' + unescape(mailto) + '</a>.');</script>
 				&nbsp; &nbsp;
-				<div class="social-likes social-likes_flat" data-zeroes="yes">
+				<div class="social-likes social-likes_flat" data-zeroes="yes" data-url="http://tex.s2cms.ru/">
 					<div class="twitter" data-via="r_parpalak" title="Поделиться ссылкой в Твитере">&nbsp;</div>
 					<div class="facebook" title="Поделиться ссылкой на Фейсбуке">&nbsp;</div>
 					<div class="vkontakte" title="Поделиться ссылкой во Вконтакте">&nbsp;</div>
