@@ -29,14 +29,21 @@ function __ ($key)
 	return isset($i18n[$key]) ? $i18n[$key] : '<span style="color:red;">Missing translation: ' . $key . '</span>';
 }
 
+if (substr($_SERVER['REQUEST_URI'], 0, 3) === '/g/') {
+	$editor_content = urldecode(substr($_SERVER['REQUEST_URI'], 3));
+}
+else {
+	$editor_content = 'f(x)';
+}
+
 ?>
 <!DOCTYPE html>
 <html>
 <meta charset="utf-8">
 <title><?php echo __('title'); ?></title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="stylesheet" href="css/style.min.css?<?php echo FINGERPRINT; ?>">
-<script src="latex.js"></script>
+<link rel="stylesheet" href="/css/style.min.css?<?php echo FINGERPRINT; ?>">
+<script src="/latex.js"></script>
 <body>
 	<div class="section" id="moto">
 		<div class="section-content">
@@ -76,7 +83,7 @@ foreach ($lang_links as $link_lang => $link_url)
 			<h2><?php echo __('equation editor'); ?></h2>
 			<form name="editor">
 				<p>
-					<textarea class="editor-text" name="source" rows="5" placeholder="<?php echo __('formula in latex'); ?>">f(x)</textarea>
+					<textarea class="editor-text" name="source" rows="5" placeholder="<?php echo __('formula in latex'); ?>"><?php echo $editor_content; ?></textarea>
 					<br />
 					<label><input type="radio" name="format" id="svg_radio" value="svg" checked />SVG</label>
 					<label><input type="radio" name="format" value="png" />PNG</label>
@@ -150,8 +157,8 @@ foreach ($samples_embedding[$lang] as $hint => $sample)
 		</div>
 	</div>
 
-	<script src="js/jquery.min.js?<?php echo FINGERPRINT; ?>"></script>
-	<script src="js/scripts.min.js?<?php echo FINGERPRINT; ?>"></script>
+	<script src="/js/jquery.min.js?<?php echo FINGERPRINT; ?>"></script>
+	<script src="/js/scripts.min.js?<?php echo FINGERPRINT; ?>"></script>
 	<script>
 		$(function () {
 			initTexEditor('<?php echo $service_url; ?>');

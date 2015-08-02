@@ -1,6 +1,10 @@
+/**
+ * Formula format watcher.
+ *
+ * @type {{setFormat, setSource, getSource, setCallback, resetTimer}}
+ */
 var Renderer = (function () {
-	var source,
-		format,
+	var source, format,
 		callback = function () {},
 		timeout;
 
@@ -33,48 +37,56 @@ var Renderer = (function () {
 		},
 		setCallback: function (f) {
 			callback = f;
-		},
-		resetTimer: function () {
-
 		}
 	};
 }());
 
-function initTexEditor (serviceURL)
-{
+function initTexEditor(serviceURL) {
 	var $source = $('.editor-text'),
 		preview = document.getElementById('editor-preview'),
-		old_url;
+		oldOutput;
 
-	function timerTick (text, format)
-	{
-		var url = text ? serviceURL + format + '/' + encodeURIComponent(text) : '';
+	/**
+	 * Displays after 300ms the formula rendered.
+	 *
+	 * @param text
+	 * @param format
+	 */
+	function timerTick(text, format) {
+		var encodedText = encodeURIComponent(text),
+			output = text ? serviceURL + format + '/' + encodedText : '';
 
-		if (url !== old_url) {
-			old_url = url;
-
-			document.forms['editor'].result.value = url;
-			preview.src = url;
+		if (output === oldOutput) {
+			return;
 		}
+		oldOutput = output;
+
+		document.forms['editor'].result.value = output;
+		preview.src = output;
+
+		if (encodedText === 'f(x)' && location.pathname === '/') {
+			return;
+		}
+		history && history.replaceState && history.replaceState(null, '', '/g/' + encodedText);
 	}
 
+	// Connect to the renderer
 	Renderer.setCallback(timerTick);
 
 	function updateFormat() {
 		Renderer.setFormat(document.getElementById('svg_radio').checked ? 'svg' : 'png');
 	}
 
-	$(document.forms['editor'].elements['format']).on('change', updateFormat);
-	updateFormat();
-
-	// Waits for 300 ms when the formula is changed and renders it.
-	function updateSource()
-	{
+	function updateSource() {
 		Renderer.setSource($.trim($source.val()));
 	}
 
-	updateSource();
+	$(document.forms['editor'].elements['format']).on('change', updateFormat);
 	$source.on('propertychange keyup input paste', updateSource);
+
+	// Renderer initialization
+	updateFormat();
+	updateSource();
 
 	// Select the content of URL field on focus.
 	$('.editor-result').on('focus', function () {
@@ -89,7 +101,9 @@ function initTexEditor (serviceURL)
 	// Highlight textarea when the formula is invalid.
 	$(preview).error(function () {
 		if (Renderer.getSource() !== '') {
-			setTimeout(function () { $source.removeClass('load-error').addClass('load-error'); }, 0);
+			setTimeout(function () {
+				$source.removeClass('load-error').addClass('load-error');
+			}, 0);
 		}
 	}).load(function () {
 		$source.removeClass('load-error');
@@ -107,14 +121,14 @@ function initTexEditor (serviceURL)
 		scrollPage($('#editor'));
 	});
 
-	function scrollPage ($target) {
+	function scrollPage($target) {
 		$('html,body').animate({
-		  scrollTop: $target.offset().top - 45
+			scrollTop: $target.offset().top - 45
 		}, 300);
 	}
 
-	$('a.inside').click(function() {
-		if (location.pathname.replace(/^\//,'') !== this.pathname.replace(/^\//,'')) {
+	$('a.inside').click(function () {
+		if (location.pathname.replace(/^\//, '') !== this.pathname.replace(/^\//, '')) {
 			return;
 		}
 		if (location.hostname !== this.hostname) {
@@ -122,7 +136,7 @@ function initTexEditor (serviceURL)
 		}
 
 		var target = $(this.hash);
-		target = target.length ? target : $('[name=' + this.hash.slice(1) +']');
+		target = target.length ? target : $('[name=' + this.hash.slice(1) + ']');
 
 		if (target.length) {
 			scrollPage(target);
@@ -133,5 +147,5 @@ function initTexEditor (serviceURL)
 
 function initTexSite() {
 	$('.sticky').Stickyfill();
-	new Image().src = "//counter.yadro.ru/hit?r"+escape(document.referrer)+((typeof(screen)=="undefined")?"":";s"+screen.width+"*"+screen.height+"*"+(screen.colorDepth?screen.colorDepth:screen.pixelDepth))+";u"+escape(document.URL)+";h"+escape(document.title.substring(0,80))+";"+Math.random();
+	new Image().src = "//counter.yadro.ru/hit?r" + escape(document.referrer) + ((typeof(screen) == "undefined") ? "" : ";s" + screen.width + "*" + screen.height + "*" + (screen.colorDepth ? screen.colorDepth : screen.pixelDepth)) + ";u" + escape(document.URL) + ";h" + escape(document.title.substring(0, 80)) + ";" + Math.random();
 }
