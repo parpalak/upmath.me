@@ -48,7 +48,7 @@ TEX;
 $samples['align'] = <<<'TEX'
 \begin{align*}
  y &= x^4 + 4 =\\
-   &= (x^2+2)^2 - 4x^2 &\le\\
+   &= (x^2+2)^2 - 4x^2 \le\\
    &\le (x^2+2)^2
 \end{align*}
 TEX;
