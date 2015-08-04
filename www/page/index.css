@@ -14,7 +14,7 @@ body {
 	overflow-x: hidden;
 	background-color: #fbfbfb;
 }
-body, textarea {
+body, textarea, button {
 	font: 16px/1.5 Calibri, "Trebuchet MS", sans-serif;
 }
 h1, h2, h3 {
@@ -60,7 +60,7 @@ h1.header {
 	width: 100%;
 	font-family: Menlo, Monaco, Consolas, "Courier New", monospace;
 	font-size: 14px;
-	padding: 10px 20px;
+	padding: 16px 20px;
 }
 textarea {
 	resize: none;
@@ -75,7 +75,7 @@ textarea {
 .result-habr,
 .result-debug,
 .result-html {
-	padding: 10px 20px;
+	padding: 16px 20px;
 	margin: 0;
 	overflow: auto;
 	background-color: #fff;
@@ -131,21 +131,35 @@ textarea {
 .result-as-debug .result-src {
 	display: none;
 }
+.toolbar {
+	position: absolute;
+	top: -24px;
+	right: 32px;
+	}
+	.toolbar-button {
+		text-align: center;
+		width: 24px;
+		}
 .demo-control {
 	position: absolute;
-	right: 24px;
 	top: -24px;
-	background-color: #FFD379;
+	left: 20px;
 	}
+	.toolbar-button,
 	.demo-control .control-item {
-		padding: 0 16px;
+		color: white;
+		background: rgba(255, 255, 255, 0.3);
+		border: 0;
+		height: 24px;
+		line-height: 24px;
+		cursor: pointer;
+		cursor: hand;
 		}
-	.demo-control .control-item:first-child {
-		padding-left: 24px;
-		}
-	.demo-control .control-item:last-child {
-		padding-right: 24px;
-		}
+.result-as-habr .demo-control .control-item[data-result-as='habr'],
+.result-as-src .demo-control .control-item[data-result-as='src'],
+.result-as-html .demo-control .control-item[data-result-as='html'] {
+	background: rgba(255, 255, 255, 0.5);
+}
 .hljs {
 	background: none;
 	padding: 0;
