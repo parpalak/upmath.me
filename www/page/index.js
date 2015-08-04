@@ -7,7 +7,7 @@
 var mdHtml, mdSrc, mdHabr, scrollMap;
 
 var defaults = {
-	html:         false,        // Enable HTML tags in source
+	html:         true,         // Enable HTML tags in source
 	xhtmlOut:     false,        // Use '/' to close single tags (<br />)
 	breaks:       false,        // Convert '\n' in paragraphs into <br>
 	langPrefix:   'language-',  // CSS language prefix for fenced blocks
@@ -41,9 +41,21 @@ function setResultView(val) {
 }
 
 function mdInit() {
-	mdHtml = window.markdownit(defaults).use(markdownitS2Tex);
-	mdSrc = window.markdownit(defaults).use(markdownitS2Tex);
-	mdHabr = window.markdownit(defaults).use(markdownitS2Tex);
+	mdHtml = window.markdownit(defaults)
+		.use(markdownitS2Tex)
+		.use(markdownitSub)
+		.use(markdownitSup)
+	;
+	mdSrc = window.markdownit(defaults)
+		.use(markdownitS2Tex)
+		.use(markdownitSub)
+		.use(markdownitSup)
+	;
+	mdHabr = window.markdownit(defaults)
+		.use(markdownitS2Tex)
+		.use(markdownitSub)
+		.use(markdownitSup)
+	;
 
 	// Beautify output of parser for html content
 	mdHtml.renderer.rules.table_open = function () {
@@ -323,20 +335,46 @@ $(function() {
 		$('.result-html').on('scroll', syncSrcScroll);
 	});
 
-	$('.source-clear').on('click', function (event) {
-		$('.source').val('');
-		updateResult();
-		event.preventDefault();
-	});
-
-	$(document).on('click', '[data-result-as]', function (event) {
+	$('.control-item').on('click', function (event) {
 		var view = $(this).data('resultAs');
 		if (view) {
 			setResultView(view);
 			// only to update permalink
 			updateResult();
-			event.preventDefault();
 		}
+	});
+
+	$('._download-source').on('click', function () {
+		var blob = new Blob([$('.source').val()], {type: 'text/markdown;charset=utf-8'});
+		saveAs(blob, 'source.md');
+	});
+
+	$('._upload-source').on('click', function () {
+		document.getElementById('fileElem').click();
+	});
+
+	$('#fileElem').change(function () {
+		if (!this.files || !FileReader) {
+			return;
+		}
+
+		var reader = new FileReader(),
+			fileInput = this;
+
+		reader.onload = function() {
+			$('.source').val(this.result);
+			fileInput.value = fileInput.defaultValue;
+			updateResult();
+		};
+		reader.readAsText(this.files[0]);
+	});
+
+	$('._download-result').on('click', function () {
+		var source = $('.source').val(),
+			result = defaults._view === 'habr' ? mdHabr.render(source) : mdSrc.render(source);
+
+		var blob = new Blob([result], {type: 'text/markdown;charset=utf-8'});
+		saveAs(blob, defaults._view + '.html');
 	});
 
 	// Need to recalculate line positions on window resize

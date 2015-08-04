@@ -6,10 +6,15 @@
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/es5-shim/4.0.5/es5-shim.min.js"></script>
-	<script src="https://cdn.jsdelivr.net/jquery/1.11.1/jquery.min.js"></script>
+	<script src="/js/jquery.min.js"></script>
 	<script src="https://cdn.jsdelivr.net/lodash/2.4.1/lodash.js"></script>
 	<script src="https://cdn.jsdelivr.net/highlight.js/8.5.0/highlight.min.js"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/markdown-it/4.4.0/markdown-it.js"></script>
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/highlight.js/8.5.0/styles/solarized_light.min.css">
+
+	<script src="/page/js/markdown-it.min.js"></script>
+	<script src="/page/js/markdown-it-sub.min.js"></script>
+	<script src="/page/js/markdown-it-sup.min.js"></script>
+	<script src="/page/js/FileSaver.js"></script>
 	<script src="markdown-it-s2-tex.js"></script>
 	<link rel="stylesheet" href="index.css">
 	<script src="index.js"></script>
@@ -23,8 +28,13 @@
 </h1>
 <div class="container full-height">
 	<div class="row full-height">
-		<div class="half-width full-height"><!--
-          --><textarea class="source full-height">
+		<div class="half-width full-height">
+			<div class="toolbar">
+				<input type="file" id="fileElem" style="display:none">
+				<button class="toolbar-button _upload-source" title="Upload">⇑</button>
+				<button class="toolbar-button _download-source" title="Download">⇓</button>
+			</div>
+			<textarea class="source full-height">
 # Торможение реликтовым излучением
 
 http://susy.written.ru/2014/01/05/CMB_drag
@@ -115,10 +125,13 @@ $$P_\omega={n_\omega\over 2}\hbar\omega\,{1+R\over 1-v^2}\int\limits_{-1}^{1}dx\
 			</textarea>
 		</div><!--
 		--><div class="half-width full-height">
+			<div class="toolbar">
+				<button class="toolbar-button _download-result" title="Download">⇓</button>
+			</div>
 			<div class="demo-control">
-				<a href="#" class="control-item" data-result-as="html">preview</a>
-				<a href="#" class="control-item" data-result-as="src">html</a>
-				<a href="#" class="control-item" data-result-as="habr">habr</a>
+				<button class="control-item" data-result-as="html">preview</button>
+				<button class="control-item" data-result-as="src">source</button>
+				<button class="control-item" data-result-as="habr">habr</button>
 <!--				<a href="#" data-result-as="debug">debug</a>-->
 			</div>
 			<div class="result-html full-height"></div>

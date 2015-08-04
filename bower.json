@@ -15,6 +15,10 @@
     "jquery": "~2.1.4",
     "autosize": "~3.0.6",
     "Stickyfill": "~1.1.1",
-    "social-likes": "~3.0.10"
+    "social-likes": "~3.0.10",
+    "markdown-it": "*",
+    "markdown-it-sub": "~1.0.0",
+    "markdown-it-sup": "~1.0.0",
+    "file-saver.js": "~1.20150507.2"
   }
 }

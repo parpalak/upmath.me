@@ -25,8 +25,22 @@ module.exports = function(grunt) {
 					// includes files within path
 					{
 						expand: true,
-						src: ['bower_components/jquery/dist/jquery.min.js'],
+						src: [
+							'bower_components/jquery/dist/jquery.min.js'
+						],
 						dest: 'www/js/',
+						filter: 'isFile',
+						flatten: true
+					},
+					{
+						expand: true,
+						src: [
+							'bower_components/file-saver.js/FileSaver.js',
+							'bower_components/markdown-it/dist/markdown-it.min.js',
+							'bower_components/markdown-it-sub/dist/markdown-it-sub.min.js',
+							'bower_components/markdown-it-sup/dist/markdown-it-sup.min.js'
+						],
+						dest: 'www/page/js/',
 						filter: 'isFile',
 						flatten: true
 					}
@@ -58,6 +72,9 @@ module.exports = function(grunt) {
 			},
 			gzipJS2: {
 				command: 'gzip -cn6 www/js/jquery.min.js > www/js/jquery.min.js.gz'
+			},
+			gzipJS3: {
+				command: 'gzip -cn6 www/page/js/markdown-it.min.js > www/page/js/markdown-it.min.js.gz'
 			},
 			gzipCSS: {
 				command: 'gzip -cn6 www/css/style.min.css > www/css/style.min.css.gz'
