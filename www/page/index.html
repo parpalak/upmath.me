@@ -27,14 +27,13 @@
 		Math text editor
 </h1>
 <div class="container full-height">
-	<div class="row full-height">
-		<div class="half-width full-height">
-			<div class="toolbar">
-				<input type="file" id="fileElem" style="display:none">
-				<button class="toolbar-button _upload-source" title="Upload">⇑</button>
-				<button class="toolbar-button _download-source" title="Download">⇓</button>
-			</div>
-			<textarea class="source full-height">
+	<div class="half-width full-height"><!--
+		--><div class="toolbar">
+			<input type="file" id="fileElem" style="display:none">
+			<button class="toolbar-button _upload-source" title="Upload">⇑</button>
+			<button class="toolbar-button _download-source" title="Download">⇓</button>
+		</div><!--
+		--><textarea class="source full-height">
 # Торможение реликтовым излучением
 
 http://susy.written.ru/2014/01/05/CMB_drag
@@ -122,24 +121,24 @@ $$P_\omega=\int{\hbar\omega\over S\,c\Delta t}\,{1+R\over 1-v^2}\,(\cos\theta-v)
 $$P_\omega={n_\omega\over 2}\hbar\omega\,{1+R\over 1-v^2}\int\limits_{-1}^{1}dx\,(x-v)|x-v|.$$
 
 После вычисления интеграла и усреднения плотности энергии $$n_\omega\hbar\omega$$ по частотам получается формула (4).
-			</textarea>
-		</div><!--
-		--><div class="half-width full-height">
-			<div class="toolbar">
-				<button class="toolbar-button _download-result" title="Download">⇓</button>
-			</div>
-			<div class="demo-control">
-				<button class="control-item" data-result-as="html">preview</button>
-				<button class="control-item" data-result-as="src">source</button>
-				<button class="control-item" data-result-as="habr">habr</button>
-<!--				<a href="#" data-result-as="debug">debug</a>-->
-			</div>
-			<div class="result-html full-height"></div>
-			<pre class="result-src full-height"><code class="result-src-content full-height"></code></pre>
-			<pre class="result-habr full-height"><code class="result-habr-content full-height"></code></pre>
-			<pre class="result-debug full-height"><code class="result-debug-content full-height"></code></pre>
-		</div><!--
-	--></div>
+			</textarea><!--
+	--></div><!--
+	--><div class="half-width full-height">
+		<div class="toolbar">
+			<button class="toolbar-button _download-result" title="Download">⇓</button>
+		</div>
+		<div class="demo-control">
+			<button class="control-item" data-result-as="html">preview</button>
+			<button class="control-item" data-result-as="src">source</button>
+			<button class="control-item" data-result-as="habr">habr</button>
+<!--			<button class="control-item" data-result-as="debug">debug</button>-->
+		</div>
+		<div class="result-html full-height"></div>
+		<pre class="result-src full-height"><code class="result-src-content full-height"></code></pre>
+		<pre class="result-habr full-height"><code class="result-habr-content full-height"></code></pre>
+		<pre class="result-debug full-height"><code class="result-debug-content full-height"></code></pre>
+	</div><!--
+--></div>
 </div>
 </body>
 </html>

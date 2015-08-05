@@ -11,7 +11,7 @@ body,
 body {
 	margin: 0;
 	padding: 0;
-	overflow-x: hidden;
+	overflow: hidden;
 	background-color: #fbfbfb;
 }
 body, textarea, button {
@@ -48,6 +48,7 @@ h1.header {
 }
 .container {
 	padding-top: 70px;
+	overflow: hidden;
 }
 .demo-options {
 	margin-bottom: 30px;
@@ -67,6 +68,7 @@ textarea {
 	display: block;
 	outline: none;
 	border: 0;
+	margin: 0;
 }
 .result-html img {
 	max-width: 100%;
