@@ -57,11 +57,6 @@ function mdInit() {
 		.use(markdownitSup)
 	;
 
-	// Beautify output of parser for html content
-	mdHtml.renderer.rules.table_open = function () {
-		return '<table class="table table-striped">\n';
-	};
-
 	//
 	// Inject line numbers for sync scroll. Notes:
 	//
@@ -98,6 +93,7 @@ function mdInit() {
 		return false;
 	}
 
+	// Habrahabr ignores <p> tags but uses whitespaces
 	function injectSpaces(tokens, idx, options, env, self) {
 		var prefix = "";
 		if (idx > 0 && tokens[idx-1].type === 'paragraph_close' && !hasBlockFormula(tokens, idx - 2)) {
@@ -114,11 +110,35 @@ function mdInit() {
 	mdHtml.renderer.rules.paragraph_open = mdHtml.renderer.rules.heading_open = injectLineNumbers;
 	mdHabr.renderer.rules.paragraph_open = mdHabr.renderer.rules.heading_open = injectSpaces;
 
+	// Habrahabr hack for numerating formulas
 	mdHabr.renderer.rules.math_number = (function (protocol) {
 		return function (tokens, idx) {
 			return '<img align="right" src="' + protocol + '//tex.s2cms.ru/svg/' + tokens[idx].content + '" />';
 		}
 	}(location.protocol == "https:" ? "https:" : 'http:'));
+
+	// Habrahabr "source" tag
+	mdHabr.renderer.rules.fence = function (tokens, idx, options, env, self) {
+		var token = tokens[idx],
+			info = token.info ? mdHabr.utils.unescapeAll(token.info).trim() : '',
+			langName = '',
+			highlighted;
+
+		if (info) {
+			langName = info.split(/\s+/g)[0];
+			token.attrPush([ 'lang', langName ]);
+		}
+
+		if (options.highlight) {
+			highlighted = options.highlight(token.content, langName) || mdHabr.utils.escapeHtml(token.content);
+		} else {
+			highlighted = mdHabr.utils.escapeHtml(token.content);
+		}
+
+		return  '<source' + self.renderAttrs(token) + '>'
+			+ highlighted
+			+ '</source>\n';
+	}
 }
 
 function setHighlightedlContent(selector, content, lang) {
