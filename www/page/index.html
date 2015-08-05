@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Math text editor</title>
+	<title>Markdown & LaTeX Editor</title>
 	<meta charset="UTF-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
@@ -18,19 +18,18 @@
 	<script src="markdown-it-s2-tex.js"></script>
 	<link rel="stylesheet" href="index.css">
 	<script src="index.js"></script>
-	<!-- Ancient IE support - load shiv & kill broken highlighter--><!--[if lt IE 9]>
-	<script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
-	<![endif]-->
 </head>
 <body>
 <h1 class="header">
-		Math text editor
+	Markdown & LaTeX Editor
 </h1>
 <div class="container full-height">
-	<div class="half-width full-height"><!--
-		--><div class="toolbar">
+	<div class="half-width full-height">
+		<div class="toolbar left">
 			<input type="file" id="fileElem" style="display:none">
 			<button class="toolbar-button _upload-source" title="Upload">⇑</button>
+		</div>
+		<div class="toolbar right">
 			<button class="toolbar-button _download-source" title="Download">⇓</button>
 		</div><!--
 		--><textarea class="source full-height">
@@ -124,7 +123,7 @@ $$P_\omega={n_\omega\over 2}\hbar\omega\,{1+R\over 1-v^2}\int\limits_{-1}^{1}dx\
 			</textarea><!--
 	--></div><!--
 	--><div class="half-width full-height">
-		<div class="toolbar">
+		<div class="toolbar right">
 			<button class="toolbar-button _download-result" title="Download">⇓</button>
 		</div>
 		<div class="demo-control">
@@ -139,6 +138,13 @@ $$P_\omega={n_\omega\over 2}\hbar\omega\,{1+R\over 1-v^2}\int\limits_{-1}^{1}dx\
 		<pre class="result-debug full-height"><code class="result-debug-content full-height"></code></pre>
 	</div><!--
 --></div>
+</div>
+<div class="copyright">
+	&copy; 2015
+	<script>
+		var mailto = "roman%"+"40written.ru";
+		document.write('<a title="Drop me a line" href="mailto:'+unescape(mailto)+'">Roman Parpalak</a>');
+	</script>
 </div>
 </body>
 </html>

@@ -9,9 +9,9 @@ body,
 	box-sizing: border-box;
 }
 body {
+	min-width: 480px;
 	margin: 0;
 	padding: 0;
-	overflow: hidden;
 	background-color: #fbfbfb;
 }
 body, textarea, button {
@@ -34,24 +34,35 @@ h1, h2, h3 {
 		font-size: 125%;
 		}
 h1.header {
+	font-size: 18px;
+	text-transform: uppercase;
+	letter-spacing: 0.4em;
 	background: #742600;
 	color: #fff;
 	padding: 0 20px;
 	margin: 0;
 	height: 70px;
-	line-height: 70px;
+	line-height: 48px;
 	position: absolute;
 	top: 0;
 	left: 0;
 	right: 0;
 	bottom: 0;
+	min-width: 480px;
 }
 .container {
 	padding-top: 70px;
 	overflow: hidden;
 }
-.demo-options {
-	margin-bottom: 30px;
+.copyright {
+	top: 12px;
+	right: 12px;
+	position: absolute;
+	letter-spacing: 0.02em;
+}
+.copyright,
+.copyright a {
+	color: #fff;
 }
 .opt__strict .not-strict {
 	opacity: 0.3;
@@ -136,8 +147,13 @@ textarea {
 .toolbar {
 	position: absolute;
 	top: -24px;
-	right: 32px;
 	}
+	.toolbar.left {
+		left: 20px;
+		}
+	.toolbar.right {
+		right: 12px;
+		}
 	.toolbar-button {
 		text-align: center;
 		width: 24px;
@@ -157,10 +173,13 @@ textarea {
 		cursor: pointer;
 		cursor: hand;
 		}
+	.demo-control .control-item {
+		background: rgba(255, 255, 255, 0.15);
+		}
 .result-as-habr .demo-control .control-item[data-result-as='habr'],
 .result-as-src .demo-control .control-item[data-result-as='src'],
 .result-as-html .demo-control .control-item[data-result-as='html'] {
-	background: rgba(255, 255, 255, 0.5);
+	background: rgba(255, 255, 255, 0.4);
 }
 .hljs {
 	background: none;
