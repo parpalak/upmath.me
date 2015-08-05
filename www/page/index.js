@@ -75,6 +75,7 @@ function mdInit() {
 			for (var i = tokens[idx+1].children.length; i-- ;) {
 				if (tokens[idx+1].children[i].tag === 'tex-block') {
 					tokens[idx].attrPush(['align', 'center']);
+					break;
 				}
 			}
 		}
@@ -184,10 +185,11 @@ function buildScrollMap() {
 		_scrollMap;
 
 	sourceLikeDiv = $('<div />').css({
-		position:   'absolute',
-		visibility: 'hidden',
-		height:     'auto',
-		width:      textarea[0].clientWidth,
+		position:    'absolute',
+		visibility:  'hidden',
+		height:      'auto',
+		width:       textarea[0].clientWidth,
+		'word-wrap': 'break-word',
 
 		'padding-left':  textarea.css('padding-left'),
 		'padding-right': textarea.css('padding-right'),
@@ -258,11 +260,21 @@ function buildScrollMap() {
 var syncResultScroll = _.debounce(function () {
 	var textarea   = $('.source'),
 		lineHeight = parseFloat(textarea.css('line-height')),
-		lineNo, posTo;
+		posTo,
+		scrollTop = Math.max(0, textarea.scrollTop() /*- parseInt(textarea.css('padding-top'))*/),
+		lineNo = Math.floor(scrollTop / lineHeight),
+		linePart = scrollTop / lineHeight - lineNo;
 
-	lineNo = Math.floor(textarea.scrollTop() / lineHeight);
-	if (!scrollMap) { scrollMap = buildScrollMap(); }
+	if (!scrollMap) {
+		scrollMap = buildScrollMap();
+	}
+
 	posTo = scrollMap[lineNo];
+
+	if (scrollMap[lineNo + 1]) {
+		posTo += linePart * (scrollMap[lineNo + 1] - scrollMap[lineNo]);
+	}
+
 	$('.result-html').stop(true).animate({
 		scrollTop: posTo
 	}, 100, 'linear');
@@ -276,7 +288,8 @@ var syncSrcScroll = _.debounce(function () {
 		lineHeight = parseFloat(textarea.css('line-height')),
 		lines,
 		i,
-		line;
+		line,
+		line_index;
 
 	if (!scrollMap) { scrollMap = buildScrollMap(); }
 
@@ -287,18 +300,25 @@ var syncSrcScroll = _.debounce(function () {
 	}
 
 	line = lines[0];
+	line_index = 0;
 
 	for (i = 1; i < lines.length; i++) {
 		if (scrollMap[lines[i]] < scrollTop) {
 			line = lines[i];
+			line_index = i;
 			continue;
 		}
 
 		break;
 	}
 
+	var srcScrollTop = lineHeight * line;
+	if (scrollMap[lines[line_index + 1]] >= scrollTop) {
+		srcScrollTop += lineHeight * (scrollTop - scrollMap[lines[line_index]]) / (scrollMap[lines[line_index + 1]] - scrollMap[lines[line_index]]);
+	}
+
 	textarea.stop(true).animate({
-		scrollTop: lineHeight * line
+		scrollTop: srcScrollTop
 	}, 100, 'linear');
 }, 50, { maxWait: 50 });
 
