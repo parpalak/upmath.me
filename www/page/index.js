@@ -21,14 +21,6 @@ var defaults = {
 	_view: 'html'               // html / src / debug
 };
 
-function setOptionClass(name, val) {
-	if (val) {
-		$('body').addClass('opt_' + name);
-	} else {
-		$('body').removeClass('opt_' + name);
-	}
-}
-
 function setResultView(val) {
 	$('body')
 		.removeClass('result-as-html')
@@ -257,7 +249,7 @@ function buildScrollMap() {
 }
 
 // Synchronize scroll position from source to result
-var syncResultScroll = _.debounce(function () {
+var syncResultScroll = debounce(function () {
 	var textarea   = $('.source'),
 		lineHeight = parseFloat(textarea.css('line-height')),
 		posTo,
@@ -281,7 +273,7 @@ var syncResultScroll = _.debounce(function () {
 }, 50, { maxWait: 50 });
 
 // Synchronize scroll position from result to source
-var syncSrcScroll = _.debounce(function () {
+var syncSrcScroll = debounce(function () {
 	var resultHtml = $('.result-html'),
 		scrollTop  = resultHtml.scrollTop(),
 		textarea   = $('.source'),
@@ -326,45 +318,13 @@ var syncSrcScroll = _.debounce(function () {
 // Init on page load
 //
 $(function() {
-
-	// Set default option values and option listeners
-	_.forOwn(defaults, function (val, key) {
-		if (key === 'highlight') { return; }
-
-		var el = document.getElementById(key);
-
-		if (!el) { return; }
-
-		var $el = $(el);
-
-		if (_.isBoolean(val)) {
-			$el.prop('checked', val);
-			$el.on('change', function () {
-				var value = Boolean($el.prop('checked'));
-				setOptionClass(key, value);
-				defaults[key] = value;
-				mdInit();
-				updateResult();
-			});
-			setOptionClass(key, val);
-
-		} else {
-			$el.val(val);
-			$el.on('change update keyup', function () {
-				defaults[key] = String($el.val());
-				mdInit();
-				updateResult();
-			});
-		}
-	});
-
 	setResultView(defaults._view);
 
 	mdInit();
 
 	// Setup listeners
 	$('.source')
-		.on('keyup paste cut mouseup', _.debounce(updateResult, 300, { maxWait: 500 }))
+		.on('keyup paste cut mouseup', debounce(updateResult, 300, { maxWait: 500 }))
 		.on('touchstart mouseover', function () {
 			$('.result-html').off('scroll');
 			$('.source').on('scroll', syncResultScroll);
@@ -375,7 +335,7 @@ $(function() {
 		$('.result-html').on('scroll', syncSrcScroll);
 	});
 
-	$('.control-item').on('click', function (event) {
+	$('.control-item').on('click', function () {
 		var view = $(this).data('resultAs');
 		if (view) {
 			setResultView(view);
