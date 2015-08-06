@@ -38,9 +38,19 @@ module.exports = function(grunt) {
 							'bower_components/file-saver.js/FileSaver.js',
 							'bower_components/markdown-it/dist/markdown-it.min.js',
 							'bower_components/markdown-it-sub/dist/markdown-it-sub.min.js',
-							'bower_components/markdown-it-sup/dist/markdown-it-sup.min.js'
+							'bower_components/markdown-it-sup/dist/markdown-it-sup.min.js',
+							'bower_components/codemirror/lib/codemirror.js'
 						],
-						dest: 'www/page/js/',
+						dest: 'www/page/dist/js/',
+						filter: 'isFile',
+						flatten: true
+					},
+					{
+						expand: true,
+						src: [
+							'bower_components/codemirror/lib/codemirror.css'
+						],
+						dest: 'www/page/dist/css/',
 						filter: 'isFile',
 						flatten: true
 					}
@@ -68,16 +78,18 @@ module.exports = function(grunt) {
 		},
 		shell: {
 			gzipJS: {
-				command: 'gzip -cn6 www/js/scripts.min.js > www/js/scripts.min.js.gz'
-			},
-			gzipJS2: {
-				command: 'gzip -cn6 www/js/jquery.min.js > www/js/jquery.min.js.gz'
+				command: [
+					'gzip -cn6 www/js/scripts.min.js > www/js/scripts.min.js.gz',
+					'gzip -cn6 www/js/jquery.min.js > www/js/jquery.min.js.gz',
+					'gzip -cn6 www/css/style.min.css > www/css/style.min.css.gz'
+				].join(' && ')
 			},
 			gzipJS3: {
-				command: 'gzip -cn6 www/page/js/markdown-it.min.js > www/page/js/markdown-it.min.js.gz'
-			},
-			gzipCSS: {
-				command: 'gzip -cn6 www/css/style.min.css > www/css/style.min.css.gz'
+				command: [
+					'gzip -cn6 www/page/dist/js/markdown-it.min.js > www/page/dist/js/markdown-it.min.js.gz',
+					'gzip -cn6 www/page/dist/js/codemirror.js > www/page/dist/js/codemirror.js.gz',
+					'gzip -cn6 www/page/dist/css/codemirror.css > www/page/dist/css/codemirror.css.gz',
+				].join(' && ')
 			},
 			gzipPublic: {
 				command: 'gzip -cn6 www/latex.js > www/latex.js.gz'
