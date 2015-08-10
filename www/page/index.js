@@ -142,8 +142,16 @@ function setHighlightedlContent(selector, content, lang) {
 	}
 }
 
+function getSource() {
+	return $('.source .ldt-textarea').val();
+}
+
+function setSource(text) {
+	$('.source .ldt-textarea').val(text);
+}
+
 function updateResult() {
-	var source = $('.source').val();
+	var source = getSource();
 
 	// Update only active view to avoid slowdowns
 	// (debug & src view with highlighting are a bit slow)
@@ -173,7 +181,7 @@ function updateResult() {
 // Optimizations are required only for big texts.
 function buildScrollMap() {
 	var i, offset, nonEmptyList, pos, a, b, lineHeightMap, linesCount,
-		acc, sourceLikeDiv, textarea = $('.source'),
+		acc, sourceLikeDiv, textarea = $('.source .ldt-textarea'),
 		_scrollMap;
 
 	sourceLikeDiv = $('<div />').css({
@@ -250,10 +258,10 @@ function buildScrollMap() {
 
 // Synchronize scroll position from source to result
 var syncResultScroll = debounce(function () {
-	var textarea   = $('.source'),
-		lineHeight = parseFloat(textarea.css('line-height')),
+	var $source   = $('.source'),
+		lineHeight = parseFloat($source.css('line-height')),
 		posTo,
-		scrollTop = Math.max(0, textarea.scrollTop() /*- parseInt(textarea.css('padding-top'))*/),
+		scrollTop = Math.max(0, $source.scrollTop() /*- parseInt(textarea.css('padding-top'))*/),
 		lineNo = Math.floor(scrollTop / lineHeight),
 		linePart = scrollTop / lineHeight - lineNo;
 
@@ -276,8 +284,8 @@ var syncResultScroll = debounce(function () {
 var syncSrcScroll = debounce(function () {
 	var resultHtml = $('.result-html'),
 		scrollTop  = resultHtml.scrollTop(),
-		textarea   = $('.source'),
-		lineHeight = parseFloat(textarea.css('line-height')),
+		$source   = $('.source'),
+		lineHeight = parseFloat($source.css('line-height')),
 		lines,
 		i,
 		line,
@@ -309,13 +317,20 @@ var syncSrcScroll = debounce(function () {
 		srcScrollTop += lineHeight * (scrollTop - scrollMap[lines[line_index]]) / (scrollMap[lines[line_index + 1]] - scrollMap[lines[line_index]]);
 	}
 
-	textarea.stop(true).animate({
+	$source.stop(true).animate({
 		scrollTop: srcScrollTop
 	}, 100, 'linear');
 }, 50, { maxWait: 50 });
 
 
 $(function() {
+	// get the textarea
+	var textarea = $('.source')[0];
+	// lets set it to something interesting
+
+	// start the decorator
+	var decorator = new TextareaDecorator( textarea, markdownParser );
+
 	setResultView(defaults._view);
 
 	mdInit();

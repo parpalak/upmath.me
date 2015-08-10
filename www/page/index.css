@@ -12,7 +12,7 @@ body {
 	min-width: 480px;
 	margin: 0;
 	padding: 0;
-	background-color: #fbfbfb;
+	background-color: #fff;
 }
 body, textarea, button {
 	font: 16px/1.5 Calibri, "Trebuchet MS", sans-serif;
@@ -68,11 +68,20 @@ h1.header {
 	opacity: 0.3;
 }
 
-.source {
-	width: 100%;
+.source, .ldt label.ldt-label {
+	padding: 0;
+}
+
+.source, .ldt pre, .ldt textarea {
 	font-family: Menlo, Monaco, Consolas, "Courier New", monospace;
 	font-size: 14px;
+}
+.ldt pre, .ldt textarea {
 	padding: 16px 20px;
+}
+textarea.source {
+	padding: 16px 20px;
+	width: 100%;
 }
 textarea {
 	resize: none;
@@ -202,4 +211,37 @@ textarea {
 }
 ::-webkit-scrollbar-thumb {
 	background: #c3986a;
+}
+
+
+/* highlight styles */
+.ldt .quote {
+	font-weight: bold;
+	color: #903502;
+	background-color: #ffb08b;
+}
+.ldt .list {
+	font-weight: bold;
+	color: green;
+	background-color: #99fc99;
+}
+.ldt .sub,
+.ldt .sup {
+	color: goldenrod;
+}
+.ldt .code,
+.ldt .fence {
+	background: #eee;
+}
+.ldt .link { color: blue; }
+.ldt .latex {font-weight: bold; color: greenyellow; }
+.ldt .bold { font-weight: bold; }
+.ldt .italic { color: cyan; }
+.ldt .strike {
+	text-decoration: line-through;
+}
+.ldt .header,
+.ldt .header2 {
+	font-weight: bold;
+	color: blue;
 }

@@ -1,11 +1,11 @@
 $(function() {
 	$('._download-source').on('click', function () {
-		var blob = new Blob([$('.source').val()], {type: 'text/markdown;charset=utf-8'});
+		var blob = new Blob([getSource()], {type: 'text/markdown;charset=utf-8'});
 		saveAs(blob, 'source.md');
 	});
 
 	$('._download-result').on('click', function () {
-		var source = $('.source').val(),
+		var source = getSource(),
 			result = defaults._view === 'habr' ? mdHabr.render(source) : mdSrc.render(source);
 
 		var blob = new Blob([result], {type: 'text/markdown;charset=utf-8'});
@@ -25,7 +25,7 @@ $(function() {
 			fileInput = this;
 
 		reader.onload = function() {
-			$('.source').val(this.result);
+			setSource(this.result);
 			fileInput.value = fileInput.defaultValue;
 			updateResult();
 		};
