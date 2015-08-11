@@ -22,6 +22,22 @@ QUnit.test("Paragraphs", function (assert) {
 				"token": "123"
 			}
 		], "Empty line");
+	assert.deepEqual(
+		mdParser.tokenize('ABC\n \n123'),
+		[
+			{
+				"block": "paragraph",
+				"token": "ABC\n"
+			},
+			{
+				"block": "empty",
+				"token": " \n"
+			},
+			{
+				"block": "paragraph",
+				"token": "123"
+			}
+		], "Empty line with whitespaces");
 });
 
 QUnit.test("Fence", function (assert) {
