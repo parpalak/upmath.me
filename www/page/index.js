@@ -324,19 +324,19 @@ var syncSrcScroll = debounce(function () {
 
 
 $(function() {
-	// get the textarea
-	var textarea = $('.source')[0];
-	// lets set it to something interesting
+	var $source = $('.source'),
+		textarea = $source[0];
 
 	// start the decorator
-	var decorator = new TextareaDecorator( textarea, markdownParser );
+	var decorator = new TextareaDecorator( textarea, mdParser),
+		recalcHeight = debounce(function () { decorator.recalcHeight() }, 100);
 
 	setResultView(defaults._view);
 
 	mdInit();
 
 	// Setup listeners
-	$('.source')
+	$source
 		.on('keyup paste cut mouseup', debounce(updateResult, 300, { maxWait: 500 }))
 		.on('touchstart mouseover', function () {
 			$('.result-html').off('scroll');
@@ -360,6 +360,7 @@ $(function() {
 	// Need to recalculate line positions on window resize
 	$(window).on('resize', function () {
 		scrollMap = null;
+		recalcHeight();
 	});
 
 	updateResult();

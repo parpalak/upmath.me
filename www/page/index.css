@@ -214,34 +214,43 @@ textarea {
 }
 
 
-/* highlight styles */
-.ldt .quote {
-	font-weight: bold;
-	color: #903502;
-	background-color: #ffb08b;
-}
-.ldt .list {
-	font-weight: bold;
-	color: green;
-	background-color: #99fc99;
-}
-.ldt .sub,
-.ldt .sup {
-	color: goldenrod;
-}
-.ldt .code,
-.ldt .fence {
-	background: #eee;
-}
-.ldt .link { color: blue; }
-.ldt .latex {font-weight: bold; color: greenyellow; }
-.ldt .bold { font-weight: bold; }
-.ldt .italic { color: cyan; }
-.ldt .strike {
-	text-decoration: line-through;
-}
+/* Markdown block highlight styles */
 .ldt .header,
 .ldt .header2 {
 	font-weight: bold;
 	color: blue;
+}
+.ldt .quote {
+	background: #fff3ea;
+}
+.ldt .list {
+	background: #f2ffef;
+}
+.ldt .fence {
+	background: #eee;
+}
+
+
+/* Markdown inline highlight styles */
+.ldt .sub,
+.ldt .sup {
+	color: goldenrod;
+}
+.ldt .code {
+	background: #eee;
+}
+.ldt .link {
+	color: blue;
+}
+.ldt .latex {
+	color: #7ca600;
+}
+.ldt .bold {
+	font-weight: bold;
+}
+.ldt .italic {
+	color: #00dede;
+}
+.ldt .strike {
+	text-decoration: line-through;
 }
