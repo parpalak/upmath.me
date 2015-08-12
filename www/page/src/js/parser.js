@@ -19,7 +19,9 @@ function MarkdownParser(i) {
 		runInBlocks = {},
 		markers = {};
 
-	var subRules;
+	var subRules,
+		subRulesMap = {},
+		subRulesRE = {};
 
 	function addBlockRule(s, rule) {
 		var re = new RegExp('^(' + s + ')$', i);
@@ -31,6 +33,13 @@ function MarkdownParser(i) {
 		var re = new RegExp('^(' + s + ')$', i);
 		ruleMap[rule] = re;
 		ruleInlineMap[rule] = re;
+	}
+
+	function addSubruleMap(s, rule, block) {
+		if (!subRulesMap[block]) {
+			subRulesMap[block] = {};
+		}
+		subRulesMap[block][rule] = new RegExp('^(' + s + ')$', i);
 	}
 
 	api.addInlineRules = function (rules) {
@@ -50,6 +59,23 @@ function MarkdownParser(i) {
 	};
 	api.addSubRules = function (rules) {
 		subRules = rules;
+
+		for (var block in rules) {
+			if (rules.hasOwnProperty(block)) {
+				var rules2 = rules[block],
+					p = [];
+				for (var rule in rules2) {
+					if (rules2.hasOwnProperty(rule)) {
+						var s = rules2[rule].source;
+						addSubruleMap(s, rule, block);
+						p.push(s);
+					}
+				}
+
+				subRulesRE[block] = new RegExp('(' + p.join('|') + ')', i);
+			}
+		}
+
 		return this;
 	};
 	api.addBlockRules = function (rules) {
@@ -78,14 +104,21 @@ function MarkdownParser(i) {
 	};
 
 	function tokenizeBlock(block, className, result) {
-		// Process specific rules for the given block type className
-		if (className in subRules && subRules[className] === null) {
-			result.push({
-				token: block,
-				block: className
-			});
+		var re = parseInlineRE;
 
-			return;
+		// Process specific rules for the given block type className
+		if (className in subRules ) {
+			if (subRules[className] === null) {
+				result.push({
+					token: block,
+					block: className
+				});
+
+				return;
+			}
+			else {
+				re = subRulesRE[className];
+			}
 		}
 
 		// Token for a block marker
@@ -100,7 +133,7 @@ function MarkdownParser(i) {
 			}
 		}
 
-		var items = block.split(parseInlineRE),
+		var items = block.split(re),
 			j = 0, token;
 
 		for (; j < items.length; j++) {
@@ -159,11 +192,18 @@ function MarkdownParser(i) {
 		return result;
 	};
 	api.identifyInline = function (tokenObj) {
-		var className = tokenObj.block;
-		if (className in subRules && subRules[className] === null) {
-			return '';
+		var className = tokenObj.block,
+			map = ruleInlineMap;
+
+		if (className in subRules) {
+			if (subRules[className] === null) {
+				return '';
+			}
+			else {
+				map = subRulesMap[className];
+			}
 		}
-		return identify(tokenObj.token, ruleInlineMap);
+		return identify(tokenObj.token, map);
 	};
 
 	function identify(token, ruleMap) {
@@ -184,7 +224,8 @@ var mdParser = new MarkdownParser();
 
 mdParser
 	.addBlockRules({
-		empty:     /(?:\n[ \t]*)*\n/,
+		latexBlock:/\$\$\n?[^\n]+(?:\n[^\n]+)*\n?\$\$(?:[ \t]*\([ \t]*\S+[ \t]*\))?(?:\n|$)/,
+		empty:     /(?:[ \t]*\n)+/,
 		fence:     /```[\s\S]*?(?:$|```(?:\n|$))/,
 		reference: /\[[^\]]+\]\:[^\n]*(?:\n|$)/,
 		header:    /#{1,6} [^\n]*(?:\n|$)/,
@@ -207,8 +248,12 @@ mdParser
 	.addSubRules({
 		fence: null,
 		rule:  null,
-		latex: {
-			keyword: /\\[a-zA_Z]]/
+		latexBlock: {
+			comment:   /%[^\n]*?(?=\$\$)|%[^\n]*/,
+			keyword:   /\\[a-zA-Zà-ÿÀ-ÿ]+[\*]?/,
+			keyword2:  /\\[^a-zA-Zà-ÿÀ-ÿ0-9]/,
+			keyword3:  /&/,
+			delimeter: /\$\$/
 		}
 	})
 	.addRunIn({

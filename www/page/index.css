@@ -249,8 +249,36 @@ textarea {
 	font-weight: bold;
 }
 .ldt .italic {
-	color: #00dede;
+	color: #0dd;
 }
 .ldt .strike {
 	text-decoration: line-through;
+}
+.ldt .latexBlock.keyword {
+	color: blue;
+}
+.ldt .latexBlock.keyword2 {
+	color: #0dd;
+}
+.ldt .latexBlock.keyword3 {
+	color: #8ECA81;
+}
+.ldt .latexBlock.comment {
+	color: #aaa;
+}
+.ldt .latexBlock.delimeter {
+	font-weight: bold;
+}
+
+
+@media screen and (-webkit-min-device-pixel-ratio:0) {
+	.ldt textarea {
+		color: #000 !important;
+		-webkit-text-fill-color: rgba(0, 0, 0, 0.2);
+	}
+
+	.ldt textarea::-webkit-input-placeholder {
+		text-shadow: none;
+		-webkit-text-fill-color: initial;
+	}
 }

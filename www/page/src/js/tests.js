@@ -231,6 +231,76 @@ QUnit.test("Heading", function (assert) {
 	);
 });
 
+QUnit.test("Latex", function (assert) {
+	assert.deepEqual(
+		mdParser.tokenize('$$\nf(x) = \\sin(x)$$ (1)'),
+		[
+			{
+				"block": "latexBlock",
+				"token": "$$"
+			},
+			{
+				"block": "latexBlock",
+				"token": "\nf(x) = "
+			},
+			{
+				"block": "latexBlock",
+				"token": "\\sin"
+			},
+			{
+				"block": "latexBlock",
+				"token": "(x)"
+			},
+			{
+				"block": "latexBlock",
+				"token": "$$"
+			},
+			{
+				"block": "latexBlock",
+				"token": " (1)"
+			}
+		],
+		"Latex block"
+	);
+	assert.deepEqual(
+		mdParser.tokenize('$$\nf(x) = %comment1\nx%comment2 $$\n(1)'),
+		[
+			{
+				"block": "latexBlock",
+				"token": "$$"
+			},
+			{
+				"block": "latexBlock",
+				"token": "\nf(x) = "
+			},
+			{
+				"block": "latexBlock",
+				"token": "%comment1"
+			},
+			{
+				"block": "latexBlock",
+				"token": "\nx"
+			},
+			{
+				"block": "latexBlock",
+				"token": "%comment2 "
+			},
+			{
+				"block": "latexBlock",
+				"token": "$$"
+			},
+			{
+				"block": "latexBlock",
+				"token": "\n"
+			},
+			{
+				"block": "paragraph",
+				"token": "(1)"
+			}		],
+		"Latex block"
+	);
+});
+
 QUnit.test("Inline", function (assert) {
 	assert.deepEqual(mdParser.tokenize('a*b*'), [
 		{token: 'a', block: 'paragraph'},
@@ -322,12 +392,12 @@ var mdSrc = window.markdownit({
 	.use(markdownitSup)
 ;
 
-QUnit.test("Time 2", function (assert) {
-	mdSrc.parse(largeText, { references: {} });
+QUnit.test("Time", function (assert) {
+	mdParser.tokenize(largeText);
 	assert.expect(0);
 });
 
-QUnit.test("Time", function (assert) {
-	mdParser.tokenize(largeText);
+QUnit.test("Time 2", function (assert) {
+	mdSrc.parse(largeText, { references: {} });
 	assert.expect(0);
 });
