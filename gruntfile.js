@@ -10,12 +10,24 @@ module.exports = function(grunt) {
 					'www/js/init_editor.js'
 				],
 				dest: 'www/js/scripts.js'
+			},
+			page: {
+				src: [
+					'bower_components/LDT/lib/TextareaDecorator.js',
+					'www/page/src/js/parser.js',
+				],
+				dest: 'www/page/dist/js/scripts.js'
 			}
 		},
 		uglify: {
 			main: {
 				files: {
 					'www/js/scripts.min.js': '<%= concat.main.dest %>'
+				}
+			},
+			page: {
+				files: {
+					'www/page/dist/js/scripts.min.js': '<%= concat.page.dest %>'
 				}
 			}
 		},
@@ -38,8 +50,7 @@ module.exports = function(grunt) {
 							'bower_components/file-saver.js/FileSaver.js',
 							'bower_components/markdown-it/dist/markdown-it.min.js',
 							'bower_components/markdown-it-sub/dist/markdown-it-sub.min.js',
-							'bower_components/markdown-it-sup/dist/markdown-it-sup.min.js',
-							'bower_components/codemirror/lib/codemirror.js'
+							'bower_components/markdown-it-sup/dist/markdown-it-sup.min.js'
 						],
 						dest: 'www/page/dist/js/',
 						filter: 'isFile',
@@ -48,10 +59,17 @@ module.exports = function(grunt) {
 					{
 						expand: true,
 						src: [
-							'bower_components/codemirror/lib/codemirror.css'
+							'bower_components/LDT/lib/TextareaDecorator.css'
 						],
 						dest: 'www/page/dist/css/',
-						filter: 'isFile',
+						flatten: true
+					},
+					{
+						expand: true,
+						src: [
+							'bower_components/LDT/lib/TextareaDecorator.js'
+						],
+						dest: 'www/page/dist/js/',
 						flatten: true
 					}
 				]
@@ -74,6 +92,13 @@ module.exports = function(grunt) {
 				],
 				filename: 'fingerprint.php',
 				template: "<?php define('FINGERPRINT', '<%= fingerprint %>'); ?>"
+			},
+			page: {
+				src: [
+					'www/page/dist/**'
+				],
+				filename: 'page_print.php',
+				template: "<?php define('FINGERPRINT', '<%= fingerprint %>'); ?>"
 			}
 		},
 		shell: {
@@ -86,9 +111,7 @@ module.exports = function(grunt) {
 			},
 			gzipJS3: {
 				command: [
-					'gzip -cn6 www/page/dist/js/markdown-it.min.js > www/page/dist/js/markdown-it.min.js.gz',
-					'gzip -cn6 www/page/dist/js/codemirror.js > www/page/dist/js/codemirror.js.gz',
-					'gzip -cn6 www/page/dist/css/codemirror.css > www/page/dist/css/codemirror.css.gz',
+					'gzip -cn6 www/page/dist/js/markdown-it.min.js > www/page/dist/js/markdown-it.min.js.gz'
 				].join(' && ')
 			},
 			gzipPublic: {
