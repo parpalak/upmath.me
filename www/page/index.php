@@ -63,6 +63,17 @@
 		document.write('<a title="Drop me a line" href="mailto:'+unescape(mailto)+'">Roman Parpalak</a>');
 	</script>
 </div>
+<script>
+	(function () {
+		try {
+			var data = localStorage.getItem("editor_content");
+			if (data) {
+				document.getElementsByClassName('source')[0].value = data;
+			}
+		}
+		catch (e) {}
+	}());
+</script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/es5-shim/4.0.5/es5-shim.min.js"></script>
 <script src="/js/jquery.min.js"></script>
 <script src="//cdn.jsdelivr.net/highlight.js/8.5.0/highlight.min.js"></script>

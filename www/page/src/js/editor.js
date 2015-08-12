@@ -174,6 +174,11 @@ function updateResult() {
 
 	// reset lines mapping cache on content update
 	scrollMap = null;
+
+	try {
+		localStorage.setItem("editor_content", source);
+	}
+	catch (e) {}
 }
 
 // Build offsets for each line (lines can be wrapped)
