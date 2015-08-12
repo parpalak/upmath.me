@@ -260,7 +260,7 @@ QUnit.test("Latex", function (assert) {
 				"token": " (1)"
 			}
 		],
-		"Latex block"
+		"Latex block 1"
 	);
 	assert.deepEqual(
 		mdParser.tokenize(' $$f(x) = \\sin(x)$$  '),
@@ -331,7 +331,17 @@ QUnit.test("Latex", function (assert) {
 				"block": "paragraph",
 				"token": "(1)"
 			}		],
-		"Latex block"
+		"Latex block 3"
+	);
+	assert.deepEqual(
+		mdParser.tokenize('$$f(x) = {dF\\$$'),
+		[
+			{
+				"block": "paragraph",
+				"token": "$$f(x) = {dF\\$$"
+			}
+		],
+		"No latex"
 	);
 });
 
@@ -382,6 +392,13 @@ QUnit.test("Inline", function (assert) {
 		{token: 'a',      block: 'paragraph'},
 		{token: '~~bc~~', block: 'paragraph'}
 	], "Strike");
+	assert.deepEqual(mdParser.tokenize('a$$bc$$'), [
+		{token: 'a',      block: 'paragraph'},
+		{token: '$$bc$$', block: 'paragraph'}
+	], "Latex");
+	assert.deepEqual(mdParser.tokenize('a$$bc\\$$'), [
+		{token: 'a$$bc\\$$', block: 'paragraph'}
+	], "No latex");
 	assert.deepEqual(mdParser.tokenize('`1``2`'), [
 		{
 			"block": "paragraph",
