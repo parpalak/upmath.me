@@ -38,7 +38,7 @@
 		<div class="toolbar right">
 			<button class="toolbar-button _download-source" title="Download">⇓</button>
 		</div><!--
-		--><textarea class="source full-height"><?php include 'sample.md'; ?></textarea><!--
+		--><textarea class="source full-height"></textarea><!--
 	--></div><!--
 	--><div class="half-width full-height">
 		<div class="toolbar right">
@@ -67,11 +67,9 @@
 	(function () {
 		try {
 			var data = localStorage.getItem("editor_content");
-			if (data) {
-				document.getElementsByClassName('source')[0].value = data;
-			}
 		}
 		catch (e) {}
+		document.getElementsByClassName('source')[0].value = data || <?php echo json_encode(file_get_contents('sample.md'), JSON_UNESCAPED_UNICODE); ?>;
 	}());
 </script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/es5-shim/4.0.5/es5-shim.min.js"></script>
