@@ -13,10 +13,19 @@ module.exports = function(grunt) {
 			},
 			page: {
 				src: [
-					'bower_components/LDT/lib/TextareaDecorator.js',
-					'www/page/src/js/parser.js',
+					'www/page/src/js/*.js'
 				],
 				dest: 'www/page/dist/js/scripts.js'
+			},
+			page_vendors: {
+				src: [
+					'bower_components/markdown-it/dist/markdown-it.min.js',
+					'bower_components/markdown-it-sub/dist/markdown-it-sub.min.js',
+					'bower_components/markdown-it-sup/dist/markdown-it-sup.min.js',
+					'bower_components/LDT/lib/TextareaDecorator.js',
+					'bower_components/file-saver.js/FileSaver.js'
+				],
+				dest: 'www/page/dist/js/vendors.js'
 			}
 		},
 		uglify: {
@@ -26,9 +35,12 @@ module.exports = function(grunt) {
 				}
 			},
 			page: {
-				files: {
-					'www/page/dist/js/scripts.min.js': '<%= concat.page.dest %>'
-				}
+				src: ['<%= concat.page.dest %>'],
+				dest: 'www/page/dist/js/scripts.min.js'
+			},
+			page_vendors: {
+				src: ['<%= concat.page_vendors.dest %>'],
+				dest: 'www/page/dist/js/vendors.min.js'
 			}
 		},
 		copy: {
@@ -82,6 +94,13 @@ module.exports = function(grunt) {
 					'bower_components/social-likes/social-likes_flat.css'
 				],
 				dest: 'www/css/style.min.css'
+			},
+			page: {
+				src: [
+					'bower_components/LDT/lib/TextareaDecorator.css',
+					'www/page/src/css/editor.css'
+				],
+				dest: 'www/page/dist/css/style.min.css'
 			}
 		},
 		fingerprint: {
@@ -94,11 +113,16 @@ module.exports = function(grunt) {
 				template: "<?php define('FINGERPRINT', '<%= fingerprint %>'); ?>"
 			},
 			page: {
-				src: [
-					'www/page/dist/**'
-				],
-				filename: 'page_print.php',
-				template: "<?php define('FINGERPRINT', '<%= fingerprint %>'); ?>"
+				src: 'www/page/dist/js/scripts.min.js',
+				filename: 'www/page/dist/js/scripts.min.js.md5'
+			},
+			page_vendors: {
+				src: 'www/page/dist/js/vendors.min.js',
+				filename: 'www/page/dist/js/vendors.min.js.md5'
+			},
+			page_css: {
+				src: 'www/page/dist/css/style.min.css',
+				filename: 'www/page/dist/css/style.min.css.md5'
 			}
 		},
 		shell: {
@@ -109,9 +133,11 @@ module.exports = function(grunt) {
 					'gzip -cn6 www/css/style.min.css > www/css/style.min.css.gz'
 				].join(' && ')
 			},
-			gzipJS3: {
+			gzip_page: {
 				command: [
-					'gzip -cn6 www/page/dist/js/markdown-it.min.js > www/page/dist/js/markdown-it.min.js.gz'
+					'gzip -cn6 <%= cssmin.page.dest %> > <%= cssmin.page.dest %>.gz',
+					'gzip -cn6 <%= uglify.page.dest %> > <%= uglify.page.dest %>.gz',
+					'gzip -cn6 <%= uglify.page_vendors.dest %> > <%= uglify.page_vendors.dest %>.gz'
 				].join(' && ')
 			},
 			gzipPublic: {
