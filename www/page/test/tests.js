@@ -263,6 +263,40 @@ QUnit.test("Latex", function (assert) {
 		"Latex block"
 	);
 	assert.deepEqual(
+		mdParser.tokenize(' $$f(x) = \\sin(x)$$  '),
+		[
+			{
+				"block": "latexBlock",
+				"token": " "
+			},
+			{
+				"block": "latexBlock",
+				"token": "$$"
+			},
+			{
+				"block": "latexBlock",
+				"token": "f(x) = "
+			},
+			{
+				"block": "latexBlock",
+				"token": "\\sin"
+			},
+			{
+				"block": "latexBlock",
+				"token": "(x)"
+			},
+			{
+				"block": "latexBlock",
+				"token": "$$"
+			},
+			{
+				"block": "latexBlock",
+				"token": "  "
+			}
+		],
+		"Latex block 2"
+	);
+	assert.deepEqual(
 		mdParser.tokenize('$$\nf(x) = %comment1\nx%comment2 $$\n(1)'),
 		[
 			{

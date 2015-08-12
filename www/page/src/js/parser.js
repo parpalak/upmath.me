@@ -224,7 +224,7 @@ var mdParser = new MarkdownParser();
 
 mdParser
 	.addBlockRules({
-		latexBlock:/\$\$\n?[^\n]+(?:\n[^\n]+)*\n?\$\$(?:[ \t]*\([ \t]*\S+[ \t]*\))?(?:\n|$)/,
+		latexBlock:/[ \t]*\$\$\n?[^\n]+(?:\n[^\n]+)*\n?\$\$(?:[ \t]*\([ \t]*\S+[ \t]*\))?[ \t]*(?:\n|$)/,
 		empty:     /(?:[ \t]*\n)+/,
 		fence:     /```[\s\S]*?(?:$|```(?:\n|$))/,
 		reference: /\[[^\]]+\]\:[^\n]*(?:\n|$)/,

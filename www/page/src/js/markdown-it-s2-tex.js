@@ -110,7 +110,7 @@
 
 			if (start == 0) {
 				var srcEnd = state.src.substring(state.pos + close.length);
-				m = srcEnd.match(/^\s*(\(\d+\))\s*$/);
+				m = srcEnd.match(/^\s*(\([ \t]*\S+[ \t]*\))\s*$/);
 				if (m || srcEnd == '') {
 					tag = 'tex-block';
 				}
