@@ -72,10 +72,13 @@ h1.header {
 	padding: 0;
 }
 
-.source, .ldt pre, .ldt textarea {
+.source, .ldt pre.ldt-pre, .ldt textarea {
 	font-family: Menlo, Monaco, Consolas, "Courier New", monospace;
 	font-size: 14px;
 	line-height: 21px;
+}
+pre.ldt-pre span {
+	vertical-align: top;
 }
 .ldt pre, .ldt textarea {
 	padding: 16px 20px;
