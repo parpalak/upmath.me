@@ -148,6 +148,7 @@ function getSource() {
 
 function setSource(text) {
 	$('.source .ldt-textarea').val(text);
+	decorator.update();
 }
 
 function getHabraMarkup(source) {
@@ -333,14 +334,15 @@ var syncSrcScroll = debounce(function () {
 	}, 100, 'linear');
 }, 50, { maxWait: 50 });
 
+var decorator;
 
 $(function() {
 	var $source = $('.source'),
 		textarea = $source[0];
 
 	// start the decorator
-	var decorator = new TextareaDecorator( textarea, mdParser),
-		recalcHeight = debounce(function () { decorator.recalcHeight() }, 100);
+	decorator = new TextareaDecorator(textarea, mdParser);
+	var recalcHeight = debounce(function () { decorator.recalcHeight() }, 100);
 
 	setResultView(defaults._view);
 
