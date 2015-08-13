@@ -9,10 +9,11 @@ body,
 	box-sizing: border-box;
 }
 body {
-	min-width: 480px;
+	min-width: 600px;
 	margin: 0;
 	padding: 0;
 	background-color: #fff;
+	position: relative;
 }
 body, textarea, button {
 	font: 16px/1.5 Calibri, "Trebuchet MS", sans-serif;
@@ -36,7 +37,7 @@ h1, h2, h3 {
 h1.header {
 	font-size: 18px;
 	text-transform: uppercase;
-	letter-spacing: 0.4em;
+	letter-spacing: 0.3em;
 	background: #742600;
 	color: #fff;
 	padding: 0 20px;
@@ -48,7 +49,6 @@ h1.header {
 	left: 0;
 	right: 0;
 	bottom: 0;
-	min-width: 480px;
 }
 .container {
 	padding-top: 70px;
@@ -211,6 +211,9 @@ textarea {
 }
 ::-webkit-scrollbar-thumb {
 	background: #c3986a;
+}
+::-webkit-scrollbar-corner {
+	background: #e5cda5;
 }
 
 

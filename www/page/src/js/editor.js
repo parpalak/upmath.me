@@ -128,7 +128,7 @@ function mdInit() {
 			highlighted = mdHabr.utils.escapeHtml(token.content);
 		}
 
-		return  '<source' + self.renderAttrs(token) + '>'
+		return  '\n<source' + self.renderAttrs(token) + '>'
 			+ highlighted
 			+ '</source>\n';
 	}
@@ -150,6 +150,12 @@ function setSource(text) {
 	$('.source .ldt-textarea').val(text);
 }
 
+function getHabraMarkup(source) {
+	var html = mdHabr.render(source);
+	html = html.replace('<spoiler ', '\n<spoiler ');
+	return html;
+}
+
 function updateResult() {
 	var source = getSource();
 
@@ -166,7 +172,7 @@ function updateResult() {
 		);
 
 	} else if (defaults._view === 'habr') {
-		setHighlightedlContent('.result-habr-content', mdHabr.render(source), 'html');
+		setHighlightedlContent('.result-habr-content', getHabraMarkup(source), 'html');
 
 	} else { /*defaults._view === 'src'*/
 		setHighlightedlContent('.result-src-content', mdSrc.render(source), 'html');
