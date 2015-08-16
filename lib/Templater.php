@@ -26,8 +26,9 @@ class Templater implements TemplaterInterface
 		$extra_packages = array();
 
 		$test_env = array(
-			'eqnarray'		=>	'eqnarray',
-//		    'tikzpicture'	=>	'tikz',
+			'eqnarray'    => 'eqnarray',
+			'tikzcd'      => 'tikz-cd',
+			'tikzpicture' => 'tikz',
 		);
 
 		foreach ($test_env as $command => $env)
