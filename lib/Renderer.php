@@ -16,16 +16,21 @@ class Renderer implements RendererInterface
 	 * @var TemplaterInterface
 	 */
 	private $templater;
-	private $is_debug = false, $log_dir = null;
+
+	private $is_debug = false;
+	private $log_dir;
+	private $pngCommand;
+	private $svgCommand;
+	private $svg2pngCommand;
 	private $svg = '', $png = '';
 
-	public function __construct (TemplaterInterface $templater, $tmpDir, $latexCommand, $svgCommand, $pngCommand)
+	public function __construct (TemplaterInterface $templater, $tmpDir, $latexCommand, $svgCommand, $pngCommand = null)
 	{
 		$this->templater = $templater;
 		$this->tmp_dir = $tmpDir;
 		$this->latex_command = $latexCommand;
-		$this->svg_command = $svgCommand;
-		$this->png_command = $pngCommand;
+		$this->svgCommand = $svgCommand;
+		$this->pngCommand = $pngCommand;
 	}
 
 	public function setDebug ($isDebug)
@@ -100,9 +105,8 @@ class Renderer implements RendererInterface
 		}
 
 		// DVI -> SVG
-		ob_start();
-		passthru(sprintf($this->svg_command, $tmp_name));
-		$svg = ob_get_clean();
+		exec(sprintf($this->svgCommand, $tmp_name));
+		$svg = file_get_contents($tmp_name . '.svg');
 
 		// $svg = '...<!--start 19.8752 31.3399 -->...';
 		$is_start = preg_match('#<!--start ([\d.]+) ([\d.]+) -->#', $svg, $match_start);
@@ -121,9 +125,17 @@ class Renderer implements RendererInterface
 
 		$this->svg = $svg;
 
-		// DVI -> PNG
-		exec(sprintf($this->png_command, $tmp_name, $tmp_name));
-		$this->png = file_get_contents($tmp_name . '.png');
+		if ($this->svg2pngCommand) {
+			// SVG -> PNG
+			ob_start();
+			passthru(sprintf($this->svg2pngCommand, $tmp_name));
+			$this->png = ob_get_clean();
+		}
+		elseif ($this->pngCommand) {
+			// DVI -> PNG
+			exec(sprintf($this->pngCommand, $tmp_name));
+			$this->png = file_get_contents($tmp_name . '.png');
+		}
 
 		// Cleaning up
 		$this->cleanupTempFiles($tmp_name);
@@ -146,5 +158,10 @@ class Renderer implements RendererInterface
 	{
 		foreach (array('', '.log', '.aux', '.dvi', '.png') as $ext)
 			@unlink($tmp_name . $ext);
+	}
+
+	public function setSVG2PNGCommand ($command)
+	{
+		$this->svg2pngCommand = $command;
 	}
 }

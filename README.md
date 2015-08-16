@@ -5,7 +5,8 @@ Source of the [LaTeX equations for web](http://tex.s2cms.com) service.
 ##Installation
 
 1. Install [TeX Live](https://www.tug.org/texlive/quickinstall.html).
-2. Deploy files:
+1. Install the following utilities: `rsvg-convert`, `optipng`, `pngout`. Or modify the code to disable PNG support.
+1. Deploy files:
 ```
 git clone git@github.com:parpalak/tex.s2cms.ru.git
 npm install

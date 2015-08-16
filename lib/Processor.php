@@ -14,7 +14,8 @@ class Processor
 	private $ext, $formula, $svg = '', $png = '', $cur_cache_name, $cache_exists = false, $modified_at;
 	private $error;
 	private $renderer;
-	private $svg_commands = array();
+	private $svgCommands = array();
+	private $pngCommands = array();
 
 	public function __construct (RendererInterface $renderer, $cacheSuccessDir, $cacheFailDir)
 	{
@@ -37,9 +38,16 @@ class Processor
 		$this->cache_exists = file_exists($this->cur_cache_name);
 	}
 
-	public function addSVGCommand ($command)
+	public function addSVGCommand($command)
 	{
-		$this->svg_commands[] = $command;
+		$this->svgCommands[] = $command;
+		return $this;
+	}
+
+	public function addPNGCommand($command)
+	{
+		$this->pngCommands[] = $command;
+		return $this;
 	}
 
 	public function prepareContent ()
@@ -111,10 +119,17 @@ class Processor
 		$svg_cache_name = $this->cachePathFromURI('svg');
 		self::file_put($svg_cache_name, $this->error ? $_SERVER['HTTP_REFERER'] . ' svg: '.$this->formula . ' ' . $this->svg : $this->svg);
 
-		// Optimizing SVG
-		if (!$this->error)
-			foreach ($this->svg_commands as $command)
+		if (!$this->error) {
+			// Optimizing SVG
+			foreach ($this->svgCommands as $command) {
 				exec(sprintf($command, $svg_cache_name));
+			}
+
+			// Optimizing PNG
+			foreach ($this->pngCommands as $command) {
+				exec(sprintf($command, $png_cache_name));
+			}
+		}
 	}
 
 	private static function file_put ($filename, $content)
