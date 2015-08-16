@@ -15,7 +15,7 @@ if (!defined('TEX_HOST')) {
 $service_url = '//' .  TEX_HOST . '/';
 $script_url = $service_url.'latex.js';
 
-$lang = $_SERVER['HTTP_HOST'] == 'tex.s2cms.com' ? 'en' : 'ru';
+$lang = $_SERVER['HTTP_HOST'] == 'tex.s2cms.ru' ? 'ru' : 'en';
 $i18n = include 'lang.' . $lang . '.php';
 
 $lang_links = [
