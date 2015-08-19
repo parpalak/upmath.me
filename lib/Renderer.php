@@ -43,8 +43,25 @@ class Renderer implements RendererInterface
 		$this->log_dir = $dir;
 	}
 
+	private function checkFormula($formula)
+	{
+		foreach (array('\\write', '\\input', '\\usepackage') as $disabledCommand) {
+			if (strpos($formula, $disabledCommand) !== false) {
+				if ($this->log_dir !== null)
+				{
+					$logger = new Katzgrau\KLogger\Logger($this->log_dir);
+					$logger->error('Forbidden command: ', array($formula));
+					$logger->error('Server vars: ', $_SERVER);
+				}
+				throw new Exception('Forbidden commands.');
+			}
+		}
+	}
+
 	public function run ($formula)
 	{
+		$this->checkFormula($formula);
+
 		$tmp_name = tempnam(TMP_DIR, '');
 
 		$tex_source = $this->templater->run($formula);
