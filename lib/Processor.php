@@ -122,12 +122,12 @@ class Processor
 		if (!$this->error) {
 			// Optimizing SVG
 			foreach ($this->svgCommands as $command) {
-				exec(sprintf($command, $svg_cache_name));
+				shell_exec(sprintf($command, $svg_cache_name));
 			}
 
 			// Optimizing PNG
 			foreach ($this->pngCommands as $command) {
-				exec(sprintf($command, $png_cache_name));
+				shell_exec(sprintf($command, $png_cache_name));
 			}
 		}
 	}

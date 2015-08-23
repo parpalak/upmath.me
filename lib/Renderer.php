@@ -65,27 +65,21 @@ class Renderer implements RendererInterface
 		$tmp_name = tempnam(TMP_DIR, '');
 
 		$tex_source = $this->templater->run($formula);
-
-		if ($this->is_debug)
-			echo '<pre>', htmlspecialchars($tex_source), '</pre>';
+		$this->echoDebug(htmlspecialchars($tex_source));
 
 		// Latex
 		file_put_contents($tmp_name, $tex_source);
-		try
-		{
+		try {
 			list($out, $status) = Lib::ExecWaitTimeout($this->latex_command . ' ' . $tmp_name . ' 2>&1');
-			if ($this->is_debug)
-			{
+			if ($this->is_debug) {
 				echo '<pre>';
 				readfile($tmp_name . '.log');
 				var_dump($status);
 				echo '</pre>';
 			}
 		}
-		catch (Exception $e)
-		{
-			if ($this->log_dir !== null)
-			{
+		catch (Exception $e) {
+			if ($this->log_dir !== null) {
 				$logger = new Katzgrau\KLogger\Logger($this->log_dir);
 				$logger->error('Cannot run Latex', array($e->getMessage()));
 				$logger->error('source', array($tex_source));
@@ -95,41 +89,36 @@ class Renderer implements RendererInterface
 
 		$is_latex_error = !file_exists($tmp_name . '.dvi') /*|| $status['exitcode'] !== 0*/;
 
-		if (!file_exists($tmp_name . '.dvi') || isset($status['status_kill']))
-		{
+		if (!file_exists($tmp_name . '.dvi') || isset($status['status_kill'])) {
 			// Ohe has to figure out why the process was killed and why no dvi-file is created.
-			if ($this->log_dir !== null)
-			{
+			if ($this->log_dir !== null) {
 				$logger = new Katzgrau\KLogger\Logger($this->log_dir);
 				$logger->error('Latex finished incorrectly');
 				$logger->error('status', $status + array("file_exists($tmp_name.dvi)" => file_exists($tmp_name . '.dvi')));
 				$logger->error('source', array($tex_source));
-				$logger->error('trace', array(file_get_contents($tmp_name.'.log')));
+				$logger->error('trace',  array(file_get_contents($tmp_name.'.log')));
 			}
 		}
 
-		if ($is_latex_error)
-		{
-			if ($this->is_debug)
-			{
-				echo '<pre>';
-				var_dump($this);
-				echo '</pre>';
-			}
-
+		if ($is_latex_error) {
+			$this->dumpDebug($this);
 			$this->cleanupTempFiles($tmp_name);
 			throw new Exception('Invalid formula');
 		}
 
 		// DVI -> SVG
-		exec(sprintf($this->svgCommand, $tmp_name));
+		$cmd = sprintf($this->svgCommand, $tmp_name);
+		$svg_output = shell_exec($cmd);
+
+		$this->dumpDebug($cmd);
+		$this->dumpDebug($svg_output);
+
 		$svg = file_get_contents($tmp_name . '.svg');
 
 		// $svg = '...<!--start 19.8752 31.3399 -->...';
 		$is_start = preg_match('#<!--start ([\d.]+) ([\d.]+) -->#', $svg, $match_start);
 		$is_bbox = preg_match('#<!--bbox ([\d.]+) ([\d.]+) ([\d.]+) ([\d.]+) -->#', $svg, $match_bbox);
-		if ($is_start && $is_bbox)
-		{
+		if ($is_start && $is_bbox) {
 			// SVG contains info about image size and baseline position.
 			$depth = round(OUTER_SCALE * (- $match_start[2] + $match_bbox[2] + $match_bbox[4]), self::SVG_PRECISION);
 			$height = round(OUTER_SCALE * $match_bbox[4], self::SVG_PRECISION);
@@ -173,12 +162,37 @@ class Renderer implements RendererInterface
 	 */
 	private function cleanupTempFiles ($tmp_name)
 	{
-		foreach (array('', '.log', '.aux', '.dvi', '.png') as $ext)
+		foreach (['', '.log', '.aux', '.dvi', '.svg', '.png'] as $ext) {
 			@unlink($tmp_name . $ext);
+		}
 	}
 
 	public function setSVG2PNGCommand ($command)
 	{
 		$this->svg2pngCommand = $command;
+	}
+
+	/**
+	 * @param $output
+	 */
+	private function dumpDebug($output)
+	{
+		if ($this->is_debug) {
+			echo '<pre>';
+			var_dump($output);
+			echo '</pre>';
+		}
+	}
+
+	/**
+	 * @param $output
+	 */
+	private function echoDebug($output)
+	{
+		if ($this->is_debug) {
+			echo '<pre>';
+			echo $output;
+			echo '</pre>';
+		}
 	}
 }
