@@ -26,9 +26,16 @@
 <?php endif; ?>
 </head>
 <body>
-<h1 class="header">
-	Markdown & LaTeX Editor
-</h1>
+<div class="header">
+	<h1 class="title">Markdown & LaTeX Editor</h1>
+	<div class="copyright">
+		&copy; 2015
+		<script>
+			var mailto = "roman%"+"40written.ru";
+			document.write('<a title="Drop me a line" href="mailto:'+unescape(mailto)+'">Roman Parpalak</a>');
+		</script>
+	</div>
+</div>
 <div class="container full-height">
 	<div class="half-width full-height">
 		<div class="toolbar left">
@@ -56,13 +63,6 @@
 		<pre class="result-debug full-height"><code class="result-debug-content full-height"></code></pre>
 	</div><!--
 --></div>
-<div class="copyright">
-	&copy; 2015
-	<script>
-		var mailto = "roman%"+"40written.ru";
-		document.write('<a title="Drop me a line" href="mailto:'+unescape(mailto)+'">Roman Parpalak</a>');
-	</script>
-</div>
 <script>
 	(function () {
 		try {

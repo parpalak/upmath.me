@@ -24,7 +24,7 @@ h1, h2, h3 {
 	font-weight: normal;
 	}
 	h1 {
-		margin: 12px 0 0;
+		margin: 1em 0 0.25em;
 		font-size: 225%;
 		}
 	h2 {
@@ -34,21 +34,24 @@ h1, h2, h3 {
 	h3 {
 		font-size: 125%;
 		}
-h1.header {
-	font-size: 18px;
-	text-transform: uppercase;
-	letter-spacing: 0.3em;
+div.header {
 	background: #742600;
 	color: #fff;
-	padding: 0 20px;
+	padding: 9px 2% 0;
 	margin: 0;
 	height: 70px;
-	line-height: 48px;
 	position: absolute;
 	top: 0;
 	left: 0;
 	right: 0;
 	bottom: 0;
+}
+h1.title {
+	font-size: 18px;
+	text-transform: uppercase;
+	letter-spacing: 0.3em;
+	line-height: 30px;
+	margin: 0;
 }
 .container {
 	padding-top: 70px;
@@ -81,10 +84,10 @@ pre.ldt-pre span {
 	vertical-align: top;
 }
 .ldt pre, .ldt textarea {
-	padding: 16px 20px;
+	padding: 16px 4%;
 }
 textarea.source {
-	padding: 16px 20px;
+	padding: 16px 4%;
 	width: 100%;
 }
 textarea {
@@ -101,7 +104,7 @@ textarea {
 .result-habr,
 .result-debug,
 .result-html {
-	padding: 16px 20px;
+	padding: 16px 4%;
 	margin: 0;
 	overflow: auto;
 	background-color: #fff;
@@ -162,7 +165,7 @@ textarea {
 	top: -24px;
 	}
 	.toolbar.left {
-		left: 20px;
+		left: 4%;
 		}
 	.toolbar.right {
 		right: 12px;
@@ -174,7 +177,7 @@ textarea {
 .demo-control {
 	position: absolute;
 	top: -24px;
-	left: 20px;
+	left: 4%;
 	}
 	.toolbar-button,
 	.demo-control .control-item {
@@ -279,6 +282,7 @@ textarea {
 
 
 @media screen and (-webkit-min-device-pixel-ratio:0) {
+	/* Chrome hack for the caret color. */
 	.ldt textarea {
 		color: #000 !important;
 		-webkit-text-fill-color: rgba(0, 0, 0, 0.2);
@@ -287,5 +291,25 @@ textarea {
 	.ldt textarea::-webkit-input-placeholder {
 		text-shadow: none;
 		-webkit-text-fill-color: initial;
+	}
+}
+
+@media screen and (max-width: 700px) {
+	h1.title {
+		text-transform: uppercase;
+		letter-spacing: 0.2em;
+	}
+
+	div.header {
+		padding-top: 3px;
+		height: 60px;
+	}
+
+	.container {
+		padding-top: 60px;
+	}
+
+	.copyright {
+		top: 6px;
 	}
 }
