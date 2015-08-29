@@ -43,6 +43,7 @@ else {
 <title><?php echo __('title'); ?></title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="/css/style.min.css?<?php echo FINGERPRINT; ?>">
+<link rel="icon" type="image/png" href="/favicon.png" />
 <script src="/latex.js"></script>
 <body>
 	<div class="section" id="moto">
