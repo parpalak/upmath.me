@@ -37,7 +37,7 @@ h1, h2, h3 {
 div.header {
 	background: #742600;
 	color: #fff;
-	padding: 9px 2% 0;
+	padding: 8px 2% 0;
 	margin: 0;
 	height: 70px;
 	position: absolute;
@@ -58,7 +58,7 @@ h1.title {
 	overflow: hidden;
 }
 .copyright {
-	top: 12px;
+	top: 10px;
 	right: 12px;
 	position: absolute;
 	letter-spacing: 0.02em;
@@ -280,6 +280,10 @@ textarea {
 	font-weight: bold;
 }
 
+.social-likes {
+	font-size: 12px;
+	vertical-align: 1px;
+}
 
 @media screen and (-webkit-min-device-pixel-ratio:0) {
 	/* Chrome hack for the caret color. */
@@ -295,6 +299,12 @@ textarea {
 }
 
 @media screen and (max-width: 700px) {
+	.social-likes {
+		display: none;
+	}
+}
+
+@media screen and (max-width: 750px) {
 	h1.title {
 		text-transform: uppercase;
 		letter-spacing: 0.2em;
@@ -306,10 +316,15 @@ textarea {
 	}
 
 	.container {
+		letter-spacing: 0;
 		padding-top: 60px;
 	}
 
 	.copyright {
-		top: 6px;
+		top: 5px;
+	}
+
+	.social-likes__widget {
+		margin-right: 0.3em;
 	}
 }
