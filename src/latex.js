@@ -1,5 +1,5 @@
 /**
- * Replaces LaTeX formulae with pictures
+ * Replaces LaTeX formulas by pictures
  * Inspired by http://www.codecogs.com/latex/htmlequations.php
  * @copyright 2012-2015 Roman Parpalak
  */
