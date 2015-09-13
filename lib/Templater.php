@@ -23,26 +23,43 @@ class Templater implements TemplaterInterface
 	function run ($formula)
 	{
 		$math_mode = true;
-		$extra_packages = array();
+		$extra_packages = [];
 
-		$test_env = array(
+		// Check if there are used certain environments and include corresponding packages
+
+		$test_env = [
 			'eqnarray'    => 'eqnarray',
 			'tikzcd'      => 'tikz-cd',
 			'tikzpicture' => 'tikz',
-		);
+			'align'       => '', // just turns math mode off
+		];
 
-		foreach ($test_env as $command => $env)
-			if (strpos($formula, '\\begin{'.$command.'}') !== false || strpos($formula, '\\begin{'.$command.'*}') !== false)
-			{
+		foreach ($test_env as $command => $env) {
+			if (strpos($formula, '\\begin{' . $command . '}') !== false || strpos($formula, '\\begin{' . $command . '*}') !== false) {
 				$math_mode = false;
-				$extra_packages[] = $env;
+				if ($env) {
+					$extra_packages[] = $env;
+				}
 			}
+		}
 
-		if (strpos($formula, '\\begin{align}') !== false || strpos($formula, '\\begin{align*}') !== false)
-			$math_mode = false;
+		// Check if there are used certain commands and include corresponding packages
 
-		if (substr($formula, 0, 7) == '\\inline')
+		$test_command = [
+			'\\addplot' => 'pgfplots',
+		];
+
+		foreach ($test_command as $command => $env) {
+			if (strpos($formula, $command) !== false) {
+				if ($env) {
+					$extra_packages[] = $env;
+				}
+			}
+		}
+
+		if (substr($formula, 0, 7) == '\\inline') {
 			$formula = '\\textstyle '.substr($formula, 7);
+		}
 
 		$tpl = $math_mode ? 'displayformula' : 'common';
 
