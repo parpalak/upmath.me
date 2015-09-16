@@ -8,6 +8,8 @@
  * @link      http://tex.s2cms.ru
  */
 
+namespace Tex;
+
 class Lib
 {
 	/**
@@ -17,7 +19,7 @@ class Lib
 	 *
 	 * @param string $cmd Command to exec (you should use 2>&1 at the end to pipe all output)
 	 * @param integer $timeout
-	 * @throws Exception
+	 * @throws \Exception
 	 * @return string Returns command output
 	 */
 	static function ExecWaitTimeout($cmd, $timeout = 8)
@@ -33,7 +35,7 @@ class Lib
 
 		$process = proc_open($cmd, $descriptorspec, $pipes);
 		if (!is_resource($process))
-			throw new Exception("proc_open failed on: " . $cmd);
+			throw new \Exception("proc_open failed on: " . $cmd);
 
 		$output = '';
 

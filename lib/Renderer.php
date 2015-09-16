@@ -8,6 +8,8 @@
  * @link      http://tex.s2cms.ru
  */
 
+namespace Tex;
+
 class Renderer implements RendererInterface
 {
 	const SVG_PRECISION = 5;
@@ -49,11 +51,11 @@ class Renderer implements RendererInterface
 			if (strpos($formula, $disabledCommand) !== false) {
 				if ($this->log_dir !== null)
 				{
-					$logger = new Katzgrau\KLogger\Logger($this->log_dir);
+					$logger = new \Katzgrau\KLogger\Logger($this->log_dir);
 					$logger->error('Forbidden command: ', array($formula));
 					$logger->error('Server vars: ', $_SERVER);
 				}
-				throw new Exception('Forbidden commands.');
+				throw new \Exception('Forbidden commands.');
 			}
 		}
 	}
@@ -78,9 +80,9 @@ class Renderer implements RendererInterface
 				echo '</pre>';
 			}
 		}
-		catch (Exception $e) {
+		catch (\Exception $e) {
 			if ($this->log_dir !== null) {
-				$logger = new Katzgrau\KLogger\Logger($this->log_dir);
+				$logger = new \Katzgrau\KLogger\Logger($this->log_dir);
 				$logger->error('Cannot run Latex', array($e->getMessage()));
 				$logger->error('source', array($tex_source));
 			}
@@ -92,7 +94,7 @@ class Renderer implements RendererInterface
 		if (!file_exists($tmp_name . '.dvi') || isset($status['status_kill'])) {
 			// Ohe has to figure out why the process was killed and why no dvi-file is created.
 			if ($this->log_dir !== null) {
-				$logger = new Katzgrau\KLogger\Logger($this->log_dir);
+				$logger = new \Katzgrau\KLogger\Logger($this->log_dir);
 				$logger->error('Latex finished incorrectly');
 				$logger->error('status', $status + array("file_exists($tmp_name.dvi)" => file_exists($tmp_name . '.dvi')));
 				$logger->error('source', array($tex_source));
@@ -103,7 +105,7 @@ class Renderer implements RendererInterface
 		if ($is_latex_error) {
 			$this->dumpDebug($this);
 			$this->cleanupTempFiles($tmp_name);
-			throw new Exception('Invalid formula');
+			throw new \Exception('Invalid formula');
 		}
 
 		// DVI -> SVG

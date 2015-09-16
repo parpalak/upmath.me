@@ -14,8 +14,8 @@
     "katzgrau/klogger": "1.0.*"
   },
   "autoload": {
-    "psr-0": {
-      "": "lib"
+    "psr-4": {
+      "Tex\\": "lib"
     }
   }
 }

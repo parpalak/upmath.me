@@ -8,6 +8,8 @@
  * @link      http://tex.s2cms.ru
  */
 
+namespace Tex;
+
 class Templater implements TemplaterInterface
 {
 	private $dir;
@@ -23,10 +25,9 @@ class Templater implements TemplaterInterface
 	function run ($formula)
 	{
 		$math_mode = true;
-		$extra_packages = [];
+		$extraPackages = [];
 
 		// Check if there are used certain environments and include corresponding packages
-
 		$test_env = [
 			'eqnarray'    => 'eqnarray',
 			'tikzcd'      => 'tikz-cd',
@@ -38,13 +39,12 @@ class Templater implements TemplaterInterface
 			if (strpos($formula, '\\begin{' . $command . '}') !== false || strpos($formula, '\\begin{' . $command . '*}') !== false) {
 				$math_mode = false;
 				if ($env) {
-					$extra_packages[] = $env;
+					$extraPackages[] = new Tpl\Package($env);
 				}
 			}
 		}
 
 		// Check if there are used certain commands and include corresponding packages
-
 		$test_command = [
 			'\\addplot' => 'pgfplots',
 		];
@@ -52,11 +52,22 @@ class Templater implements TemplaterInterface
 		foreach ($test_command as $command => $env) {
 			if (strpos($formula, $command) !== false) {
 				if ($env) {
-					$extra_packages[] = $env;
+					$extraPackages[] = new Tpl\Package($env);
 				}
 			}
 		}
 
+		// Custom rules
+		if (strpos($formula, '\\xymatrix') !== false || strpos($formula, '\\begin{xy}') !== false) {
+			$extraPackages[] = new Tpl\Package('xy', ['all']);
+		}
+
+		if (preg_match('#[А-Яа-я]#u', $formula)) {
+			$extraPackages[] = new Tpl\Package('inputenc', ['utf8']);
+			$extraPackages[] = new Tpl\Package('babel', ['russian']);
+		}
+
+		// Other setup
 		if (substr($formula, 0, 7) == '\\inline') {
 			$formula = '\\textstyle '.substr($formula, 7);
 		}

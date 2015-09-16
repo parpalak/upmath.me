@@ -8,6 +8,10 @@
  * @link      http://tex.s2cms.ru
  */
 
+use Tex\Templater;
+use Tex\Tester;
+use Tex\Renderer;
+
 require '../vendor/autoload.php';
 require '../config.php';
 

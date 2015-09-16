@@ -9,6 +9,8 @@
  * @link      http://tex.s2cms.ru
  */
 
+namespace Tex;
+
 class Processor
 {
 	private $ext, $formula, $svg = '', $png = '', $cur_cache_name, $cache_exists = false, $modified_at;
@@ -28,7 +30,7 @@ class Processor
 	{
 		$a = explode('/', $uri);
 		if (count($a) < 3 || $a[1] !== 'svg' && $a[1] !== 'png')
-			throw new Exception('Incorrect output format has been requested. Expected SVG or PNG.');
+			throw new \Exception('Incorrect output format has been requested. Expected SVG or PNG.');
 
 		$this->ext = $a[1];
 		$this->formula = urldecode($a[2]);
@@ -67,7 +69,7 @@ class Processor
 			$this->svg = $this->renderer->getSVG();
 			$this->png = $this->renderer->getPNG();
 		}
-		catch (Exception $e)
+		catch (\Exception $e)
 		{
 			$this->error = $e->getMessage();
 		}

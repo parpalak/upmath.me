@@ -8,6 +8,8 @@
  * @link      http://tex.s2cms.ru
  */
 
+namespace Tex;
+
 interface TemplaterInterface
 {
 	/**
