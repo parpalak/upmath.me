@@ -67,11 +67,23 @@ $formats = [
 			<button class="toolbar-button _download-result" title="Download">⇓</button>
 		</div>
 		<div class="demo-control">
-<?php foreach ($formats as $class => $name)
+<?php
+
+$selected = true;
+
+foreach ($formats as $class => $name)
 {
 ?>
-			<button class="control-item" data-result-as="<?php echo $class; ?>"><?php echo $name; ?></button>
+			<input
+				class="control-input"
+				id="id_<?php echo $class; ?>"
+				type="radio"
+				name="source_type"
+				<?php $selected ? print 'checked="checked"' : null; ?>
+			>
+			<label for="id_<?php echo $class; ?>" data-result-as="<?php echo $class; ?>" class="control-item"><?php echo $name; ?></label>
 <?php
+	$selected = false;
 }
 ?>
 		</div>

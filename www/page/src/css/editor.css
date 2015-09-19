@@ -104,6 +104,7 @@ textarea {
 .result-habr,
 .result-debug,
 .result-html {
+	display: none;
 	padding: 16px 4%;
 	margin: 0;
 	overflow: auto;
@@ -117,49 +118,19 @@ textarea {
 .result-debug {
 	font-size: 12px;
 }
-.result-src,
-.result-habr,
-.result-debug {
-	display: none;
-	background-color: #fff;
-}
 .result-src-content,
 .result-habr-content,
 .result-debug-content {
 	white-space: pre-wrap;
 }
-.result-as-html .result-html {
-	display: block;
-}
-.result-as-html .result-src,
-.result-as-html .result-habr,
-.result-as-html .result-debug {
-	display: none;
-}
+
+.result-as-html .result-html,
+.result-as-habr .result-habr,
+.result-as-debug .result-debug,
 .result-as-src .result-src {
 	display: block;
 }
-.result-as-src .result-html,
-.result-as-src .result-habr,
-.result-as-src .result-debug {
-	display: none;
-}
-.result-as-habr .result-habr {
-	display: block;
-}
-.result-as-habr .result-src,
-.result-as-habr .result-html,
-.result-as-habr .result-debug {
-	display: none;
-}
-.result-as-debug .result-debug {
-	display: block;
-}
-.result-as-debug .result-html,
-.result-as-debug .result-habr,
-.result-as-debug .result-src {
-	display: none;
-}
+
 .toolbar {
 	position: absolute;
 	top: -24px;
@@ -179,6 +150,9 @@ textarea {
 	top: -24px;
 	left: 4%;
 	}
+	.demo-control .control-input {
+		display: none;
+	}
 	.toolbar-button,
 	.demo-control .control-item {
 		color: white;
@@ -191,12 +165,12 @@ textarea {
 		}
 	.demo-control .control-item {
 		background: rgba(255, 255, 255, 0.15);
+		display: inline-block;
+		padding: 0 5px;
 		}
-.result-as-habr .demo-control .control-item[data-result-as='habr'],
-.result-as-src .demo-control .control-item[data-result-as='src'],
-.result-as-html .demo-control .control-item[data-result-as='html'] {
-	background: rgba(255, 255, 255, 0.4);
-}
+		.demo-control .control-input:checked + .control-item {
+			background: rgba(255, 255, 255, 0.4);
+			}
 .hljs {
 	background: none;
 	padding: 0;
