@@ -8,6 +8,13 @@
 
 @include 'config.php';
 
+$formats = [
+	'html' => 'preview',
+	'src'  => 'source',
+	'habr' => 'habr',
+//	'debug' => 'debug',
+]
+
 ?>
 <!DOCTYPE html>
 <html>
@@ -60,10 +67,13 @@
 			<button class="toolbar-button _download-result" title="Download">⇓</button>
 		</div>
 		<div class="demo-control">
-			<button class="control-item" data-result-as="html">preview</button>
-			<button class="control-item" data-result-as="src">source</button>
-			<button class="control-item" data-result-as="habr">habr</button>
-<!--			<button class="control-item" data-result-as="debug">debug</button>-->
+<?php foreach ($formats as $class => $name)
+{
+?>
+			<button class="control-item" data-result-as="<?php echo $class; ?>"><?php echo $name; ?></button>
+<?php
+}
+?>
 		</div>
 		<div class="result-html full-height"></div>
 		<pre class="result-src full-height"><code class="result-src-content full-height"></code></pre>
