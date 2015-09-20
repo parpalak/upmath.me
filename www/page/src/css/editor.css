@@ -214,6 +214,9 @@ textarea {
 .ldt .list {
 	background: #f2ffef;
 }
+.ldt .list-mark {
+	font-weight: bold;
+}
 .ldt .fence {
 	background: #eee;
 }
