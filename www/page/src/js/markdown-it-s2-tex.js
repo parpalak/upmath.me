@@ -149,13 +149,18 @@
 
 		md.renderer.rules.math_inline = (function (protocol) {
 			return function (tokens, idx) {
-				var formula = tokens[idx].content,
-					url = protocol + '//tex.s2cms.ru/svg/' + encodeURIComponent(formula);
-				if ("tex-inline" === tokens[idx].tag) {
-					return '<img src="' + url + '" alt="' + md.utils.escapeHtml(formula) + '" />';
+				var formula = tokens[idx].content;
+
+				if (options.noreplace) {
+					return inlineOpen + formula + inlineClose;
 				}
 
-				return  '<img align="center" src="' + url + '" alt="' + md.utils.escapeHtml(formula) + '" />';
+				var url = protocol + '//tex.s2cms.ru/svg/' + encodeURIComponent(formula),
+					isInline = "tex-inline" === tokens[idx].tag;
+
+				return isInline
+						? '<img src="' + url + '" alt="' + md.utils.escapeHtml(formula) + '" />'
+						: '<img align="center" src="' + url + '" alt="' + md.utils.escapeHtml(formula) + '" />';
 			}
 		}(location.protocol == "https:" ? "https:" : 'http:'));
 

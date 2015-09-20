@@ -102,6 +102,7 @@ textarea {
 }
 .result-src,
 .result-habr,
+.result-htmltex,
 .result-debug,
 .result-html {
 	display: none;
@@ -112,6 +113,7 @@ textarea {
 }
 .result-src,
 .result-habr,
+.result-htmltex,
 .result-debug {
 	white-space: pre-wrap;
 }
@@ -120,12 +122,14 @@ textarea {
 }
 .result-src-content,
 .result-habr-content,
+.result-htmltex-content,
 .result-debug-content {
 	white-space: pre-wrap;
 }
 
 .result-as-html .result-html,
 .result-as-habr .result-habr,
+.result-as-htmltex .result-htmltex,
 .result-as-debug .result-debug,
 .result-as-src .result-src {
 	display: block;

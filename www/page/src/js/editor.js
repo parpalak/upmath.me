@@ -15,6 +15,9 @@ var defaults = {
 	typographer:  true,         // Enable smartypants and other sweet transforms
 	quotes:       '«»„“',
 
+	// option for tex plugin
+	_tex: {noreplace: false},
+
 	// options below are for demo only
 	_highlight: true,
 	_strict: false,
@@ -23,10 +26,7 @@ var defaults = {
 
 function setResultView(val) {
 	$('body')
-		.removeClass('result-as-html')
-		.removeClass('result-as-habr')
-		.removeClass('result-as-src')
-		.removeClass('result-as-debug')
+		.removeClass('result-as-html result-as-htmltex result-as-habr result-as-src result-as-debug')
 		.addClass('result-as-' + val)
 	;
 	defaults._view = val;
@@ -39,7 +39,7 @@ function mdInit() {
 		.use(markdownitSup)
 	;
 	mdSrc = window.markdownit(defaults)
-		.use(markdownitS2Tex)
+		.use(markdownitS2Tex, defaults._tex)
 		.use(markdownitSub)
 		.use(markdownitSup)
 	;
@@ -68,11 +68,17 @@ function mdInit() {
 		return false;
 	}
 
-	//
-	// Inject line numbers for sync scroll. Notes:
-	//
-	// - We track only headings and paragraphs on first level. That's enough.
-	// - Footnotes content causes jumps. Level limit filter it automatically.
+	/**
+	 * Inject line numbers for sync scroll. Notes:
+	 * - We track only headings and paragraphs on first level. That's enough.
+	 * - Footnotes content causes jumps. Level limit filter it automatically.
+	 *
+	 * @param tokens
+	 * @param idx
+	 * @param options
+	 * @param env
+	 * @param self
+	 */
 	function injectLineNumbers(tokens, idx, options, env, self) {
 		var line;
 		if (tokens[idx].map && tokens[idx].level === 0) {
@@ -178,18 +184,23 @@ function updateResult() {
 	// (debug & src view with highlighting are a bit slow)
 	if (defaults._view === 'html') {
 		$('.result-html').html(mdHtml.render(source));
-
-	} else if (defaults._view === 'debug') {
+	}
+	else if (defaults._view === 'htmltex') {
+		defaults._tex.noreplace = true;
+		setHighlightedlContent('.result-htmltex-content', mdSrc.render(source), 'html');
+	}
+	else if (defaults._view === 'debug') {
 		setHighlightedlContent(
 			'.result-debug-content',
 			JSON.stringify(mdSrc.parse(source, { references: {} }), null, 2),
 			'json'
 		);
-
-	} else if (defaults._view === 'habr') {
+	}
+	else if (defaults._view === 'habr') {
 		setHighlightedlContent('.result-habr-content', getHabraMarkup(source), 'html');
-
-	} else { /*defaults._view === 'src'*/
+	}
+	else { /*defaults._view === 'src'*/
+		defaults._tex.noreplace = false;
 		setHighlightedlContent('.result-src-content', mdSrc.render(source), 'html');
 	}
 

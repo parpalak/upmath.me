@@ -9,11 +9,12 @@
 @include 'config.php';
 
 $formats = [
-	'html' => 'preview',
-	'src'  => 'source',
-	'habr' => 'habr',
+	'html'    => 'preview',
+	'src'     => 'html',
+	'htmltex' => 'html+tex',
+	'habr'    => 'habr',
 //	'debug' => 'debug',
-]
+];
 
 ?>
 <!DOCTYPE html>
@@ -89,6 +90,7 @@ foreach ($formats as $class => $name)
 		</div>
 		<div class="result-html full-height"></div>
 		<pre class="result-src full-height"><code class="result-src-content full-height"></code></pre>
+		<pre class="result-htmltex full-height"><code class="result-htmltex-content full-height"></code></pre>
 		<pre class="result-habr full-height"><code class="result-habr-content full-height"></code></pre>
 		<pre class="result-debug full-height"><code class="result-debug-content full-height"></code></pre>
 	</div><!--
