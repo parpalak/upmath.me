@@ -24,6 +24,18 @@ var defaults = {
 	_view: 'html'               // html / src / debug
 };
 
+function SelectText(eItem) {
+	var range, selection;
+
+	if (window.getSelection) {
+		selection = window.getSelection();
+		range = document.createRange();
+		range.selectNodeContents(eItem);
+		selection.removeAllRanges();
+		selection.addRange(range);
+	}
+}
+
 function setResultView(val) {
 	$('body')
 		.removeClass('result-as-html result-as-htmltex result-as-habr result-as-src result-as-debug')
@@ -392,6 +404,14 @@ $(function() {
 			setResultView(view);
 			// only to update permalink
 			updateResult();
+
+			// Selecting all block content.
+			var $contentBlock = $('.result-' + view + '-content');
+			if (view !== 'preview' && $contentBlock.length) {
+				setTimeout(function () {
+					SelectText($contentBlock[0]);
+				}, 0);
+			}
 		}
 	});
 
