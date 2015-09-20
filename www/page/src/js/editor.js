@@ -310,18 +310,29 @@ var syncResultScroll = debounce(function () {
 	var $source   = $('.source'),
 		lineHeight = parseFloat($source.css('line-height')),
 		posTo,
-		scrollTop = Math.max(0, $source.scrollTop() /*- parseInt(textarea.css('padding-top'))*/),
-		lineNo = Math.floor(scrollTop / lineHeight),
-		linePart = scrollTop / lineHeight - lineNo;
+		scrollShift = $source.height() / 2,
+		scrollTop = $source.scrollTop(),
+		scrollLevel = scrollTop + scrollShift,
+		lineNo = Math.floor(scrollLevel / lineHeight),
+		linePart = scrollLevel / lineHeight - lineNo;
 
-	if (!scrollMap) {
-		scrollMap = buildScrollMap();
+	if (scrollTop == 0) {
+		posTo = 0
 	}
+	else {
+		if (!scrollMap) {
+			scrollMap = buildScrollMap();
+		}
 
-	posTo = scrollMap[lineNo];
+		if (lineNo >= scrollMap.length) {
+			lineNo = scrollMap.length - 1;
+		}
 
-	if (scrollMap[lineNo + 1]) {
-		posTo += linePart * (scrollMap[lineNo + 1] - scrollMap[lineNo]);
+		posTo = scrollMap[lineNo] - scrollShift;
+
+		if (scrollMap[lineNo + 1]) {
+			posTo += linePart * (scrollMap[lineNo + 1] - scrollMap[lineNo]);
+		}
 	}
 
 	$('.result-html').stop(true).animate({
@@ -331,8 +342,9 @@ var syncResultScroll = debounce(function () {
 
 // Synchronize scroll position from result to source
 var syncSrcScroll = debounce(function () {
-	var resultHtml = $('.result-html'),
-		scrollTop  = resultHtml.scrollTop(),
+	var $resultHtml = $('.result-html'),
+		scrollShift = $resultHtml.height() / 2,
+		scrollLevel  = $resultHtml.scrollTop() + scrollShift,
 		$source   = $('.source'),
 		lineHeight = parseFloat($source.css('line-height')),
 		lines,
@@ -352,7 +364,7 @@ var syncSrcScroll = debounce(function () {
 	line_index = 0;
 
 	for (i = 1; i < lines.length; i++) {
-		if (scrollMap[lines[i]] < scrollTop) {
+		if (scrollMap[lines[i]] < scrollLevel) {
 			line = lines[i];
 			line_index = i;
 			continue;
@@ -361,13 +373,13 @@ var syncSrcScroll = debounce(function () {
 		break;
 	}
 
-	var srcScrollTop = lineHeight * line;
-	if (scrollMap[lines[line_index + 1]] >= scrollTop) {
-		srcScrollTop += lineHeight * (scrollTop - scrollMap[lines[line_index]]) / (scrollMap[lines[line_index + 1]] - scrollMap[lines[line_index]]);
+	var srcScrollLevel = lineHeight * line;
+	if (scrollMap[lines[line_index + 1]] >= scrollLevel) {
+		srcScrollLevel += lineHeight * (scrollLevel - scrollMap[lines[line_index]]) / (scrollMap[lines[line_index + 1]] - scrollMap[lines[line_index]]);
 	}
 
 	$source.stop(true).animate({
-		scrollTop: srcScrollTop
+		scrollTop: srcScrollLevel - scrollShift
 	}, 100, 'linear');
 }, 50, { maxWait: 50 });
 
