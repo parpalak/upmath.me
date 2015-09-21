@@ -175,7 +175,7 @@ module.exports = function(grunt) {
 			},
 			src: {
 				files: ['src/latex.js'],
-				tasks: ['replace'],
+				tasks: ['replace', 'shell:gzipPublic'],
 				options: {
 					spawn: false
 				}

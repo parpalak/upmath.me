@@ -4,45 +4,57 @@
  * @copyright 2012-2015 Roman Parpalak
  */
 
-(function (w, d)
-{
+(function (w, d) {
 	var url = '//tex.s2cms.ru',
 		im = d.implementation,
 		ext = im && im.hasFeature("http://www.w3.org/TR/SVG11/feature#BasicStructure", "1.1") ? 'svg' : 'png';
 
-	(function (fn)
-	{
-		var done = !1, top = !0, root = d.documentElement, w3 = !!d.addEventListener,
+	(function (fn) {
+		var done = !1,
+			top = !0,
+			root = d.documentElement,
+			w3 = !!d.addEventListener,
 
-		add = w3 ? 'addEventListener' : 'attachEvent',
-		rem = w3 ? 'removeEventListener' : 'detachEvent',
-		pre = w3 ? '' : 'on',
+			add = w3 ? 'addEventListener' : 'attachEvent',
+			rem = w3 ? 'removeEventListener' : 'detachEvent',
+			pre = w3 ? '' : 'on',
 
-		init = function(e) {
-			if (e.type == 'readystatechange' && d.readyState != 'complete') return;
-			(e.type == 'load' ? w : d)[rem](pre + e.type, init, false);
-			if (!done && (done = !0)) fn.call(w, e.type || e);
-		},
+			init = function (e) {
+				if (e.type == 'readystatechange' && d.readyState != 'complete') return;
+				(e.type == 'load' ? w : d)[rem](pre + e.type, init, false);
+				if (!done && (done = !0)) fn.call(w, e.type || e);
+			},
 
-		poll = function() {
-			try { root.doScroll('left'); } catch(e) { setTimeout(poll, 50); return; }
-			init('poll');
-		};
+			poll = function () {
+				try {
+					root.doScroll('left');
+				} catch (e) {
+					setTimeout(poll, 50);
+					return;
+				}
+				init('poll');
+			};
 
-		if (d.readyState == 'complete') fn.call(w, 'lazy');
+		if (d.readyState == 'complete') {
+			fn.call(w, 'lazy');
+		}
 		else {
 			if (d.createEventObject && root.doScroll) {
-				try { top = !w.frameElement; } catch(e) { }
+				try {
+					top = !w.frameElement;
+				} catch (e) {
+				}
 				if (top) poll();
 			}
 			d[add](pre + 'DOMContentLoaded', init, !1);
 			d[add](pre + 'readystatechange', init, !1);
 			w[add](pre + 'load', init, !1);
 		}
-	})(function () {processTree(d.body);});
+	})(function () {
+		processTree(d.body);
+	});
 
-	function image (f)
-	{
+	function image(f) {
 		var s = (ext == 'svg'),
 			i = d.createElement(s ? 'embed' : 'img');
 
@@ -54,37 +66,47 @@
 		return i;
 	}
 
-	function processTree (eItem)
-	{
+	function processTree(eItem) {
 		var eNext = eItem.firstChild;
 
-		while (eNext)
-		{
+		while (eNext) {
 			var eCur = eNext, sNn = eCur.nodeName;
 			eNext = eNext.nextSibling;
 
-			if (eCur.nodeType == 1 && sNn != 'SCRIPT' && sNn != 'TEXTAREA' && sNn != 'EMBED')
+			if (eCur.nodeType == 1 && sNn != 'SCRIPT' && sNn != 'TEXTAREA' && sNn != 'EMBED') {
 				processTree(eCur);
-			else if (eCur.nodeType == 3)
-			{
+			}
+			else if (eCur.nodeType == 3) {
 				var as = (' ' + eCur.nodeValue + ' ').split(/\$\$/g),
 					n = as.length, i, s;
-				if (n > 2)
-				{
+
+				if (n == 3 &&
+					(/^[ \t]$/.test(as[0])) &&
+					(/(?:[ \t]*\([ \t]*\S+[ \t]*\))?[ \t]*/.test(as[2])) &&
+					eItem.tagName == 'P' && eItem.childNodes.length <= 2
+				) {
+					s = image(as[1]);
+					eItem.insertBefore(s, eCur);
+					eItem.setAttribute('align', 'center');
+
+					var eSpan = d.createElement('span');
+					eSpan.appendChild(d.createTextNode(as[2]));
+					eSpan.setAttribute('style', 'float:right;');
+
+					eItem.insertBefore(eSpan, eCur);
+					eItem.removeChild(eCur);
+				}
+				else if (n > 2) {
 					as[0] = as[0].substring(1);
 					as[n - 1] = as[n - 1].substring(0, as[n - 1].length - 1);
 
-					for (i = 0; i < n; i++)
-					{
-						if (i % 2)
-						{
-							if (i + 1 < n)
-							{
+					for (i = 0; i < n; i++) {
+						if (i % 2) {
+							if (i + 1 < n) {
 								s = image(as[i]);
 
 								var after = as[i + 1].substring(0, 2);
-								if (/[,.;!?)] /.test(after))
-								{
+								if (/[,.;!?)] /.test(after)) {
 									as[i + 1] = as[i + 1].substring(1);
 
 									var nobr = d.createElement('nobr');
@@ -93,11 +115,13 @@
 									s.appendChild(d.createTextNode(after.substring(0, 1)));
 								}
 							}
-							else
+							else {
 								s = d.createTextNode('$$' + as[i]);
+							}
 						}
-						else
+						else {
 							s = d.createTextNode(as[i]);
+						}
 
 						eItem.insertBefore(s, eCur);
 					}
@@ -109,8 +133,7 @@
 	}
 
 	var ao;
-	w.addEventListener && w.addEventListener('message', function (e)
-	{
+	w.addEventListener && w.addEventListener('message', function (e) {
 		if (e.origin.replace(/^https?:/, '') != url)
 			return;
 
@@ -122,7 +145,7 @@
 			i = ao.length;
 
 		s = s.join('|');
-		for (; i-- ;)
+		for (; i--;)
 			if (ao[i].src == s || decodeURIComponent(ao[i].src) == s)
 				ao[i].setAttribute('style', 'vertical-align: ' + (-v) + 'pt; width: ' + x + 'pt; height: ' + y + 'pt;');
 	}, !1);
