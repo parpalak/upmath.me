@@ -241,15 +241,38 @@ QUnit.test("Latex", function (assert) {
 			},
 			{
 				"block": "latexBlock",
-				"token": "\nf(x) = "
+				"token": "\nf"
 			},
 			{
+				"block": "latexBlock",
+				"token": "("
+			},
+			{
+				"block": "latexBlock",
+				"token": "x"
+			},
+			{
+				"block": "latexBlock",
+				"token": ")"
+			},
+			{
+				"block": "latexBlock",
+				"token": " = "
+			},			{
 				"block": "latexBlock",
 				"token": "\\sin"
 			},
 			{
 				"block": "latexBlock",
-				"token": "(x)"
+				"token": "("
+			},
+			{
+				"block": "latexBlock",
+				"token": "x"
+			},
+			{
+				"block": "latexBlock",
+				"token": ")"
 			},
 			{
 				"block": "latexBlock",
@@ -263,7 +286,7 @@ QUnit.test("Latex", function (assert) {
 		"Latex block 1"
 	);
 	assert.deepEqual(
-		mdParser.tokenize(' $$f(x) = \\sin(x)$$  '),
+		mdParser.tokenize(' $$f(x) = \\sin x$$  '),
 		[
 			{
 				"block": "latexBlock",
@@ -275,7 +298,23 @@ QUnit.test("Latex", function (assert) {
 			},
 			{
 				"block": "latexBlock",
-				"token": "f(x) = "
+				"token": "f"
+			},
+			{
+				"block": "latexBlock",
+				"token": "("
+			},
+			{
+				"block": "latexBlock",
+				"token": "x"
+			},
+			{
+				"block": "latexBlock",
+				"token": ")"
+			},
+			{
+				"block": "latexBlock",
+				"token": " = "
 			},
 			{
 				"block": "latexBlock",
@@ -283,7 +322,7 @@ QUnit.test("Latex", function (assert) {
 			},
 			{
 				"block": "latexBlock",
-				"token": "(x)"
+				"token": " x"
 			},
 			{
 				"block": "latexBlock",
@@ -297,7 +336,7 @@ QUnit.test("Latex", function (assert) {
 		"Latex block 2"
 	);
 	assert.deepEqual(
-		mdParser.tokenize('$$\nf(x) = %comment1\nx%comment2 $$\n(1)'),
+		mdParser.tokenize('$$\nf_x = %comment1\nx%comment2 $$\n(1)'),
 		[
 			{
 				"block": "latexBlock",
@@ -305,7 +344,15 @@ QUnit.test("Latex", function (assert) {
 			},
 			{
 				"block": "latexBlock",
-				"token": "\nf(x) = "
+				"token": "\nf"
+			},
+			{
+				"block": "latexBlock",
+				"token": "_x"
+			},
+			{
+				"block": "latexBlock",
+				"token": " = "
 			},
 			{
 				"block": "latexBlock",
@@ -334,6 +381,92 @@ QUnit.test("Latex", function (assert) {
 		"Latex block 3"
 	);
 	assert.deepEqual(
+		mdParser.tokenize('$$P_\\text{скр}={IlEh\\over c^2}={\\mu E\\over c^2},$$'),
+		[
+			{
+				"block": "latexBlock",
+				"token": "$$"
+			},
+			{
+				"block": "latexBlock",
+				"token": "P"
+			},
+			{
+				"block": "latexBlock",
+				"token": "_\\text{скр}"
+			},
+			{
+				"block": "latexBlock",
+				"token": "="
+			},
+			{
+				"block": "latexBlock",
+				"token": "{"
+			},
+			{
+				"block": "latexBlock",
+				"token": "IlEh"
+			},
+			{
+				"block": "latexBlock",
+				"token": "\\over"
+			},
+			{
+				"block": "latexBlock",
+				"token": " c"
+			},
+			{
+				"block": "latexBlock",
+				"token": "^2"
+			},
+			{
+				"block": "latexBlock",
+				"token": "}"
+			},
+			{
+				"block": "latexBlock",
+				"token": "="
+			},
+			{
+				"block": "latexBlock",
+				"token": "{"
+			},
+			{
+				"block": "latexBlock",
+				"token": "\\mu"
+			},
+			{
+				"block": "latexBlock",
+				"token": " E"
+			},
+			{
+				"block": "latexBlock",
+				"token": "\\over"
+			},
+			{
+				"block": "latexBlock",
+				"token": " c"
+			},
+			{
+				"block": "latexBlock",
+				"token": "^2"
+			},
+			{
+				"block": "latexBlock",
+				"token": "}"
+			},
+			{
+				"block": "latexBlock",
+				"token": ","
+			},
+			{
+				"block": "latexBlock",
+				"token": "$$"
+			}
+		],
+		"Latex block 4"
+	);
+	assert.deepEqual(
 		mdParser.tokenize('$$f(x) = {dF\\$$'),
 		[
 			{
@@ -342,6 +475,32 @@ QUnit.test("Latex", function (assert) {
 			}
 		],
 		"No latex"
+	);
+	assert.deepEqual(
+		mdParser.tokenize('$$3$$ (4) \n\n'),
+		[
+			{
+				"block": "latexBlock",
+				"token": "$$"
+			},
+			{
+				"block": "latexBlock",
+				"token": "3"
+			},
+			{
+				"block": "latexBlock",
+				"token": "$$"
+			},
+			{
+				"block": "latexBlock",
+				"token": " (4) \n"
+			},
+			{
+				"block": "empty",
+				"token": "\n"
+			}
+		],
+		"Latex reference"
 	);
 });
 

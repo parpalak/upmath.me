@@ -254,8 +254,14 @@ textarea {
 .ldt .latexBlock.keyword3 {
 	color: #8ECA81;
 }
+.ldt .latexBlock.bracket {
+	color: #ff0150;
+}
 .ldt .latexBlock.comment {
 	color: #aaa;
+}
+.ldt .latexBlock.index {
+	color: #f5d4a5;
 }
 .ldt .latexBlock.delimeter {
 	font-weight: bold;

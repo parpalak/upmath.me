@@ -107,7 +107,7 @@ function MarkdownParser(i) {
 		var re = parseInlineRE;
 
 		// Process specific rules for the given block type className
-		if (className in subRules ) {
+		if (className in subRules) {
 			if (subRules[className] === null) {
 				result.push({
 					token: block,
@@ -250,8 +250,11 @@ mdParser
 		rule:  null,
 		latexBlock: {
 			comment:   /%[^\n]*?(?=\$\$)|%[^\n]*/,
-			keyword:   /\\[a-zA-Z�-��-�]+[\*]?/,
-			keyword2:  /\\[^a-zA-Z�-��-�0-9]/,
+			reference: /[ \t]*\([ \t]*\S+[ \t]*\)[ \t\n]*$/,
+			index:     /(?:\^|_)(?:\\[a-zA-Zа-яА-я]+[\*]?(?:\{.*?\})|\{[a-zA-Zа-яА-я0-9]*?\}|[a-zA-Zа-яА-я0-9])/,
+			bracket:   /(?:(?:\\left|\\right)?[\{\}\[\]\(\)\|])/,
+			keyword:   /\\[a-zA-Zа-яА-я]+[\*]?/,
+			keyword2:  /\\[^a-zA-Zа-яА-я0-9]/,
 			keyword3:  /&/,
 			delimeter: /\$\$/
 		}
