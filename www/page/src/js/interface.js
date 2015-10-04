@@ -1,4 +1,4 @@
-$(function() {
+$(function () {
 	$('._download-source').on('click', function () {
 		var blob = new Blob([getSource()], {type: 'text/markdown;charset=utf-8'});
 		saveAs(blob, 'source.md');
@@ -24,7 +24,7 @@ $(function() {
 		var reader = new FileReader(),
 			fileInput = this;
 
-		reader.onload = function() {
+		reader.onload = function () {
 			setSource(this.result);
 			fileInput.value = fileInput.defaultValue;
 			updateResult();

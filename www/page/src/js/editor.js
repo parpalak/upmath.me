@@ -4,7 +4,7 @@
 
 'use strict';
 
-var mdHtml, mdSrc, mdHabr, scrollMap;
+var mdHtml, mdSrc, mdHabr, scrollMap, scrollMapKeys;
 
 var defaults = {
 	html:         true,         // Enable HTML tags in source
@@ -229,9 +229,9 @@ function updateResult() {
 // That's a bit dirty to process each line everytime, but ok for demo.
 // Optimizations are required only for big texts.
 function buildScrollMap() {
-	var i, offset, nonEmptyList, pos, a, b, lineHeightMap, linesCount,
-		acc, sourceLikeDiv, textarea = $('.source .ldt-textarea'),
-		_scrollMap;
+	var i,
+		sourceLikeDiv, textarea = $('.source .ldt-textarea'),
+		lineHeight = textarea.css('line-height');
 
 	sourceLikeDiv = $('<div />').css({
 		position:    'absolute',
@@ -244,53 +244,62 @@ function buildScrollMap() {
 		'padding-right': textarea.css('padding-right'),
 		'font-size':     textarea.css('font-size'),
 		'font-family':   textarea.css('font-family'),
-		'line-height':   textarea.css('line-height'),
+		'line-height':   lineHeight,
 		'white-space':   textarea.css('white-space')
 	}).appendTo('body');
 
-	var $resultHtml = $('.result-html');
-	offset = $resultHtml.scrollTop() - $resultHtml.offset().top - parseInt(textarea.css('padding-top'));
-	_scrollMap = [];
-	nonEmptyList = [];
-	lineHeightMap = [];
+	var $resultHtml = $('.result-html'),
+		offset = - parseInt(textarea.css('padding-top')),
+		_scrollMap = [],
+		nonEmptyList = [],
+		lineHeightMap = [],
+		linesCount = 0;
 
-	acc = 0;
+	lineHeight = parseFloat(lineHeight);
 	textarea.val().split('\n').forEach(function(str) {
-		var h, lh;
+		lineHeightMap.push(linesCount);
 
-		lineHeightMap.push(acc);
-
-		if (str.length === 0) {
-			acc++;
+		if (str === '') {
+			linesCount++;
 			return;
 		}
 
 		sourceLikeDiv.text(str);
-		h = parseFloat(sourceLikeDiv.css('height'));
-		lh = parseFloat(sourceLikeDiv.css('line-height'));
-		acc += Math.round(h / lh);
+		linesCount += Math.round(
+			parseFloat(sourceLikeDiv.css('height')) / lineHeight
+		);
 	});
 	sourceLikeDiv.remove();
-	lineHeightMap.push(acc);
-	linesCount = acc;
+	lineHeightMap.push(linesCount);
 
-	for (i = 0; i < linesCount; i++) { _scrollMap.push(-1); }
+	for (i = 0; i < linesCount; i++) {
+		_scrollMap.push(-1);
+	}
 
 	nonEmptyList.push(0);
 	_scrollMap[0] = 0;
 
-	$('.line').each(function(n, el) {
-		var $el = $(el), t = $el.data('line');
-		if (t === '') { return; }
-		t = lineHeightMap[t];
-		if (t !== 0) { nonEmptyList.push(t); }
-		_scrollMap[t] = Math.round($el.offset().top + offset);
-	});
+	var blockElements = document.querySelectorAll('.result-html .line');
+
+	for (i = 0; i < blockElements.length; i++) {
+		var t, line = parseInt(blockElements[i].getAttribute('data-line'));
+
+		if (!line) {
+			continue;
+		}
+
+		t = lineHeightMap[line];
+		if (t !== 0) {
+			nonEmptyList.push(t);
+		}
+
+		_scrollMap[t] = Math.round(/*$(blockElements[i]).offset().top*/ blockElements[i].offsetTop + offset);
+	}
 
 	nonEmptyList.push(linesCount);
 	_scrollMap[linesCount] = $resultHtml[0].scrollHeight;
 
-	pos = 0;
+	var pos = 0, a, b;
 	for (i = 1; i < linesCount; i++) {
 		if (_scrollMap[i] !== -1) {
 			pos++;
@@ -322,6 +331,7 @@ var syncResultScroll = debounce(function () {
 	else {
 		if (!scrollMap) {
 			scrollMap = buildScrollMap();
+			scrollMapKeys = Object.keys(scrollMap);
 		}
 
 		if (lineNo >= scrollMap.length) {
@@ -342,42 +352,28 @@ var syncResultScroll = debounce(function () {
 
 // Synchronize scroll position from result to source
 var syncSrcScroll = debounce(function () {
-	var $resultHtml = $('.result-html'),
-		scrollShift = $resultHtml.height() / 2,
-		scrollLevel  = $resultHtml.scrollTop() + scrollShift,
-		$source   = $('.source'),
-		lineHeight = parseFloat($source.css('line-height')),
-		lines,
-		i,
-		line,
-		line_index;
+	if (!scrollMap) {
+		scrollMap = buildScrollMap();
+		scrollMapKeys = Object.keys(scrollMap);
+	}
 
-	if (!scrollMap) { scrollMap = buildScrollMap(); }
-
-	lines = Object.keys(scrollMap);
+	var lines = scrollMapKeys;
 
 	if (lines.length < 1) {
 		return;
 	}
 
-	line = lines[0];
-	line_index = 0;
+	var $resultHtml = $('.result-html'),
+		scrollShift = $resultHtml.height() / 2,
+		scrollLevel  = $resultHtml.scrollTop() + scrollShift,
 
-	for (i = 1; i < lines.length; i++) {
-		if (scrollMap[lines[i]] < scrollLevel) {
-			line = lines[i];
-			line_index = i;
-			continue;
-		}
+		result = findBisect(scrollLevel, lines, scrollMap),
 
-		break;
-	}
+		$source   = $('.source'),
+		lineHeight = parseFloat($source.css('line-height')),
 
-	var srcScrollLevel = lineHeight * line;
-	if (scrollMap[lines[line_index + 1]] >= scrollLevel) {
-		srcScrollLevel += lineHeight * (scrollLevel - scrollMap[lines[line_index]]) / (scrollMap[lines[line_index + 1]] - scrollMap[lines[line_index]]);
-	}
-
+		srcScrollLevel = lineHeight * (parseFloat(lines[result.val]) + parseFloat(result.part));
+console.log(scrollShift, scrollLevel);
 	$source.stop(true).animate({
 		scrollTop: srcScrollLevel - scrollShift
 	}, 100, 'linear');

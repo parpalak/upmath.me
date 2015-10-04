@@ -1,6 +1,47 @@
 /**
- * Functions from lodash.js
+ * Find the index of a maximum value in values array
+ * which is less than maxValue.
  *
+ * @param maxValue
+ * @param keys
+ * @param values
+ *
+ * @returns {object}
+ */
+function findBisect (maxValue, keys, values) {
+	var a = 0,
+		b = keys.length - 1,
+		f_a = values[keys[a]];
+
+	if (f_a >= maxValue) {
+		return {val: a, part: 0};
+	}
+
+	var f_b = values[keys[b]];
+	if (f_b < maxValue) {
+		return {val: b, part: 0};
+	}
+
+	while (b - a > 1) {
+		var c = a + Math.round((b - a) / 2),
+			f_c = values[keys[c]];
+
+		if (f_c >= maxValue) {
+			b = c;
+			f_b = f_c;
+		}
+		else {
+			a = c;
+			f_a = f_c;
+		}
+	}
+
+	return {val: a, part: (maxValue - f_a) / (f_b - f_a)};
+}
+
+
+/**
+ * Functions from lodash.js
  * @see https://github.com/lodash/lodash/
  */
 
