@@ -39,6 +39,146 @@ function findBisect (maxValue, keys, values) {
 	return {val: a, part: (maxValue - f_a) / (f_b - f_a)};
 }
 
+/**
+ * True animation module based on one-dimensional physical model.
+ *
+ * @param positionGetter
+ * @param positionSetter
+ * @constructor
+ */
+function Animator (positionGetter, positionSetter) {
+	var x = 0,
+		x1 = 0,
+		x2 = 0,
+		v = 0,
+		animationTime = 200,
+		timerId,
+		startedAt = null;
+
+	var loop = function (timestamp) {
+		if (startedAt === null) {
+			startedAt = timestamp;
+		}
+
+		var moveTime = timestamp - startedAt;
+
+		if (moveTime < moveDuration) {
+			// New postition and velosity
+			x = x2 + A * (Math.cos(omega * (moveTime - moveDuration)) - 1);
+			v = A * omega * (Math.sin(omega * (moveDuration - moveTime)));
+
+			positionSetter(x);
+
+			timerId = requestAnimationFrame(loop);
+
+			if (isReInit) {
+				/**
+				 * If the position has been forced, we run the animation again.
+				 */
+				initMotion(reInitPosition, x);
+				isReInit = false;
+				startedAt = timestamp;
+			}
+		}
+		else {
+			// Stop the animation
+			startedAt = null;
+
+			v = 0;
+			positionSetter(x);
+			cancelAnimationFrame(timerId);
+
+			if (isReInit) {
+				isReInit = false;
+			}
+		}
+	};
+
+	/**
+	 * The moveDuration of animation. It can be less than animationTime in case of high speed.
+	 */
+	var moveDuration;
+
+	/**
+	 * Motion parameters. See the loop formulas.
+	 */
+	var A, omega;
+
+	/**
+	 * Flag fired when the final position has been changed during running amination.
+	 */
+	var isReInit = false;
+
+	/**
+	 * New value for final position (that has been changed during running amination).
+	 */
+	var reInitPosition;
+
+	/**
+	 * Calculate parameters A and omega for the position given by formula
+	 *
+	 * x(t) = x0 + A * (Math.cos(omega * (t - t0)) - 1);
+	 *
+	 * @param newPosition
+	 * @param oldPosition
+	 */
+	function initMotion(newPosition, oldPosition) {
+		var k;
+		x2 = newPosition;
+		x1 = oldPosition;
+
+		if (Math.abs(v) < 0.00001) {
+			// Rest
+			k = Math.PI;
+			moveDuration = animationTime;
+		}
+		else {
+			// Motion
+
+			var alpha = (x2 - x1) / v / animationTime; // Motion parameter
+
+			/**
+			 * Istead of solving non-linear equation alpha * k = tan(k/2)
+			 * we use approximation 0.5/a = 1 - (k/pi)^2
+			 */
+			if (alpha < 0 || alpha > 0.5) {
+				k = Math.PI * Math.sqrt(1 - 0.5/alpha);
+			}
+			else {
+				k = 0.1;
+			}
+
+			/**
+			 * After approximate value of k is determined, we redefine alpha
+			 * since its value affects the animation. It means that the total
+			 * animation duration (moveDuration) differs from animationTime.
+			 * However, the difference does not impact the user experience.
+			 */
+			var alpha1 = (1 - Math.cos(k)) / k / Math.sin(k);
+			moveDuration = (x2 - x1) / alpha1 / v;
+		}
+
+		omega = k / moveDuration;
+		A = (x2 - x1) / (1 - Math.cos(k));
+	}
+
+	/**
+	 * Public control method
+	 *
+	 * @param nextPos
+	 */
+	this.setPos = function (nextPos) {
+		isReInit = (startedAt !== null);
+		if (!isReInit) {
+			x = positionGetter();
+			initMotion(nextPos, x);
+			timerId = requestAnimationFrame(loop);
+		}
+		else {
+			reInitPosition = nextPos;
+		}
+	};
+}
 
 /**
  * Functions from lodash.js

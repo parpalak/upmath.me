@@ -189,8 +189,15 @@ function getHabraMarkup(source) {
 	return html;
 }
 
-function updateResult() {
+var oldSource = null;
+
+function updateResult(ignoreDiff) {
 	var source = getSource();
+	if (ignoreDiff !== true && oldSource === source) {
+		return;
+	}
+
+	oldSource = source;
 
 	// Update only active view to avoid slowdowns
 	// (debug & src view with highlighting are a bit slow)
@@ -218,6 +225,7 @@ function updateResult() {
 
 	// reset lines mapping cache on content update
 	scrollMap = null;
+	scrollMapKeys = null;
 
 	try {
 		localStorage.setItem("editor_content", source);
@@ -315,7 +323,7 @@ function buildScrollMap() {
 }
 
 // Synchronize scroll position from source to result
-var syncResultScroll = debounce(function () {
+var syncResultScroll = function () {
 	var $source   = $('.source'),
 		lineHeight = parseFloat($source.css('line-height')),
 		posTo,
@@ -331,7 +339,6 @@ var syncResultScroll = debounce(function () {
 	else {
 		if (!scrollMap) {
 			scrollMap = buildScrollMap();
-			scrollMapKeys = Object.keys(scrollMap);
 		}
 
 		if (lineNo >= scrollMap.length) {
@@ -345,15 +352,15 @@ var syncResultScroll = debounce(function () {
 		}
 	}
 
-	$('.result-html').stop(true).animate({
-		scrollTop: posTo
-	}, 100, 'linear');
-}, 50, { maxWait: 50 });
+	animatorResult.setPos(posTo);
+};
 
 // Synchronize scroll position from result to source
-var syncSrcScroll = debounce(function () {
+var syncSrcScroll = function () {
 	if (!scrollMap) {
 		scrollMap = buildScrollMap();
+	}
+	if (!scrollMapKeys) {
 		scrollMapKeys = Object.keys(scrollMap);
 	}
 
@@ -373,17 +380,15 @@ var syncSrcScroll = debounce(function () {
 		lineHeight = parseFloat($source.css('line-height')),
 
 		srcScrollLevel = lineHeight * (parseFloat(lines[result.val]) + parseFloat(result.part));
-console.log(scrollShift, scrollLevel);
-	$source.stop(true).animate({
-		scrollTop: srcScrollLevel - scrollShift
-	}, 100, 'linear');
-}, 50, { maxWait: 50 });
 
-var decorator;
+	animatorSrc.setPos(srcScrollLevel - scrollShift);
+};
+
+var decorator, animatorSrc, animatorResult;
 
 $(function() {
-	var $source = $('.source'),
-		textarea = $source[0];
+	var $textareaSource = $('.source'),
+		textarea = $textareaSource[0];
 
 	// start the decorator
 	decorator = new TextareaDecorator(textarea, mdParser);
@@ -394,24 +399,45 @@ $(function() {
 	mdInit();
 
 	// Setup listeners
-	$source
+	$textareaSource
 		.on('keyup paste cut mouseup', debounce(updateResult, 300, { maxWait: 500 }))
 		.on('touchstart mouseover', function () {
 			$('.result-html').off('scroll');
-			$('.source').on('scroll', syncResultScroll);
+			$('.source').off('scroll', syncResultScroll).on('scroll', syncResultScroll);
 		});
 
 	$('.result-html').on('touchstart mouseover', function () {
 		$('.source').off('scroll');
-		$('.result-html').on('scroll', syncSrcScroll);
+		$('.result-html').off('scroll', syncSrcScroll).on('scroll', syncSrcScroll);
 	});
+
+	// .source has been changed after TextareaDecorator call
+	var $source = $('.source');
+	animatorSrc = new Animator(
+		function () {
+			return $source.scrollTop();
+		},
+		function (x) {
+			$source.scrollTop(x);
+		}
+	);
+
+	var $resultHtml = $('.result-html');
+	animatorResult = new Animator(
+		function () {
+			return $resultHtml.scrollTop();
+		},
+		function (x) {
+			$resultHtml.scrollTop(x);
+		}
+	);
 
 	$('.control-item').on('click', function () {
 		var view = $(this).data('resultAs');
 		if (view) {
 			setResultView(view);
 			// only to update permalink
-			updateResult();
+			updateResult(true);
 
 			// Selecting all block content.
 			var $contentBlock = $('.result-' + view + '-content');
@@ -426,6 +452,7 @@ $(function() {
 	// Need to recalculate line positions on window resize
 	$(window).on('resize', function () {
 		scrollMap = null;
+		scrollMapKeys = null;
 		recalcHeight();
 	});
 
