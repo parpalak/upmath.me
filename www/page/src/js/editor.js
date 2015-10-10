@@ -404,11 +404,13 @@ $(function() {
 		.on('touchstart mouseover', function () {
 			$('.result-html').off('scroll');
 			$('.source').off('scroll', syncResultScroll).on('scroll', syncResultScroll);
+			// animatorSrc.stop();
 		});
 
 	$('.result-html').on('touchstart mouseover', function () {
 		$('.source').off('scroll');
 		$('.result-html').off('scroll', syncSrcScroll).on('scroll', syncSrcScroll);
+		// animatorResult.stop();
 	});
 
 	// .source has been changed after TextareaDecorator call

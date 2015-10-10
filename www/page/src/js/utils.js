@@ -142,7 +142,7 @@ function Animator (positionGetter, positionSetter) {
 			 * we use approximation 0.5/a = 1 - (k/pi)^2
 			 */
 			if (alpha < 0 || alpha > 0.5) {
-				k = Math.PI * Math.sqrt(1 - 0.5/alpha);
+				k = Math.PI * Math.sqrt(1 - 0.5 / alpha);
 			}
 			else {
 				k = 0.1;
@@ -177,6 +177,13 @@ function Animator (positionGetter, positionSetter) {
 		else {
 			reInitPosition = nextPos;
 		}
+	};
+
+	this.stop = function () {
+		startedAt = null;
+		v = 0;
+		cancelAnimationFrame(timerId);
+		isReInit = false;
 	};
 }
 
