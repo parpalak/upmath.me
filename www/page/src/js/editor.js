@@ -443,7 +443,7 @@ $(function() {
 
 	// Setup listeners
 	$textareaSource
-		.on('keyup paste cut mouseup', debounce(updateResult, 300, { maxWait: 500 }))
+		.on('keyup paste cut mouseup', debounce(updateResult, 300, { maxWait: 3000 }))
 		.on('touchstart mouseover', function () {
 			$('.result-html').off('scroll');
 			$('.source').off('scroll', syncResultScroll).on('scroll', syncResultScroll);
