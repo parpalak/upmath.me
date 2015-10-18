@@ -322,11 +322,9 @@ function buildScrollMap() {
 	return _scrollMap;
 }
 
-// Synchronize scroll position from source to result
-var syncResultScroll = function () {
-	var $source   = $('.source'),
+function getResultBlockPosition() {
+	var $source = $('.source'),
 		lineHeight = parseFloat($source.css('line-height')),
-		posTo,
 		scrollShift = $source.height() / 2,
 		scrollTop = $source.scrollTop(),
 		scrollLevel = scrollTop + scrollShift,
@@ -334,55 +332,100 @@ var syncResultScroll = function () {
 		linePart = scrollLevel / lineHeight - lineNo;
 
 	if (scrollTop == 0) {
-		posTo = 0
-	}
-	else {
-		if (!scrollMap) {
-			scrollMap = buildScrollMap();
-		}
-
-		if (lineNo >= scrollMap.length) {
-			lineNo = scrollMap.length - 1;
-		}
-
-		posTo = scrollMap[lineNo] - scrollShift;
-
-		if (scrollMap[lineNo + 1]) {
-			posTo += linePart * (scrollMap[lineNo + 1] - scrollMap[lineNo]);
-		}
+		return 0;
 	}
 
-	animatorResult.setPos(posTo);
-};
-
-// Synchronize scroll position from result to source
-var syncSrcScroll = function () {
 	if (!scrollMap) {
 		scrollMap = buildScrollMap();
 	}
-	if (!scrollMapKeys) {
-		scrollMapKeys = Object.keys(scrollMap);
+
+	if (lineNo >= scrollMap.length) {
+		lineNo = scrollMap.length - 1;
 	}
 
-	var lines = scrollMapKeys;
+	var posTo = scrollMap[lineNo] - scrollShift;
 
-	if (lines.length < 1) {
-		return;
+	if (scrollMap[lineNo + 1]) {
+		posTo += linePart * (scrollMap[lineNo + 1] - scrollMap[lineNo]);
 	}
 
-	var $resultHtml = $('.result-html'),
-		scrollShift = $resultHtml.height() / 2,
-		scrollLevel  = $resultHtml.scrollTop() + scrollShift,
+	return posTo;
+}
 
-		result = findBisect(scrollLevel, lines, scrollMap),
+if (parseUrlQuery().animation === 'linear') {
+	// Synchronize scroll position from source to result
+	var syncResultScroll = debounce(function () {
+		$('.result-html').stop(true).animate({
+			scrollTop: getResultBlockPosition()
+		}, 100, 'linear');
+	}, 50, { maxWait: 50 });
 
-		$source   = $('.source'),
-		lineHeight = parseFloat($source.css('line-height')),
+	// Synchronize scroll position from result to source
+	var syncSrcScroll = debounce(function () {
+		if (!scrollMap) {
+			scrollMap = buildScrollMap();
+		}
+		if (!scrollMapKeys) {
+			scrollMapKeys = Object.keys(scrollMap);
+		}
 
-		srcScrollLevel = lineHeight * (parseFloat(lines[result.val]) + parseFloat(result.part));
+		var lines = scrollMapKeys;
 
-	animatorSrc.setPos(srcScrollLevel - scrollShift);
-};
+		if (lines.length < 1) {
+			return;
+		}
+
+		var $resultHtml = $('.result-html'),
+			scrollShift = $resultHtml.height() / 2,
+			scrollLevel  = $resultHtml.scrollTop() + scrollShift,
+
+			result = findBisect(scrollLevel, lines, scrollMap),
+
+			$source   = $('.source'),
+			lineHeight = parseFloat($source.css('line-height')),
+
+			srcScrollLevel = lineHeight * (parseFloat(lines[result.val]) + parseFloat(result.part));
+
+		$source.stop(true).animate({
+			scrollTop: srcScrollLevel - scrollShift
+		}, 100, 'linear');
+	}, 50, { maxWait: 50 });
+}
+else {
+	// Synchronize scroll position from source to result
+	var syncResultScroll = function () {
+		animatorResult.setPos(getResultBlockPosition());
+	};
+
+	// Synchronize scroll position from result to source
+	var syncSrcScroll = function () {
+		if (!scrollMap) {
+			scrollMap = buildScrollMap();
+		}
+		if (!scrollMapKeys) {
+			scrollMapKeys = Object.keys(scrollMap);
+		}
+
+		var lines = scrollMapKeys;
+
+		if (lines.length < 1) {
+			return;
+		}
+
+		var $resultHtml = $('.result-html'),
+			scrollShift = $resultHtml.height() / 2,
+			scrollLevel  = $resultHtml.scrollTop() + scrollShift,
+
+			result = findBisect(scrollLevel, lines, scrollMap),
+
+			$source   = $('.source'),
+			lineHeight = parseFloat($source.css('line-height')),
+
+			srcScrollLevel = lineHeight * (parseFloat(lines[result.val]) + parseFloat(result.part));
+
+		animatorSrc.setPos(srcScrollLevel - scrollShift);
+	};
+}
 
 var decorator, animatorSrc, animatorResult;
 
