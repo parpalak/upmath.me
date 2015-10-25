@@ -4,7 +4,7 @@
 
 'use strict';
 
-var mdHtml, mdSrc, mdHabr, scrollMap, scrollMapKeys;
+var mdHtml, mdSrc, mdHabr;
 
 var defaults = {
 	html:         true,         // Enable HTML tags in source
@@ -224,8 +224,7 @@ function updateResult(ignoreDiff) {
 	}
 
 	// reset lines mapping cache on content update
-	scrollMap = null;
-	scrollMapKeys = null;
+	resetScrollMap();
 
 	try {
 		localStorage.setItem("editor_content", source);
@@ -233,123 +232,80 @@ function updateResult(ignoreDiff) {
 	catch (e) {}
 }
 
-// Build offsets for each line (lines can be wrapped)
-// That's a bit dirty to process each line everytime, but ok for demo.
-// Optimizations are required only for big texts.
-function buildScrollMap() {
-	var i,
-		sourceLikeDiv, textarea = $('.source .ldt-textarea'),
-		lineHeight = textarea.css('line-height');
-
-	sourceLikeDiv = $('<div />').css({
-		position:    'absolute',
-		visibility:  'hidden',
-		height:      'auto',
-		width:       textarea[0].clientWidth,
-		'word-wrap': 'break-word',
-
-		'padding-left':  textarea.css('padding-left'),
-		'padding-right': textarea.css('padding-right'),
-		'font-size':     textarea.css('font-size'),
-		'font-family':   textarea.css('font-family'),
-		'line-height':   lineHeight,
-		'white-space':   textarea.css('white-space')
-	}).appendTo('body');
-
-	var $resultHtml = $('.result-html'),
-		offset = - parseInt(textarea.css('padding-top')),
-		_scrollMap = [],
-		nonEmptyList = [],
-		lineHeightMap = [],
-		linesCount = 0;
-
-	lineHeight = parseFloat(lineHeight);
-	textarea.val().split('\n').forEach(function(str) {
-		lineHeightMap.push(linesCount);
-
-		if (str === '') {
-			linesCount++;
-			return;
-		}
-
-		sourceLikeDiv.text(str);
-		linesCount += Math.round(
-			parseFloat(sourceLikeDiv.css('height')) / lineHeight
-		);
-	});
-	sourceLikeDiv.remove();
-	lineHeightMap.push(linesCount);
-
-	for (i = 0; i < linesCount; i++) {
-		_scrollMap.push(-1);
-	}
-
-	nonEmptyList.push(0);
-	_scrollMap[0] = 0;
-
-	var blockElements = document.querySelectorAll('.result-html .line');
-
-	for (i = 0; i < blockElements.length; i++) {
-		var t, line = parseInt(blockElements[i].getAttribute('data-line'));
-
-		if (!line) {
-			continue;
-		}
-
-		t = lineHeightMap[line];
-		if (t !== 0) {
-			nonEmptyList.push(t);
-		}
-
-		_scrollMap[t] = Math.round(/*$(blockElements[i]).offset().top*/ blockElements[i].offsetTop + offset);
-	}
-
-	nonEmptyList.push(linesCount);
-	_scrollMap[linesCount] = $resultHtml[0].scrollHeight;
-
-	var pos = 0, a, b;
-	for (i = 1; i < linesCount; i++) {
-		if (_scrollMap[i] !== -1) {
-			pos++;
-			continue;
-		}
-
-		a = nonEmptyList[pos];
-		b = nonEmptyList[pos + 1];
-		_scrollMap[i] = Math.round((_scrollMap[b] * (i - a) + _scrollMap[a] * (b - i)) / (b - a));
-	}
-
-	return _scrollMap;
+function resetScrollMap() {
+	mapScroll = [null, null];
 }
 
-function getResultBlockPosition() {
-	var $source = $('.source'),
-		lineHeight = parseFloat($source.css('line-height')),
-		scrollShift = $source.height() / 2,
-		scrollTop = $source.scrollTop(),
-		scrollLevel = scrollTop + scrollShift,
-		lineNo = Math.floor(scrollLevel / lineHeight),
-		linePart = scrollLevel / lineHeight - lineNo;
+var mapScroll;
+
+/**
+ * Searches start position for text blocks
+ */
+function findScrollMarks() {
+	var resElements = document.querySelectorAll('.result-html .line'),
+		resElementHeight = [],
+		line,
+		mapSrc = [0],
+		mapResult = [0],
+		i = 0, len = resElements.length;
+
+	for (; i < len; i++) {
+		line = parseInt(resElements[i].getAttribute('data-line'));
+		if (line) {
+			resElementHeight[line] = Math.round(resElements[i].offsetTop);
+		}
+	}
+
+	var srcElements = document.querySelectorAll('.ldt-pre .block-start');
+
+	len  = srcElements.length;
+	line = 0;
+
+	for (i = 0; i < len; i++) {
+		var lineDelta = parseInt(srcElements[i].getAttribute('data-line'));
+		if (lineDelta) {
+			line += lineDelta;
+
+			// We track only lines in both containers
+			if (typeof resElementHeight[line] !== 'undefined') {
+				mapSrc.push(srcElements[i].offsetTop);
+				mapResult.push(resElementHeight[line]);
+			}
+		}
+	}
+
+	mapScroll = [mapSrc, mapResult];
+}
+
+function getPositionFromMaps($block, fromIndex, toIndex) {
+	var	scrollTop = $block.scrollTop();
 
 	if (scrollTop == 0) {
 		return 0;
 	}
 
-	if (!scrollMap) {
-		scrollMap = buildScrollMap();
+	if (mapScroll[fromIndex] === null) {
+		findScrollMarks();
 	}
 
-	if (lineNo >= scrollMap.length) {
-		lineNo = scrollMap.length - 1;
+	var scrollShift    = $block.height() / 2,
+		scrollLevel    = scrollTop + scrollShift,
+		blockIndex     = findBisect(scrollLevel, mapScroll[fromIndex]),
+		srcScrollLevel = parseFloat(mapScroll[toIndex][blockIndex.val] * (1 - blockIndex.part));
+
+	if (mapScroll[toIndex][blockIndex.val + 1]) {
+		srcScrollLevel += parseFloat(mapScroll[toIndex][blockIndex.val + 1] * blockIndex.part);
 	}
 
-	var posTo = scrollMap[lineNo] - scrollShift;
+	return srcScrollLevel - scrollShift;
+}
 
-	if (scrollMap[lineNo + 1]) {
-		posTo += linePart * (scrollMap[lineNo + 1] - scrollMap[lineNo]);
-	}
+function getResultBlockPosition() {
+	return getPositionFromMaps($('.source'), 0, 1);
+}
 
-	return posTo;
+function getSrcBlockPosition() {
+	return getPositionFromMaps($('.result-html'), 1, 0);
 }
 
 if (parseUrlQuery().animation === 'linear') {
@@ -362,32 +318,8 @@ if (parseUrlQuery().animation === 'linear') {
 
 	// Synchronize scroll position from result to source
 	var syncSrcScroll = debounce(function () {
-		if (!scrollMap) {
-			scrollMap = buildScrollMap();
-		}
-		if (!scrollMapKeys) {
-			scrollMapKeys = Object.keys(scrollMap);
-		}
-
-		var lines = scrollMapKeys;
-
-		if (lines.length < 1) {
-			return;
-		}
-
-		var $resultHtml = $('.result-html'),
-			scrollShift = $resultHtml.height() / 2,
-			scrollLevel  = $resultHtml.scrollTop() + scrollShift,
-
-			result = findBisect(scrollLevel, lines, scrollMap),
-
-			$source   = $('.source'),
-			lineHeight = parseFloat($source.css('line-height')),
-
-			srcScrollLevel = lineHeight * (parseFloat(lines[result.val]) + parseFloat(result.part));
-
-		$source.stop(true).animate({
-			scrollTop: srcScrollLevel - scrollShift
+		$('.source').stop(true).animate({
+			scrollTop: getSrcBlockPosition()
 		}, 100, 'linear');
 	}, 50, { maxWait: 50 });
 }
@@ -399,31 +331,7 @@ else {
 
 	// Synchronize scroll position from result to source
 	var syncSrcScroll = function () {
-		if (!scrollMap) {
-			scrollMap = buildScrollMap();
-		}
-		if (!scrollMapKeys) {
-			scrollMapKeys = Object.keys(scrollMap);
-		}
-
-		var lines = scrollMapKeys;
-
-		if (lines.length < 1) {
-			return;
-		}
-
-		var $resultHtml = $('.result-html'),
-			scrollShift = $resultHtml.height() / 2,
-			scrollLevel  = $resultHtml.scrollTop() + scrollShift,
-
-			result = findBisect(scrollLevel, lines, scrollMap),
-
-			$source   = $('.source'),
-			lineHeight = parseFloat($source.css('line-height')),
-
-			srcScrollLevel = lineHeight * (parseFloat(lines[result.val]) + parseFloat(result.part));
-
-		animatorSrc.setPos(srcScrollLevel - scrollShift);
+		animatorSrc.setPos(getSrcBlockPosition());
 	};
 }
 
@@ -496,8 +404,7 @@ $(function() {
 
 	// Need to recalculate line positions on window resize
 	$(window).on('resize', function () {
-		scrollMap = null;
-		scrollMapKeys = null;
+		resetScrollMap();
 		recalcHeight();
 	});
 

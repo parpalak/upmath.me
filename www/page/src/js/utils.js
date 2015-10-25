@@ -1,30 +1,31 @@
+'use strict';
+
 /**
  * Find the index of a maximum value in values array
  * which is less than maxValue.
  *
  * @param maxValue
- * @param keys
  * @param values
  *
  * @returns {object}
  */
-function findBisect (maxValue, keys, values) {
+function findBisect(maxValue, values) {
 	var a = 0,
-		b = keys.length - 1,
-		f_a = values[keys[a]];
+		b = values.length - 1,
+		f_a = values[a];
 
 	if (f_a >= maxValue) {
 		return {val: a, part: 0};
 	}
 
-	var f_b = values[keys[b]];
+	var f_b = values[b];
 	if (f_b < maxValue) {
 		return {val: b, part: 0};
 	}
 
 	while (b - a > 1) {
 		var c = a + Math.round((b - a) / 2),
-			f_c = values[keys[c]];
+			f_c = values[c];
 
 		if (f_c >= maxValue) {
 			b = c;
@@ -56,7 +57,26 @@ function parseUrlQuery() {
 }
 
 /**
- * True animation module based on one-dimensional physical model.
+ * Count the number of occurances of a substring in a string
+ *
+ * @param substr
+ * @param str
+ * @returns {number}
+ */
+function substrCount(substr, str) {
+	var count = -1,
+		index = -2;
+
+	while (index != -1) {
+		count++;
+		index = str.indexOf(substr, index + 1)
+	}
+
+	return count;
+}
+
+/**
+ * Realistic animation module based on one-dimensional physical model.
  *
  * @param positionGetter
  * @param positionSetter
@@ -101,7 +121,7 @@ function Animator (positionGetter, positionSetter) {
 			startedAt = null;
 
 			v = 0;
-			positionSetter(x);
+			positionSetter(x2);
 			cancelAnimationFrame(timerId);
 
 			if (isReInit) {

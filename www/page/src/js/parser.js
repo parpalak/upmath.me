@@ -1,8 +1,8 @@
 /**
- * Markdown parser
+ * Markdown parser with latex extension
  *
- * Originally written by Colin Kuebler 2012
- * Modified by Roman Parpalak 2015
+ * (c) Roman Parpalak, 2015
+ * Based on code by Colin Kuebler, 2012
  */
 
 function MarkdownParser(i) {
@@ -103,7 +103,7 @@ function MarkdownParser(i) {
 		return this;
 	};
 
-	function tokenizeBlock(block, className, result) {
+	function tokenizeBlock(block, className, lineNum, result) {
 		var re = parseInlineRE;
 
 		// Process specific rules for the given block type className
@@ -111,7 +111,8 @@ function MarkdownParser(i) {
 			if (subRules[className] === null) {
 				result.push({
 					token: block,
-					block: className
+					block: className,
+					line:  lineNum
 				});
 
 				return;
@@ -127,9 +128,11 @@ function MarkdownParser(i) {
 			if (matches[2]) {
 				result.push({
 					token: matches[1],
-					block: className + '-mark'
+					block: className + '-mark',
+					line:  lineNum
 				});
 				block = matches[2];
+				lineNum = 0; // Write block position only once
 			}
 		}
 
@@ -141,8 +144,10 @@ function MarkdownParser(i) {
 			if (token != '') {
 				result.push({
 					token: token,
-					block: className
+					block: className,
+					line:  lineNum
 				});
+				lineNum = 0; // Write block position only once
 			}
 		}
 	}
@@ -154,8 +159,7 @@ function MarkdownParser(i) {
 			classNames = [],
 			blocks = input.split(parseBlockRE),
 			blockNum = blocks.length,
-			block, i,
-			prevIndex = 0, prevBlockClass;
+			i, prevIndex = 0, prevBlockClass;
 
 		// Merge blocks separated by line breaks
 		for (i = 0; i < blockNum; i++) {
@@ -167,7 +171,7 @@ function MarkdownParser(i) {
 
 			if (prevIndex > 0 && className in runInBlocks) {
 				var allowedPrevBlocks = runInBlocks[className].allowedBlocks;
-				if (allowedPrevBlocks.indexOf(prevBlockClass) >= 0) {
+				if (allowedPrevBlocks && allowedPrevBlocks.indexOf(prevBlockClass) >= 0) {
 					blocks[prevIndex] += blocks[i];
 					blocks[i] = '';
 					classNames[i] = '';
@@ -182,10 +186,18 @@ function MarkdownParser(i) {
 			prevBlockClass = className;
 		}
 
+		var lineBreakCnt = 0;
+
 		for (i = 0; i < blockNum; i++) {
-			block = blocks[i];
+			var block = blocks[i];
 			if (block !== '') {
-				tokenizeBlock(block, classNames[i], result);
+				var lineNum = 0;
+				if (classNames[i] != 'empty') { // TODO move to config
+					lineNum = lineBreakCnt;
+					lineBreakCnt = 0; // Storing diff between line numbers
+				}
+				tokenizeBlock(block, classNames[i], lineNum, result);
+				lineBreakCnt += substrCount('\n', block);
 			}
 		}
 
@@ -268,4 +280,3 @@ mdParser
 		list:  /^([ ]{0,3}(?:[+\-\*]|\d+\.)[ \t]+)([\s\S]*)$/,
 		quote: /^([ ]{0,3}(?:>[ \t]*)+)([\s\S]*)$/
 	});
-
