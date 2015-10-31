@@ -232,3 +232,7 @@ p, pre, .url-line {
 	content: '';
 	display: table;
 	}
+
+.likely {
+	vertical-align: middle;
+}

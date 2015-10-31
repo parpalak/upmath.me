@@ -31,7 +31,7 @@ $formats = [
 	<link rel="stylesheet" href="/page/dist/css/style.min.css?<?php include 'dist/css/style.min.css.md5'; ?>">
 <?php else: ?>
 	<link rel="stylesheet" href="/page/dist/css/TextareaDecorator.css">
-	<link rel="stylesheet" href="/page/src/css/social-likes_dark.css">
+	<link rel="stylesheet" href="/page/dist/css/likely.css">
 	<link rel="stylesheet" href="/page/src/css/editor.css">
 <?php endif; ?>
 </head>
@@ -39,10 +39,10 @@ $formats = [
 <div class="header">
 	<h1 class="title">Markdown & LaTeX Editor</h1>
 	<div class="copyright">
-		<div class="social-likes social-likes_flat" data-zeroes="yes" data-url="http://tex.s2cms.ru/page/">
+		<div class="likely likely-light likely-small" data-url="http://tex.s2cms.ru/page/">
 			<div class="twitter" title="Share link on Twitter"></div>
 			<div class="facebook" title="Share link on Facebook"></div>
-			<div class="plusone" title="Share link on Google+"></div>
+			<div class="gplus" title="Share link on Google+"></div>
 			<div class="vkontakte" title="Share link on VK"></div>
 		</div>
 		&copy; 2015
@@ -116,7 +116,7 @@ foreach ($formats as $class => $name)
 	<script src="/page/dist/js/markdown-it-sup.min.js"></script>
 	<script src="/page/dist/js/FileSaver.js"></script>
 	<script src="/page/dist/js/TextareaDecorator.js"></script>
-	<script src="/page/dist/js/social-likes.js"></script>
+	<script src="/page/dist/js/likely.js"></script>
 
 	<script src="/page/src/js/utils.js"></script>
 	<script src="/page/src/js/markdown-it-s2-tex.js"></script>

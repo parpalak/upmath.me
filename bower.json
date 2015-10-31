@@ -15,10 +15,10 @@
     "jquery": "~2.1.4",
     "autosize": "~3.0.6",
     "Stickyfill": "~1.1.1",
-    "social-likes": "~3.0.10",
+    "ilyabirman-likely": "~2.0.4",
     "markdown-it": "*",
-    "markdown-it-sub": "~1.0.0",
-    "markdown-it-sup": "~1.0.0",
+    "markdown-it-sub": "*",
+    "markdown-it-sup": "*",
     "file-saver.js": "~1.20150507.2",
     "LDT": "git://github.com/parpalak/LDT.git"
   }

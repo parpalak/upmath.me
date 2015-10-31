@@ -6,7 +6,7 @@ module.exports = function(grunt) {
 				src: [
 					'bower_components/autosize/dist/autosize.js',
 					'bower_components/Stickyfill/dist/stickyfill.min.js',
-					'bower_components/social-likes/src/social-likes.js',
+					'bower_components/ilyabirman-likely/release/likely.js',
 					'www/js/init_editor.js'
 				],
 				dest: 'www/js/scripts.js'
@@ -19,7 +19,7 @@ module.exports = function(grunt) {
 			},
 			page_vendors: {
 				src: [
-					'bower_components/social-likes/src/social-likes.js',
+					'bower_components/ilyabirman-likely/release/likely.js',
 					'bower_components/markdown-it/dist/markdown-it.min.js',
 					'bower_components/markdown-it-sub/dist/markdown-it-sub.min.js',
 					'bower_components/markdown-it-sup/dist/markdown-it-sup.min.js',
@@ -60,7 +60,7 @@ module.exports = function(grunt) {
 					{
 						expand: true,
 						src: [
-							'bower_components/social-likes/src/social-likes.js',
+							'bower_components/ilyabirman-likely/release/likely.js',
 							'bower_components/file-saver.js/FileSaver.js',
 							'bower_components/markdown-it/dist/markdown-it.min.js',
 							'bower_components/markdown-it-sub/dist/markdown-it-sub.min.js',
@@ -73,7 +73,8 @@ module.exports = function(grunt) {
 					{
 						expand: true,
 						src: [
-							'bower_components/LDT/lib/TextareaDecorator.css'
+							'bower_components/LDT/lib/TextareaDecorator.css',
+							'bower_components/ilyabirman-likely/release/likely.css'
 						],
 						dest: 'www/page/dist/css/',
 						flatten: true
@@ -93,14 +94,14 @@ module.exports = function(grunt) {
 			target: {
 				src: [
 					'www/css/style.css',
-					'bower_components/social-likes/social-likes_flat.css'
+					'bower_components/ilyabirman-likely/release/likely.css'
 				],
 				dest: 'www/css/style.min.css'
 			},
 			page: {
 				src: [
 					'bower_components/LDT/lib/TextareaDecorator.css',
-					'www/page/src/css/social-likes_dark.css',
+					'bower_components/ilyabirman-likely/release/likely.css',
 					'www/page/src/css/editor.css'
 				],
 				dest: 'www/page/dist/css/style.min.css'

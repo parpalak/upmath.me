@@ -267,9 +267,9 @@ textarea {
 	font-weight: bold;
 }
 
-.social-likes {
-	font-size: 12px;
-	vertical-align: 1px;
+.likely {
+	vertical-align: middle;
+	margin-right: 0.3em;
 }
 
 @media screen and (-webkit-min-device-pixel-ratio:0) {
@@ -286,7 +286,7 @@ textarea {
 }
 
 @media screen and (max-width: 700px) {
-	.social-likes {
+	.likely {
 		display: none;
 	}
 }
@@ -309,9 +309,5 @@ textarea {
 
 	.copyright {
 		top: 5px;
-	}
-
-	.social-likes__widget {
-		margin-right: 0.3em;
 	}
 }
