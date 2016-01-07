@@ -88,7 +88,7 @@ return [
 				&copy; 2014 <a href="http://written.ru/">Roman Parpalak</a>.
 				<script>var mailto="roman%"+"40written.ru";document.write('Drop me a line: <a href="mailto:'+unescape(mailto)+'">' + unescape(mailto) + '</a>.');</script>
 				&nbsp;
-				<div class="likely" data-zeroes="yes" data-url="http://tex.s2cms.com/">
+				<div class="likely" data-url="http://tex.s2cms.com/">
 					<div class="facebook" title="Share">&nbsp;</div>
 					<div class="twitter" data-via="r_parpalak" title="Tweet">&nbsp;</div>
 				</div>

@@ -40,10 +40,10 @@ $formats = [
 	<h1 class="title">Markdown & LaTeX Editor</h1>
 	<div class="copyright">
 		<div class="likely likely-light likely-small" data-url="http://tex.s2cms.ru/page/">
-			<div class="twitter" title="Share link on Twitter"></div>
 			<div class="facebook" title="Share link on Facebook"></div>
 			<div class="gplus" title="Share link on Google+"></div>
 			<div class="vkontakte" title="Share link on VK"></div>
+			<div class="twitter" title="Share link on Twitter"></div>
 		</div>
 		&copy; 2015
 		<script>
