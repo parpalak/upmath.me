@@ -1,11 +1,13 @@
 /**
  * Replaces LaTeX formulas by pictures
  * Inspired by http://www.codecogs.com/latex/htmlequations.php
- * @copyright 2012-2015 Roman Parpalak
+ * @copyright 2012-2016 Roman Parpalak
  */
 
 (function (w, d) {
-	var url = '//tex.s2cms.ru',
+	var prtcl = location.protocol,
+		ntwPath = '//tex.s2cms.ru',
+		url = (prtcl === 'http:' || prtcl === 'https:') ? ntwPath : 'http:' + ntwPath,
 		im = d.implementation,
 		ext = im && im.hasFeature("http://www.w3.org/TR/SVG11/feature#BasicStructure", "1.1") ? 'svg' : 'png';
 
@@ -134,7 +136,7 @@
 
 	var ao;
 	w.addEventListener && w.addEventListener('message', function (e) {
-		if (e.origin.replace(/^https?:/, '') != url)
+		if (e.origin.replace(/^https?:/, '') != ntwPath)
 			return;
 
 		if (!ao)
