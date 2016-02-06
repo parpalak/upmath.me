@@ -74,7 +74,8 @@ foreach ($lang_links as $link_lang => $link_url)
 			 --><a class="nav-item inside" href="#editor"><span class="nav-link"><?php echo __('equation editor'); ?></span></a><!--
 			 --><a class="nav-item inside" href="#samples"><span class="nav-link"><?php echo __('examples'); ?></span></a><!--
 			 --><a class="nav-item inside" href="#faq"><span class="nav-link"><?php echo __('link-faq'); ?></span></a><!--
-			 --><a class="nav-item inside" href="#embedding"><span class="nav-link"><?php echo __('link-install'); ?></span></a>
+			 --><a class="nav-item inside" href="#embedding"><span class="nav-link"><?php echo __('link-install'); ?></span></a><!--
+			 --><a class="nav-item" href="/page/"><span class="nav-link"><?php echo __('page-editor'); ?></span></a>
 			</div>
 		</div>
 	</div>

@@ -133,6 +133,9 @@ h2+h3 {margin-top: 0;}
 		height: 45px;
 		box-shadow: 0 2px 3px rgba(140, 100, 80, 0.4);
 		}
+		.header-content {
+			padding: 0 1em;
+		}
 		.nav {
 			margin: 0 -1em;
 			height: 45px;

@@ -45,27 +45,33 @@ div.header {
 	left: 0;
 	right: 0;
 	bottom: 0;
-}
-h1.title {
-	font-size: 18px;
-	text-transform: uppercase;
-	letter-spacing: 0.3em;
-	line-height: 30px;
-	margin: 0;
-}
+	}
+	.menu {
+	}
+	.header-item {
+		display: inline-block;
+		vertical-align: middle;
+	}
+	.header a.link {
+		color: #fff;
+		}
+	h1.title {
+		font-size: 17px;
+		text-transform: uppercase;
+		letter-spacing: 0.15em;
+		line-height: 28px;
+		margin: 0;
+		flex: 1 0 auto;
+		}
+	.copyright {
+		top: 10px;
+		right: 12px;
+		position: absolute;
+		letter-spacing: 0.02em;
+		}
 .container {
 	padding-top: 70px;
 	overflow: hidden;
-}
-.copyright {
-	top: 10px;
-	right: 12px;
-	position: absolute;
-	letter-spacing: 0.02em;
-}
-.copyright,
-.copyright a {
-	color: #fff;
 }
 .opt__strict .not-strict {
 	opacity: 0.3;
@@ -285,18 +291,13 @@ textarea {
 	}
 }
 
-@media screen and (max-width: 700px) {
+@media screen and (max-width: 800px) {
 	.likely {
 		display: none;
 	}
 }
 
 @media screen and (max-width: 750px) {
-	h1.title {
-		text-transform: uppercase;
-		letter-spacing: 0.2em;
-	}
-
 	div.header {
 		padding-top: 3px;
 		height: 60px;
@@ -309,5 +310,12 @@ textarea {
 
 	.copyright {
 		top: 5px;
+	}
+}
+
+@media screen and (max-width: 666px) {
+	h1.title {
+		font-size: 15px;
+		letter-spacing: 0.1em;
 	}
 }

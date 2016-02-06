@@ -37,8 +37,11 @@ $formats = [
 </head>
 <body>
 <div class="header">
-	<h1 class="title">Markdown & LaTeX Editor</h1>
-	<div class="copyright">
+	<div class="header-item menu">
+		<a class="link" href="/">&larr; Equations for web</a>
+	</div>
+	<h1 class="header-item title">&nbsp;&middot;&nbsp;Markdown & LaTeX Editor</h1>
+	<div class="header-item copyright">
 		<div class="likely likely-light likely-small" data-url="http://tex.s2cms.ru/page/">
 			<div class="facebook" title="Share link on Facebook"></div>
 			<div class="gplus" title="Share link on Google+"></div>
@@ -48,7 +51,7 @@ $formats = [
 		&copy; 2015
 		<script>
 			var mailto = "roman%"+"40written.ru";
-			document.write('<a title="Drop me a line" href="mailto:'+unescape(mailto)+'">Roman Parpalak</a>');
+			document.write('<a class="link" title="Drop me a line" href="mailto:'+unescape(mailto)+'">Roman Parpalak</a>');
 		</script>
 	</div>
 </div>

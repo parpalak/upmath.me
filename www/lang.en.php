@@ -20,6 +20,7 @@ return [
 	'link-s2'          => '&larr; S2 CMS',
 	'link-faq'         => 'FAQ',
 	'link-install'     => 'Embedding',
+	'page-editor'      => 'Math text editor',
 	'samples'          => [
 		'integrals' => 'Integrals, roots and borders',
 		'limits'    => 'Limits and sums',
