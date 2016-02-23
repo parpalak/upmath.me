@@ -148,6 +148,7 @@
 		md.inline.ruler.before('escape', 'math_inline', math_inline);
 
 		md.renderer.rules.math_inline = (function (protocol) {
+			protocol = typeof options.protocol !== 'undefined' ? options.protocol : protocol;
 			return function (tokens, idx) {
 				var formula = tokens[idx].content;
 

@@ -16,7 +16,8 @@ var defaults = {
 	quotes:       '«»„“',
 
 	// option for tex plugin
-	_tex: {noreplace: false},
+	_tex: {noreplace: false}, // a switch for mdSrc parser
+	_habr: {protocol: ''},    // no protocol for habrahabr markup
 
 	// options below are for demo only
 	_highlight: true,
@@ -56,7 +57,7 @@ function mdInit() {
 		.use(markdownitSup)
 	;
 	mdHabr = window.markdownit(defaults)
-		.use(markdownitS2Tex)
+		.use(markdownitS2Tex, defaults._habr)
 		.use(markdownitSub)
 		.use(markdownitSup)
 	;
@@ -127,11 +128,9 @@ function mdInit() {
 	/**
 	 * Habrahabr hack for numerating formulas
  	 */
-	mdHabr.renderer.rules.math_number = (function (protocol) {
-		return function (tokens, idx) {
-			return '<img align="right" src="' + protocol + '//tex.s2cms.ru/svg/' + tokens[idx].content + '" />';
-		}
-	}(location.protocol == "https:" ? "https:" : 'http:'));
+	mdHabr.renderer.rules.math_number = function (tokens, idx) {
+		return '<img align="right" src="//tex.s2cms.ru/svg/' + tokens[idx].content + '" />';
+	};
 
 	/**
 	 * Habrahabr "source" tag
