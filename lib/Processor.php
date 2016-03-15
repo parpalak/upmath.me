@@ -33,7 +33,7 @@ class Processor
 			throw new \Exception('Incorrect output format has been requested. Expected SVG or PNG.');
 
 		$this->ext = $a[1];
-		$this->formula = urldecode($a[2]);
+		$this->formula = rawurldecode($a[2]);
 		$this->formula = trim($this->formula);
 
 		$this->cur_cache_name = $this->cachePathFromURI($this->ext);
