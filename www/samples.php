@@ -77,8 +77,8 @@ ob_start();
 ?>
 <p>Магнитный момент $$\vec{\mathfrak{m}}$$, находящийся в начале координат, создает в точке $$\vec{R}_0$$ векторный потенциал</p>
 
-<p><span style="float: right;">(1)</span>
-$$\vec{A} = {\vec{\mathfrak{m}} \times \vec{R}_0 \over R_0^3}.$$</p>
+<p>$$\vec{A} = {\vec{\mathfrak{m}}
+\times \vec{R}_0 \over R_0^3}.$$(1)</p>
 <?php
 
 $samples_embedding['ru'][] = ob_get_clean();
@@ -87,8 +87,8 @@ ob_start();
 ?>
 <p>Placed in the origin, magnetic moment $$\vec{\mathfrak{m}}$$ produces at point $$\vec{R}_0$$ magnetic vector potential</p>
 
-<p><span style="float: right;">(1)</span>
-$$\vec{A} = {\vec{\mathfrak{m}} \times \vec{R}_0 \over R_0^3}.$$</p>
+<p>$$\vec{A} = {\vec{\mathfrak{m}}
+\times \vec{R}_0 \over R_0^3}.$$(1)</p>
 <?php
 
 $samples_embedding['en'][] = ob_get_clean();
