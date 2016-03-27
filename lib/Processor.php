@@ -1,9 +1,6 @@
 <?php
 /**
- * Processes requested URL and caches the result.
- * Uses cache if possible.
- *
- * @copyright 2014-2015 Roman Parpalak
+ * @copyright 2014-2016 Roman Parpalak
  * @license   http://www.opensource.org/licenses/mit-license.php MIT
  * @package   S2 Latex Service
  * @link      http://tex.s2cms.ru
@@ -11,6 +8,12 @@
 
 namespace Tex;
 
+/**
+ * Class Processor
+ *
+ * Processes requested URL and caches the result.
+ * Uses cache if possible.
+ */
 class Processor
 {
 	private $ext, $formula, $svg = '', $png = '', $cur_cache_name, $cache_exists = false, $modified_at;
@@ -134,18 +137,37 @@ class Processor
 		}
 	}
 
-	private static function file_put ($filename, $content)
+	/**
+	 * Wrapper for file_put_contents()
+	 *
+	 * 1. Creates parent directories if they do not exist.
+	 * 2. Uses atomic rename operation to avoid using partial content and race conditions.
+	 *
+	 * @param $filename
+	 * @param $content
+	 */
+	private static function file_put($filename, $content)
 	{
 		$dir = dirname($filename);
-		if (!file_exists($dir))
+		if (!file_exists($dir)) {
 			mkdir($dir, 0777, true);
+		}
 
-		file_put_contents($filename, $content);
+		$tmpFilename = $filename . '.temp';
+
+		file_put_contents($tmpFilename, $content);
+
+		if (!@rename($tmpFilename, $filename)) {
+			@unlink($filename);
+			@rename($tmpFilename, $filename);
+		}
 	}
 
-	private function cachePathFromURI ($ext)
+	private function cachePathFromURI($ext)
 	{
-		$hash = md5($this->formula);
-		return ($this->error ? $this->cache_fail_dir : $this->cache_success_dir) . substr($hash, 0, 2) . '/' . substr($hash, 2, 2) . '/' . substr($hash, 4) . '.' . $ext;
+		$hash      = md5($this->formula);
+		$prefixDir = $this->error ? $this->cache_fail_dir : $this->cache_success_dir;
+
+		return $prefixDir . substr($hash, 0, 2) . '/' . substr($hash, 2, 2) . '/' . substr($hash, 4) . '.' . $ext;
 	}
 }

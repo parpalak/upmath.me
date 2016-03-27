@@ -1,8 +1,6 @@
 <?php
 /**
- * Runs Latex CLI.
- *
- * @copyright 2014-2015 Roman Parpalak
+ * @copyright 2014-2016 Roman Parpalak
  * @license   http://www.opensource.org/licenses/mit-license.php MIT
  * @package   S2 Latex Service
  * @link      http://tex.s2cms.ru
@@ -10,6 +8,11 @@
 
 namespace Tex;
 
+/**
+ * Class Renderer
+ *
+ * Runs Latex CLI.
+ */
 class Renderer implements RendererInterface
 {
 	const SVG_PRECISION = 5;
@@ -21,6 +24,7 @@ class Renderer implements RendererInterface
 
 	private $is_debug = false;
 	private $log_dir;
+	private $latexCommand;
 	private $pngCommand;
 	private $svgCommand;
 	private $svg2pngCommand;
@@ -28,11 +32,11 @@ class Renderer implements RendererInterface
 
 	public function __construct (TemplaterInterface $templater, $tmpDir, $latexCommand, $svgCommand, $pngCommand = null)
 	{
-		$this->templater = $templater;
-		$this->tmp_dir = $tmpDir;
-		$this->latex_command = $latexCommand;
-		$this->svgCommand = $svgCommand;
-		$this->pngCommand = $pngCommand;
+		$this->templater    = $templater;
+		$this->tmp_dir      = $tmpDir;
+		$this->latexCommand = $latexCommand;
+		$this->svgCommand   = $svgCommand;
+		$this->pngCommand   = $pngCommand;
 	}
 
 	public function setDebug ($isDebug)
@@ -72,7 +76,7 @@ class Renderer implements RendererInterface
 		// Latex
 		file_put_contents($tmp_name, $tex_source);
 		try {
-			list($out, $status) = Lib::ExecWaitTimeout($this->latex_command . ' ' . $tmp_name . ' 2>&1');
+			list($out, $status) = Lib::ExecWaitTimeout($this->latexCommand . ' ' . $tmp_name . ' 2>&1');
 			if ($this->is_debug) {
 				echo '<pre>';
 				readfile($tmp_name . '.log');
@@ -122,11 +126,12 @@ class Renderer implements RendererInterface
 		$is_bbox = preg_match('#<!--bbox ([\d.]+) ([\d.]+) ([\d.]+) ([\d.]+) -->#', $svg, $match_bbox);
 		if ($is_start && $is_bbox) {
 			// SVG contains info about image size and baseline position.
+			// Taking into account OUTER_SCALE since coordinates are in the internal scale.
 			$depth = round(OUTER_SCALE * (- $match_start[2] + $match_bbox[2] + $match_bbox[4]), self::SVG_PRECISION);
 			$height = round(OUTER_SCALE * $match_bbox[4], self::SVG_PRECISION);
 			$width = round(OUTER_SCALE * $match_bbox[3], self::SVG_PRECISION);
 
-			// Embed script providing that info to parent.
+			// Embedding script providing that info to the parent.
 			$script = '<script type="text/ecmascript">if(window.parent.postMessage)window.parent.postMessage("'.$depth.'|'.$width.'|'.$height.'|"+window.location,"*");</script>'."\n";
 			$svg = str_replace('<defs>', $script . '<defs>', $svg);
 		}
