@@ -134,7 +134,7 @@
 		}
 	}
 
-	var ao, isIE = !!(document.documentMode || /Edge/.test(navigator.userAgent));
+	var ao;
 
 	w.addEventListener && w.addEventListener('message', function (e) {
 		if (e.origin.replace(/^https?:/, '') != ntwPath) {
@@ -146,23 +146,15 @@
 		}
 
 		var s = e.data.split('|'),
-			v = s.shift(), x = s.shift(), y = s.shift(),
+			c = 1.00375,
+			v = c * s.shift(), x = c * s.shift(), y = c * s.shift(),
 			i = ao.length;
 
 		s = s.join('|');
 
-		if (isIE) {
-			for (; i-- ;) {
-				if (ao[i].src == s || decodeURIComponent(ao[i].src) == s) {
-					ao[i].setAttribute('style', 'vertical-align: ' + (-v) + 'pt; width: ' + x + 'pt; height: ' + y + 'pt;');
-				}
-			}
-		}
-		else {
-			for (; i-- ;) {
-				if (ao[i].src == s || decodeURIComponent(ao[i].src) == s) {
-					ao[i].setAttribute('style', 'vertical-align: ' + (-v) + 'pt;');
-				}
+		for (; i-- ;) {
+			if (ao[i].src == s || decodeURIComponent(ao[i].src) == s) {
+				ao[i].setAttribute('style', 'vertical-align: ' + (-v) + 'pt; width: ' + x + 'pt; height: ' + y + 'pt;');
 			}
 		}
 	}, !1);
