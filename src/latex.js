@@ -134,22 +134,37 @@
 		}
 	}
 
-	var ao;
-	w.addEventListener && w.addEventListener('message', function (e) {
-		if (e.origin.replace(/^https?:/, '') != ntwPath)
-			return;
+	var ao, isIE = !!(document.documentMode || /Edge/.test(navigator.userAgent));
 
-		if (!ao)
+	w.addEventListener && w.addEventListener('message', function (e) {
+		if (e.origin.replace(/^https?:/, '') != ntwPath) {
+			return;
+		}
+
+		if (!ao) {
 			ao = d.getElementsByTagName('embed');
+		}
 
 		var s = e.data.split('|'),
 			v = s.shift(), x = s.shift(), y = s.shift(),
 			i = ao.length;
 
 		s = s.join('|');
-		for (; i--;)
-			if (ao[i].src == s || decodeURIComponent(ao[i].src) == s)
-				ao[i].setAttribute('style', 'vertical-align: ' + (-v) + 'pt;');
+
+		if (isIE) {
+			for (; i-- ;) {
+				if (ao[i].src == s || decodeURIComponent(ao[i].src) == s) {
+					ao[i].setAttribute('style', 'vertical-align: ' + (-v) + 'pt; width: ' + x + 'pt; height: ' + y + 'pt;');
+				}
+			}
+		}
+		else {
+			for (; i-- ;) {
+				if (ao[i].src == s || decodeURIComponent(ao[i].src) == s) {
+					ao[i].setAttribute('style', 'vertical-align: ' + (-v) + 'pt;');
+				}
+			}
+		}
 	}, !1);
 
 })(window, document);
