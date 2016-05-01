@@ -66,14 +66,40 @@ $${\Large\boxed{P=-\varepsilon\,(1+R)\,\frac{v\,(1+v^2/3)}{1-v^2}}.}$$(4)
 
 ## Вычисление в неподвижной системе отсчета
 
-<img align="right" src="//susy.written.ru/_pictures/relativity/relic_disc.png" alt="" width="188" height="288">
+<span style="float:right;">$$\usetikzlibrary{decorations.pathmorphing}
+\begin{tikzpicture}[line width=0.2mm,scale=1.0545]\small
+\tikzset{>=stealth}
+\tikzset{snake it/.style={->,semithick,
+decoration={snake,amplitude=.3mm,segment length=2.5mm,post length=0.9mm},decorate}}
+\def\h{3}
+\def\d{0.2}
+\def\ww{1.4}
+\def\w{1+\ww}
+\def\p{1.5}
+\def\r{0.7}
+\coordinate[label=below:$A_1$] (A1) at (\ww,\p);
+\coordinate[label=above:$B_1$] (B1) at (\ww,\p+\h);
+\coordinate[label=below:$A_2$] (A2) at (\w,\p);
+\coordinate[label=above:$B_2$] (B2) at (\w,\p+\h);
+\coordinate[label=left:$C$] (C1) at (0,0);
+\coordinate[label=left:$D$] (D) at (0,\h);
+\draw[fill=blue!14](A2)--(B2)-- ++(\d,0)-- ++(0,-\h)--cycle;
+\draw[gray,thin](C1)-- +(\w+\d,0);
+\draw[dashed,gray,fill=blue!5](A1)-- (B1)-- ++(\d,0)-- ++(0,-\h)-- cycle;
+\draw[dashed,line width=0.14mm](A1)--(C1)--(D)--(B1);
+\draw[snake it](C1)--(A2) node[pos=0.6,below] {$c\Delta t$};
+\draw[->,semithick](\ww,\p+0.44*\h)-- +(\w-\ww,0) node[pos=0.6,above] {$v\Delta t$};
+\draw[snake it](D)--(B2);
+\draw[thin](\r,0) arc (0:atan2(\p,\w):\r) node[midway,right,yshift=0.06cm] {$\theta$};
+\draw[opacity=0](-0.40,-0.14)-- ++(0,5.06);
+\end{tikzpicture}$$</span>
 Тот же результат получается и в неподвижной системе отсчета. В ней не нужно иметь дела с функцией распределения фотонов, однако из-за движения площадки геометрические выкладки сложнее.
 
 Чтобы понять, сколько летящих под углом *θ* фотонов с частотой ω попадет за время Δ*t* на площадку AB, нужно ввести понятие "заметаемого объема" (объем, фотоны из которого попадут на диск) и умножить его величину на плотность фотонов *n*ω. За это время площадка переместится из положения A~1~B~1~ в положение A~2~B~2~, а фотоны из точек C и D долетят до диска. Таким образом, заметаемый объем соответствует фигуре A~1~B~1~DС, и его величина равна <nobr>*S* |*c*Δ*t* cos *θ* − *v*Δ*t*|</nobr>.
 
 При отражении фотона от площадки в сопутствующей системе отсчета знак проекции волнового вектора фотона изменяется на противоположный: $$k'_{2x}=-k'_{1x}$$. Найдем соответствующее изменение в неподвижной системе:
 
-$$\begin{array}{ll}\Delta k\!\!\!&=k_{1x}-k_{2x}=k_{1x}-\gamma(k'_{2x}+\omega'_2v)=k_{1x}+\gamma(k'_{1x}-\omega'_1v)=\\ &=k_{1x}+\gamma\left(\gamma(k_{1x}-\omega_1 v)-\gamma(\omega_1-k_{1x}v) v\right)=k_{1x}+\gamma^2\left(k_{1x}(1+v^2)-2v\omega\right).\end{array}$$
+$$\begin{aligned}\Delta k &=k_{1x}-k_{2x}=k_{1x}-\gamma(k'_{2x}+\omega'_2v)=k_{1x}+\gamma(k'_{1x}-\omega'_1v)=\\&=k_{1x}+\gamma\left(\gamma(k_{1x}-\omega_1 v)-\gamma(\omega_1-k_{1x}v)v\right)=k_{1x}+\gamma^2\left(k_{1x}(1+v^2)-2v\omega\right).\end{aligned*}$$
 
 Выражая проекцию волнового вектора через частоту фотона и азимутальный угол $$k_x=\omega\cos\theta$$, получаем
 
