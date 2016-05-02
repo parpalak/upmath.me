@@ -99,7 +99,7 @@ function Animator (positionGetter, positionSetter) {
 		var moveTime = timestamp - startedAt;
 
 		if (moveTime < moveDuration) {
-			// New postition and velosity
+			// New position and velocity
 			x = x2 + A * (Math.cos(omega * (moveTime - moveDuration)) - 1);
 			v = A * omega * (Math.sin(omega * (moveDuration - moveTime)));
 
@@ -174,7 +174,7 @@ function Animator (positionGetter, positionSetter) {
 			var alpha = (x2 - x1) / v / animationTime; // Motion parameter
 
 			/**
-			 * Istead of solving non-linear equation alpha * k = tan(k/2)
+			 * Instead of solving non-linear equation alpha * k = tan(k/2)
 			 * we use approximation 0.5/a = 1 - (k/pi)^2
 			 */
 			if (alpha < 0 || alpha > 0.5) {

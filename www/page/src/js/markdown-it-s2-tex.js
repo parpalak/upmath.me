@@ -7,44 +7,50 @@
  */
 
 (function (w) {
-
 	'use strict';
+
 	function scanDelims(state, start) {
 		var pos = state.pos, lastChar, nextChar, count,
 			isLastWhiteSpace, isLastPunctChar,
 			isNextWhiteSpace, isNextPunctChar,
-			can_open = true,
+			can_open  = true,
 			can_close = true,
 			max = state.posMax,
-			isWhiteSpace = state.md.utils.isWhiteSpace,
-			isPunctChar = state.md.utils.isPunctChar,
+			isWhiteSpace   = state.md.utils.isWhiteSpace,
+			isPunctChar    = state.md.utils.isPunctChar,
 			isMdAsciiPunct = state.md.utils.isMdAsciiPunct;
+
 		// treat beginning of the line as a whitespace
 		lastChar = start > 0 ? state.src.charCodeAt(start - 1) : 0x20;
 		if (pos >= max) {
 			can_open = false;
 		}
 		count = pos - start;
+
 		// treat end of the line as a whitespace
 		nextChar = pos < max ? state.src.charCodeAt(pos) : 0x20;
 		isLastPunctChar = isMdAsciiPunct(lastChar) || isPunctChar(String.fromCharCode(lastChar));
 		isNextPunctChar = isMdAsciiPunct(nextChar) || isPunctChar(String.fromCharCode(nextChar));
 		isLastWhiteSpace = isWhiteSpace(lastChar);
 		isNextWhiteSpace = isWhiteSpace(nextChar);
+
 		if (isNextWhiteSpace) {
 			can_open = false;
-		} else if (isNextPunctChar) {
+		}
+		else if (isNextPunctChar) {
 			if (!(isLastWhiteSpace || isLastPunctChar)) {
 				can_open = false;
 			}
 		}
 		if (isLastWhiteSpace) {
 			can_close = false;
-		} else if (isLastPunctChar) {
+		}
+		else if (isLastPunctChar) {
 			if (!(isNextWhiteSpace || isNextPunctChar)) {
 				can_close = false;
 			}
 		}
+
 		return {
 			can_open: can_open,
 			can_close: can_close,
@@ -104,7 +110,7 @@
 
 			// Found!
 
-			// Detecting single formula with a
+			// Detecting single formula with a line number
 			var m = false,
 				tag = 'tex-inline';
 
