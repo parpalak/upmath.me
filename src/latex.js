@@ -68,7 +68,7 @@
 		return i;
 	}
 
-	function processTree(eItem) {
+	var processTree = function (eItem) {
 		var eNext = eItem.firstChild;
 
 		while (eNext) {
@@ -132,7 +132,9 @@
 				}
 			}
 		}
-	}
+	};
+
+	w.S2Latex = {processTree: processTree};
 
 	var ao;
 
