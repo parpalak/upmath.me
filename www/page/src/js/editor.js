@@ -4,7 +4,9 @@
 
 'use strict';
 
-var mdHtml, mdSrc, mdHabr;
+var mdHtml, mdSrc, mdHabr,
+	imagePreloader = new ImagePreloader(),
+	imageLoader = new ImageLoader(imagePreloader, location.protocol == 'https:' ? 'https:' : 'http:');
 
 var defaults = {
 	html:         true,         // Enable HTML tags in source
@@ -113,6 +115,11 @@ function mdInit() {
 	mdHtml.renderer.rules.paragraph_open = mdHtml.renderer.rules.heading_open = injectLineNumbers;
 	mdHabr.renderer.rules.paragraph_open = mdHabr.renderer.rules.heading_open = injectSpaces;
 
+	// Custom image embedding for smooth UX
+	mdHtml.renderer.rules.math_inline = function (tokens, idx) {
+		return imageLoader.getHtmlStub(tokens[idx].content);
+	};
+
 	/**
 	 * Habrahabr hack for numerating formulas
  	 */
@@ -190,7 +197,11 @@ function updateResult(ignoreDiff) {
 	// Update only active view to avoid slowdowns
 	// (debug & src view with highlighting are a bit slow)
 	if (defaults._view === 'html') {
-		$('.result-html').html(mdHtml.render(source));
+		var $result = $('.result-html');
+
+		imageLoader.reset();
+		$result.html(mdHtml.render(source));
+		imageLoader.fixDom();
 	}
 	else if (defaults._view === 'htmltex') {
 		defaults._tex.noreplace = true;
