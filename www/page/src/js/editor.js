@@ -25,18 +25,6 @@ var defaults = {
 	_view: 'html'               // html / src / debug
 };
 
-function SelectText(eItem) {
-	var range, selection;
-
-	if (window.getSelection) {
-		selection = window.getSelection();
-		range = document.createRange();
-		range.selectNodeContents(eItem);
-		selection.removeAllRanges();
-		selection.addRange(range);
-	}
-}
-
 function setResultView(val) {
 	$('body')
 		.removeClass('result-as-html result-as-htmltex result-as-habr result-as-src result-as-debug')
@@ -168,7 +156,8 @@ function mdInit() {
 function setHighlightedlContent(selector, content, lang) {
 	if (window.hljs) {
 		$(selector).html(window.hljs.highlight(lang, content).value);
-	} else {
+	}
+	else {
 		$(selector).text(content);
 	}
 }
@@ -342,7 +331,8 @@ $(function() {
 
 	// start the decorator
 	decorator = new TextareaDecorator(textarea, mdParser);
-	var recalcHeight = debounce(function () { decorator.recalcHeight() }, 100);
+	var recalcHeight = debounce(function () { decorator.recalcHeight() }, 100),
+		$resultHtml  = $('.result-html');
 
 	setResultView(defaults._view);
 
@@ -357,14 +347,16 @@ $(function() {
 			// animatorSrc.stop();
 		});
 
-	$('.result-html').on('touchstart mouseover', function () {
-		$('.source').off('scroll');
-		$('.result-html').off('scroll', syncSrcScroll).on('scroll', syncSrcScroll);
-		// animatorResult.stop();
-	});
+	$resultHtml
+		.on('touchstart mouseover', function () {
+			$('.source').off('scroll');
+			$('.result-html').off('scroll', syncSrcScroll).on('scroll', syncSrcScroll);
+			// animatorResult.stop();
+		});
 
 	// .source has been changed after TextareaDecorator call
 	var $source = $('.source');
+
 	animatorSrc = new Animator(
 		function () {
 			return $source.scrollTop();
@@ -374,7 +366,6 @@ $(function() {
 		}
 	);
 
-	var $resultHtml = $('.result-html');
 	animatorResult = new Animator(
 		function () {
 			return $resultHtml.scrollTop();
@@ -395,7 +386,7 @@ $(function() {
 			var $contentBlock = $('.result-' + view + '-content');
 			if (view !== 'preview' && $contentBlock.length) {
 				setTimeout(function () {
-					SelectText($contentBlock[0]);
+					selectText($contentBlock[0]);
 				}, 0);
 			}
 		}

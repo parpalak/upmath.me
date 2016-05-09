@@ -76,6 +76,24 @@ function substrCount(substr, str) {
 }
 
 /**
+ * Selects the content of the given DOM node.
+ *
+ * @param eNode
+ */
+function selectText(eNode) {
+	if (!window.getSelection) {
+		return;
+	}
+
+	var selection = window.getSelection(),
+		range = document.createRange();
+
+	range.selectNodeContents(eNode);
+	selection.removeAllRanges();
+	selection.addRange(range);
+}
+
+/**
  * Realistic animation module based on one-dimensional physical model.
  *
  * @param positionGetter
