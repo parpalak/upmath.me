@@ -148,8 +148,7 @@
 		}
 
 		var s = e.data.split('|'),
-			c = 1.00375,
-			v = c * s.shift(), x = c * s.shift(), y = c * s.shift(),
+			v = s.shift(), x = s.shift(), y = s.shift(),
 			i = ao.length;
 
 		s = s.join('|');

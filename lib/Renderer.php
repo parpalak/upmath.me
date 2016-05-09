@@ -122,8 +122,10 @@ class Renderer implements RendererInterface
 		$svg = file_get_contents($tmp_name . '.svg');
 
 		// $svg = '...<!--start 19.8752 31.3399 -->...';
+		//                                    x        y
 		$is_start = preg_match('#<!--start ([\d.]+) ([\d.]+) -->#', $svg, $match_start);
-		$is_bbox = preg_match('#<!--bbox ([\d.]+) ([\d.]+) ([\d.]+) ([\d.]+) -->#', $svg, $match_bbox);
+		//                                  x        y        w        h
+ 		$is_bbox = preg_match('#<!--bbox ([\d.]+) ([\d.]+) ([\d.]+) ([\d.]+) -->#', $svg, $match_bbox);
 		if ($is_start && $is_bbox) {
 			// SVG contains info about image size and baseline position.
 			// Taking into account OUTER_SCALE since coordinates are in the internal scale.

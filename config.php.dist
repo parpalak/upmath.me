@@ -30,4 +30,4 @@ define('CACHE_FAIL_DIR', '_error/');
  * Do not forget to clear the cache dir when changing this.
  */
 
-define('OUTER_SCALE', 1.25);
+define('OUTER_SCALE', 1.00375 * 1.25);
