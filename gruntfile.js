@@ -90,7 +90,8 @@ module.exports = function(grunt) {
 		cssmin: {
 			target: {
 				src: [
-					'www/css/style.css'
+					'www/css/style.css',
+					'bower_components/ilyabirman-likely/release/likely.css'
 				],
 				dest: 'www/css/style.min.css'
 			},
