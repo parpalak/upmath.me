@@ -42,7 +42,7 @@ $formats = [
 	</div>
 	<h1 class="header-item title">&nbsp;&middot;&nbsp;Markdown & LaTeX Editor</h1>
 	<div class="header-item copyright">
-		&copy; 2015&ndash;2016
+		&copy; 2016
 		<script>
 			var mailto = "roman%"+"40written.ru";
 			document.write('<a class="link" title="Drop me a line" href="mailto:'+unescape(mailto)+'">Roman Parpalak</a>');
