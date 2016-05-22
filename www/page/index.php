@@ -42,13 +42,7 @@ $formats = [
 	</div>
 	<h1 class="header-item title">&nbsp;&middot;&nbsp;Markdown & LaTeX Editor</h1>
 	<div class="header-item copyright">
-		<div class="likely likely-light likely-small" data-url="http://tex.s2cms.ru/page/">
-			<div class="facebook" title="Share link on Facebook"></div>
-			<div class="gplus" title="Share link on Google+"></div>
-			<div class="vkontakte" title="Share link on VK"></div>
-			<div class="twitter" title="Share link on Twitter"></div>
-		</div>
-		&copy; 2015
+		&copy; 2015&ndash;2016
 		<script>
 			var mailto = "roman%"+"40written.ru";
 			document.write('<a class="link" title="Drop me a line" href="mailto:'+unescape(mailto)+'">Roman Parpalak</a>');
@@ -119,7 +113,6 @@ foreach ($formats as $class => $name)
 	<script src="/page/dist/js/markdown-it-sup.min.js"></script>
 	<script src="/page/dist/js/FileSaver.js"></script>
 	<script src="/page/dist/js/TextareaDecorator.js"></script>
-	<script src="/page/dist/js/likely.js"></script>
 
 	<script src="/page/src/js/utils.js"></script>
 	<script src="/page/src/js/markdown-it-s2-tex.js"></script>

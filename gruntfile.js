@@ -19,7 +19,6 @@ module.exports = function(grunt) {
 			},
 			page_vendors: {
 				src: [
-					'bower_components/ilyabirman-likely/release/likely.js',
 					'bower_components/markdown-it/dist/markdown-it.min.js',
 					'bower_components/markdown-it-sub/dist/markdown-it-sub.min.js',
 					'bower_components/markdown-it-sup/dist/markdown-it-sup.min.js',
@@ -60,7 +59,6 @@ module.exports = function(grunt) {
 					{
 						expand: true,
 						src: [
-							'bower_components/ilyabirman-likely/release/likely.js',
 							'bower_components/file-saver.js/FileSaver.js',
 							'bower_components/markdown-it/dist/markdown-it.min.js',
 							'bower_components/markdown-it-sub/dist/markdown-it-sub.min.js',
@@ -73,8 +71,7 @@ module.exports = function(grunt) {
 					{
 						expand: true,
 						src: [
-							'bower_components/LDT/lib/TextareaDecorator.css',
-							'bower_components/ilyabirman-likely/release/likely.css'
+							'bower_components/LDT/lib/TextareaDecorator.css'
 						],
 						dest: 'www/page/dist/css/',
 						flatten: true
@@ -93,15 +90,13 @@ module.exports = function(grunt) {
 		cssmin: {
 			target: {
 				src: [
-					'www/css/style.css',
-					'bower_components/ilyabirman-likely/release/likely.css'
+					'www/css/style.css'
 				],
 				dest: 'www/css/style.min.css'
 			},
 			page: {
 				src: [
 					'bower_components/LDT/lib/TextareaDecorator.css',
-					'bower_components/ilyabirman-likely/release/likely.css',
 					'www/page/src/css/editor.css'
 				],
 				dest: 'www/page/dist/css/style.min.css'

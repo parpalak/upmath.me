@@ -297,11 +297,6 @@ textarea {
 	font-weight: bold;
 }
 
-.likely {
-	vertical-align: middle;
-	margin-right: 0.3em;
-}
-
 @media screen and (-webkit-min-device-pixel-ratio:0) {
 	/* Chrome hack for the caret color. */
 	.ldt textarea {
@@ -312,12 +307,6 @@ textarea {
 	.ldt textarea::-webkit-input-placeholder {
 		text-shadow: none;
 		-webkit-text-fill-color: initial;
-	}
-}
-
-@media screen and (max-width: 800px) {
-	.likely {
-		display: none;
 	}
 }
 
