@@ -47,7 +47,7 @@ $$T^{\mu\nu}=\begin{pmatrix}
 
 integrals:
 
-$$P_\omega={n_\omega\over 2}\hbar\omega\,{1+R\over 1-v^2}\int\limits_{-1}^{1}dx\,(x-v)|x-v|.$$
+$$P_\omega={n_\omega\over 2}\hbar\omega\,{1+R\over 1-v^2}\int\limits_{-1}^{1}dx\,(x-v)|x-v|,$$
 
 cool tikz-pictures:
 
@@ -114,11 +114,11 @@ It works in browsers, except equations rendered on the server. The editor stores
 
 I have designed and developed this lightweight editor and the service for converting LaTeX equations into svg-pictures to make publishing math texts on the web easy. I consider client-side rendering, the rival technique implemented in [MathJax](https://www.mathjax.org/), to be too limited and resource-consuming, especially on mobile devices.
 
-The source code is [published at Github](https://github.com/parpalak/tex.s2cms.ru) under MIT license.
+The source code is [published on Github](https://github.com/parpalak/tex.s2cms.ru) under MIT license.
 
 ***
 
-Now you can erase this instruction and start writing a scientific post. If you want to see the instruction again, open the editor in a private tab, different browser or download and clear your post and refresh the page.
+Now you can erase this instruction and start writing your own scientific post. If you want to see the instruction again, open the editor in a private tab, a different browser or download and clear your post and refresh the page.
 
 Have a nice day :)
 
