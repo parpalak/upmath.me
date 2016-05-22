@@ -18,13 +18,29 @@ body {
 body, textarea, button {
 	font: 16px/1.5 Calibri, "Trebuchet MS", sans-serif;
 }
+sup, sub {
+	vertical-align: baseline;
+	position: relative;
+	top: -0.4em;
+}
+sub {
+	top: 0.4em;
+}
+hr {
+	display: block;
+	height: 1px;
+	border: 0;
+	border-top: 1px solid #ccc;
+	margin: 1em 0;
+	padding: 0;
+}
 h1, h2, h3 {
 	font: 16px/1.2 Cambria, Georgia, serif;
 	margin: 1em 0 0;
 	font-weight: normal;
 	}
 	h1 {
-		margin: 1em 0 0.25em;
+		margin: 0.5em 0 0.25em;
 		font-size: 225%;
 		}
 	h2 {
