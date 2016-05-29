@@ -1,6 +1,20 @@
 'use strict';
 
 /**
+ * DOMContentLoaded polyfill
+ *
+ * @param fn
+ */
+function documentReady(fn) {
+	if (document.readyState != 'loading') {
+		fn();
+	}
+	else {
+		document.addEventListener('DOMContentLoaded', fn);
+	}
+}
+
+/**
  * Find the index of a maximum value in values array
  * which is less than maxValue.
  *
@@ -38,22 +52,6 @@ function findBisect(maxValue, values) {
 	}
 
 	return {val: a, part: (maxValue - f_a) / (f_b - f_a)};
-}
-
-/**
- * @returns {{}}
- */
-function parseUrlQuery() {
-	var data = {};
-	if (location.search) {
-		var pair = (location.search.substr(1)).split('&'),
-			i = pair.length;
-		for (; i-- ;) {
-			var param = pair[i].split('=');
-			data[param[0]] = param[1];
-		}
-	}
-	return data;
 }
 
 /**
@@ -100,7 +98,7 @@ function selectText(eNode) {
  * @param positionSetter
  * @constructor
  */
-function Animator (positionGetter, positionSetter) {
+function Animator(positionGetter, positionSetter) {
 	var x = 0,
 		x1 = 0,
 		x2 = 0,
@@ -251,7 +249,7 @@ function escapeRegExp(str) {
  * @param replacement
  * @returns {string}
  */
-String.prototype.replaceAll = function(search, replacement) {
+String.prototype.replaceAll = function (search, replacement) {
 	var target = this;
 	return target.replace(new RegExp(escapeRegExp(search), 'g'), replacement);
 };
@@ -264,7 +262,7 @@ function ImagePreloader() {
 	var data = {},
 		uniqueIndex = 0;
 
-	function ajaxReady () {
+	function ajaxReady() {
 		var svg;
 
 		if (this.status >= 200 && this.status < 400) {
@@ -300,9 +298,9 @@ function ImagePreloader() {
 	this.onLoad = function (url, callback) {
 		if (!data[url]) {
 			data[url] = {
-				svg:      null,
+				svg: null,
 				baseline: null,
-				request:  loadImage(url),
+				request: loadImage(url),
 				callback: callback
 			};
 		}
@@ -328,7 +326,7 @@ function ImagePreloader() {
 		var i = m.length,
 			id, newId, curStr;
 
-		for (; i-- ;) {
+		for (; i--;) {
 			curStr = m[i];
 			id = curStr.match(/id=["']([^"']*)["']/)[1];
 			newId = 's' + uniqueIndex + id;
@@ -369,9 +367,9 @@ function ImagePreloader() {
 
 		urlData.callback(url, svg, baselineShift);
 
-		urlData.svg      = svg;
+		urlData.svg = svg;
 		urlData.baseline = baselineShift;
-		urlData.request  = null;
+		urlData.request = null;
 		urlData.callback = null;
 	};
 
@@ -383,7 +381,7 @@ function ImagePreloader() {
 	 */
 	this.getImageDataFromUrl = function (url) {
 		var urlData = data[url];
-		return urlData ? urlData: null;
+		return urlData ? urlData : null;
 	};
 }
 
@@ -393,7 +391,7 @@ function ImagePreloader() {
  * @param protocol  Needed for support the "file:" protocol.
  * @constructor
  */
-function ImageLoader (preloader, protocol) {
+function ImageLoader(preloader, protocol) {
 	var curItems = [],  // current formula content
 		prevItems = [], // previous formula content
 		map = {},       // maps formula content to index
@@ -401,7 +399,7 @@ function ImageLoader (preloader, protocol) {
 
 		placeholderTimer = null,
 		placeholderIndex = null,
-		placeholderUrl   = null;
+		placeholderUrl = null;
 
 	/**
 	 * Find if user has edited only one formula formula.
@@ -410,7 +408,7 @@ function ImageLoader (preloader, protocol) {
 		if (n == prevItems.length) {
 			var editNum = 0, index, i = n;
 
-			for (; i-- ;) {
+			for (; i--;) {
 				if (curItems[i] != prevItems[i]) {
 					editNum++;
 					index = i;
@@ -441,7 +439,7 @@ function ImageLoader (preloader, protocol) {
 
 	function buildMap() {
 		map = {};
-		for (var i = n; i-- ;) {
+		for (var i = n; i--;) {
 			var url = curItems[i];
 
 			if (typeof map[url] === 'undefined') {
@@ -472,10 +470,10 @@ function ImageLoader (preloader, protocol) {
 		var indexes = map[url], i;
 
 		if (indexes && (i = indexes.length)) {
-			for (; i-- ;) {
+			for (; i--;) {
 				var index = indexes[i];
 
- 				insertPicture(index, svg, baselineShift, index === placeholderIndex ? 'fade-in' : 'replace');
+				insertPicture(index, svg, baselineShift, index === placeholderIndex ? 'fade-in' : 'replace');
 
 				if (index === placeholderIndex) {
 					// Clear fade out timer if the new image has just bee
@@ -496,7 +494,7 @@ function ImageLoader (preloader, protocol) {
 	 * @param baselineShift
 	 * @param mode One of 'replace', 'fade-in', 'fade-out'
 	 */
-	function insertPicture (index, svg, baselineShift, mode) {
+	function insertPicture(index, svg, baselineShift, mode) {
 		var id = 's2tex_' + index,
 			oldSvgNode = document.getElementById(id),
 			parentNode = oldSvgNode.parentNode,
@@ -551,13 +549,13 @@ function ImageLoader (preloader, protocol) {
 	this.fixDom = function () {
 		detectPlaceholderFormula();
 		buildMap();
-		for (var i = n; i-- ;) {
+		for (var i = n; i--;) {
 			preloader.onLoad(curItems[i], callback);
 		}
 
 		if (placeholderIndex !== null) {
 			var data = preloader.getImageDataFromUrl(placeholderUrl);
-			if (data !== null && data.callback === null ) {
+			if (data !== null && data.callback === null) {
 				insertPicture(placeholderIndex, data.svg, data.baseline, 'fade-out');
 			}
 		}
@@ -571,7 +569,7 @@ function ImageLoader (preloader, protocol) {
  * @see https://github.com/lodash/lodash/
  */
 
-var now = Date.now || function() {
+var now = Date.now || function () {
 		return new Date().getTime();
 	};
 

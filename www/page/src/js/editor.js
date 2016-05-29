@@ -28,10 +28,30 @@ var defaults = {
 };
 
 function setResultView(val) {
-	$('body')
-		.removeClass('result-as-html result-as-htmltex result-as-habr result-as-src result-as-debug')
-		.addClass('result-as-' + val)
-	;
+	var eNode = document.body;
+
+	[
+		'result-as-html',
+		'result-as-htmltex',
+		'result-as-habr',
+		'result-as-src',
+		'result-as-debug'
+	].forEach(function (className) {
+		if (eNode.classList) {
+			eNode.classList.remove(className);
+		}
+		else {
+			eNode.className = eNode.className.replace(new RegExp('(^|\\b)' + className.split(' ').join('|') + '(\\b|$)', 'gi'), ' ');
+		}
+	});
+
+	if (eNode.classList) {
+		eNode.classList.add('result-as-' + val);
+	}
+	else {
+		eNode.className += ' ' + 'result-as-' + val;
+	}
+
 	defaults._view = val;
 }
 
@@ -160,21 +180,22 @@ function mdInit() {
 	}
 }
 
-function setHighlightedlContent(selector, content, lang) {
+function setHighlightedlContent(className, content, lang) {
+	var eNode = document.getElementsByClassName(className)[0];
 	if (window.hljs) {
-		$(selector).html(window.hljs.highlight(lang, content).value);
+		eNode.innerHTML = window.hljs.highlight(lang, content).value;
 	}
 	else {
-		$(selector).text(content);
+		eNode.textContent = content;
 	}
 }
 
 function getSource() {
-	return $('.source .ldt-textarea').val();
+	return document.querySelector('.source .ldt-textarea').value;
 }
 
 function setSource(text) {
-	$('.source .ldt-textarea').val(text);
+	document.querySelector('.source .ldt-textarea').value = text;
 	decorator.update();
 }
 
@@ -197,29 +218,29 @@ function updateResult(ignoreDiff) {
 	// Update only active view to avoid slowdowns
 	// (debug & src view with highlighting are a bit slow)
 	if (defaults._view === 'html') {
-		var $result = $('.result-html');
+		var result = document.getElementsByClassName('result-html');
 
 		imageLoader.reset();
-		$result.html(mdHtml.render(source));
+		result[0].innerHTML = mdHtml.render(source);
 		imageLoader.fixDom();
 	}
 	else if (defaults._view === 'htmltex') {
 		defaults._tex.noreplace = true;
-		setHighlightedlContent('.result-htmltex-content', mdSrc.render(source), 'html');
+		setHighlightedlContent('result-htmltex-content', mdSrc.render(source), 'html');
 	}
 	else if (defaults._view === 'debug') {
 		setHighlightedlContent(
-			'.result-debug-content',
+			'result-debug-content',
 			JSON.stringify(mdSrc.parse(source, { references: {} }), null, 2),
 			'json'
 		);
 	}
 	else if (defaults._view === 'habr') {
-		setHighlightedlContent('.result-habr-content', getHabraMarkup(source), 'html');
+		setHighlightedlContent('result-habr-content', getHabraMarkup(source), 'html');
 	}
 	else { /*defaults._view === 'src'*/
 		defaults._tex.noreplace = false;
-		setHighlightedlContent('.result-src-content', mdSrc.render(source), 'html');
+		setHighlightedlContent('result-src-content', mdSrc.render(source), 'html');
 	}
 
 	// reset lines mapping cache on content update
@@ -276,8 +297,8 @@ function findScrollMarks() {
 	mapScroll = [mapSrc, mapResult];
 }
 
-function getPositionFromMaps($block, fromIndex, toIndex) {
-	var	scrollTop = $block.scrollTop();
+function getPositionFromMaps(eBlockNode, fromIndex, toIndex) {
+	var	scrollTop = eBlockNode.scrollTop;
 
 	if (scrollTop == 0) {
 		return 0;
@@ -287,7 +308,7 @@ function getPositionFromMaps($block, fromIndex, toIndex) {
 		findScrollMarks();
 	}
 
-	var scrollShift    = $block.height() / 2,
+	var scrollShift    = eBlockNode.offsetHeight / 2,
 		scrollLevel    = scrollTop + scrollShift,
 		blockIndex     = findBisect(scrollLevel, mapScroll[fromIndex]),
 		srcScrollLevel = parseFloat(mapScroll[toIndex][blockIndex.val] * (1 - blockIndex.part));
@@ -299,112 +320,111 @@ function getPositionFromMaps($block, fromIndex, toIndex) {
 	return srcScrollLevel - scrollShift;
 }
 
-function getResultBlockPosition() {
-	return getPositionFromMaps($('.source'), 0, 1);
-}
+var decorator;
 
-function getSrcBlockPosition() {
-	return getPositionFromMaps($('.result-html'), 1, 0);
-}
-
-if (parseUrlQuery().animation === 'linear') {
-	// Synchronize scroll position from source to result
-	var syncResultScroll = debounce(function () {
-		$('.result-html').stop(true).animate({
-			scrollTop: getResultBlockPosition()
-		}, 100, 'linear');
-	}, 50, { maxWait: 50 });
-
-	// Synchronize scroll position from result to source
-	var syncSrcScroll = debounce(function () {
-		$('.source').stop(true).animate({
-			scrollTop: getSrcBlockPosition()
-		}, 100, 'linear');
-	}, 50, { maxWait: 50 });
-}
-else {
+/**
+ * @param animatorSrc
+ * @param animatorResult
+ * @param eSrc
+ * @param eResult
+ * @constructor
+ */
+function SyncScroll(animatorSrc, animatorResult, eSrc, eResult) {
 	// Synchronize scroll position from source to result
 	var syncResultScroll = function () {
-		animatorResult.setPos(getResultBlockPosition());
+		animatorResult.setPos(getPositionFromMaps(eSrc, 0, 1));
 	};
 
 	// Synchronize scroll position from result to source
 	var syncSrcScroll = function () {
-		animatorSrc.setPos(getSrcBlockPosition());
+		animatorSrc.setPos(getPositionFromMaps(eResult, 1, 0));
 	};
+
+	this.switchScrollToSrc = function () {
+		eResult.removeEventListener('scroll', syncSrcScroll);
+		eSrc.removeEventListener('scroll', syncResultScroll);
+		eSrc.addEventListener('scroll', syncResultScroll);
+		// animatorSrc.stop();
+	};
+
+	this.switchScrollToResult = function () {
+		eSrc.removeEventListener('scroll', syncResultScroll);
+		eResult.removeEventListener('scroll', syncSrcScroll);
+		eResult.addEventListener('scroll', syncSrcScroll);
+		// animatorResult.stop();
+	}
 }
 
-var decorator, animatorSrc, animatorResult;
-
-$(function() {
-	var $textareaSource = $('.source'),
-		textarea = $textareaSource[0];
+documentReady(function() {
+	var eTextarea = document.getElementsByClassName('source')[0];
 
 	// start the decorator
-	decorator = new TextareaDecorator(textarea, mdParser);
+	decorator = new TextareaDecorator(eTextarea, mdParser);
+
 	var recalcHeight = debounce(function () { decorator.recalcHeight() }, 100),
-		$resultHtml  = $('.result-html');
+		eResultHtml  = document.getElementsByClassName('result-html')[0];
 
 	setResultView(defaults._view);
 
 	mdInit();
 
-	// Setup listeners
-	$textareaSource
-		.on('keyup paste cut mouseup', debounce(updateResult, 300, { maxWait: 3000 }))
-		.on('touchstart mouseover', function () {
-			$('.result-html').off('scroll');
-			$('.source').off('scroll', syncResultScroll).on('scroll', syncResultScroll);
-			// animatorSrc.stop();
-		});
-
-	$resultHtml
-		.on('touchstart mouseover', function () {
-			$('.source').off('scroll');
-			$('.result-html').off('scroll', syncSrcScroll).on('scroll', syncSrcScroll);
-			// animatorResult.stop();
-		});
-
 	// .source has been changed after TextareaDecorator call
-	var $source = $('.source');
+	var eNodeSource = document.getElementsByClassName('source')[0];
 
-	animatorSrc = new Animator(
+	var animatorSrc = new Animator(
 		function () {
-			return $source.scrollTop();
+			return eNodeSource.scrollTop;
 		},
-		function (x) {
-			$source.scrollTop(x);
+		function (y) {
+			eNodeSource.scrollTop = y;
 		}
 	);
 
-	animatorResult = new Animator(
+	var animatorResult = new Animator(
 		function () {
-			return $resultHtml.scrollTop();
+			return eResultHtml.scrollTop;
 		},
-		function (x) {
-			$resultHtml.scrollTop(x);
+		function (y) {
+			eResultHtml.scrollTop = y;
 		}
 	);
 
-	$('.control-item').on('click', function () {
-		var view = $(this).data('resultAs');
-		if (view) {
-			setResultView(view);
-			// only to update permalink
-			updateResult(true);
+	var syncScroll = new SyncScroll(animatorSrc, animatorResult, eNodeSource, eResultHtml);
 
-			// Selecting all block content.
-			var $contentBlock = $('.result-' + view + '-content');
-			if (view !== 'preview' && $contentBlock.length) {
-				setTimeout(function () {
-					selectText($contentBlock[0]);
-				}, 0);
+	// Setup listeners
+	var updateText = debounce(updateResult, 300, { maxWait: 3000 });
+	eTextarea.addEventListener('keyup', updateText);
+	eTextarea.addEventListener('paste', updateText);
+	eTextarea.addEventListener('cut', updateText);
+	eTextarea.addEventListener('mouseup', updateText);
+
+	eTextarea.addEventListener('touchstart', syncScroll.switchScrollToSrc);
+	eTextarea.addEventListener('mouseover', syncScroll.switchScrollToSrc);
+
+	eResultHtml.addEventListener('touchstart', syncScroll.switchScrollToResult);
+	eResultHtml.addEventListener('mouseover', syncScroll.switchScrollToResult);
+
+	Array.prototype.forEach.call(document.getElementsByClassName('control-item'), function(eNode, index) {
+		eNode.addEventListener('click', function () {
+			var view = this.getAttribute('data-result-as');
+			if (view) {
+				setResultView(view);
+				// only to update permalink
+				updateResult(true);
+
+				// Selecting all block content.
+				var contentBlocks = document.getElementsByClassName('result-' + view + '-content');
+				if (view !== 'preview' && contentBlocks.length) {
+					setTimeout(function () {
+						selectText(contentBlocks[0]);
+					}, 0);
+				}
 			}
-		}
+		})
 	});
 
 	// Need to recalculate line positions on window resize
-	$(window).on('resize', function () {
+	window.addEventListener('resize', function () {
 		resetScrollMap();
 		recalcHeight();
 	});

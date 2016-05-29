@@ -1,10 +1,12 @@
-$(function () {
-	$('._download-source').on('click', function () {
+'use strict';
+
+documentReady(function () {
+	document.querySelector('._download-source').addEventListener('click', function () {
 		var blob = new Blob([getSource()], {type: 'text/markdown;charset=utf-8'});
 		saveAs(blob, 'source.md');
 	});
 
-	$('._download-result').on('click', function () {
+	document.querySelector('._download-result').addEventListener('click', function () {
 		var source = getSource(),
 			result = defaults._view === 'habr' ? mdHabr.render(source) : mdSrc.render(source);
 
@@ -12,11 +14,12 @@ $(function () {
 		saveAs(blob, defaults._view + '.html');
 	});
 
-	$('._upload-source').on('click', function () {
-		document.getElementById('fileElem').click();
+	document.querySelector('._upload-source').addEventListener('click', function () {
+		var eNode = document.getElementById('fileElem');
+		(eNode.onclick || eNode.click || function () {}).call(eNode);
 	});
 
-	$('#fileElem').change(function () {
+	document.getElementById('fileElem').addEventListener('change', function () {
 		if (!this.files || !FileReader) {
 			return;
 		}

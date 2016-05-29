@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright (C) 2015 Roman Parpalak
+ * @copyright (C) 2015-2016 Roman Parpalak
  * @license   http://www.opensource.org/licenses/mit-license.php MIT
  * @package   Markdown & LaTeX Editor
  * @link      http://tex.s2cms.ru/page/
@@ -102,7 +102,6 @@ foreach ($formats as $class => $name)
 	}());
 </script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/es5-shim/4.0.5/es5-shim.min.js"></script>
-<script src="/js/jquery.min.js"></script>
 <script src="//cdn.jsdelivr.net/highlight.js/8.5.0/highlight.min.js"></script>
 <?php if (defined('USE_MINIFICATION') && USE_MINIFICATION): ?>
 	<script src="/page/dist/js/vendors.min.js?<?php include 'dist/js/vendors.min.js.md5'; ?>"></script>
