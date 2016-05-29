@@ -1,6 +1,6 @@
 #S2 LaTeX Renderer
 
-Source of the [LaTeX equations for web](http://tex.s2cms.com).
+Service for generating nice [SVG pictures from LaTeX equations](https://tex.s2cms.com) for web and [Markdown & LaTeX Online Editor](https://tex.s2cms.ru/page/).
 
 ##Requirements
 
@@ -8,7 +8,7 @@ Source of the [LaTeX equations for web](http://tex.s2cms.com).
 1. `nginx` web server with [ngx_http_lua_module](https://github.com/openresty/lua-nginx-module) (for example, [nginx-extras Debian package](https://packages.debian.org/search?searchon=names&keywords=nginx-extras)).
 1. `php-fpm`. 
 1. Node.js and frontend building tools: `npm`, `bower`, `grunt-cli`. Make the following symlink on Debian: `root:/usr/bin# ln -s nodejs node`.
-1. `ghostscript` (used internally by TeX component `dvisvgm`).
+1. `ghostscript` (used internally by `dvisvgm` TeX component).
 1. Utilities: `rsvg-convert`, `optipng`, `pngout`. Install them or modify the code to disable PNG support.
 
 ##Installation
