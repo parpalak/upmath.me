@@ -244,7 +244,7 @@ function updateResult(ignoreDiff) {
 	}
 
 	// reset lines mapping cache on content update
-	resetScrollMap();
+	scrollMap.reset();
 
 	try {
 		localStorage.setItem("editor_content", source);
@@ -252,11 +252,36 @@ function updateResult(ignoreDiff) {
 	catch (e) {}
 }
 
-function resetScrollMap() {
-	mapScroll = [null, null];
-}
+function ScrollMap(mapBuilder) {
+	var map = null;
 
-var mapScroll;
+	this.reset = function () {
+		map = [null, null];
+	};
+
+	this.getPosition = function (eBlockNode, fromIndex, toIndex) {
+		var	scrollTop = eBlockNode.scrollTop;
+
+		if (scrollTop == 0) {
+			return 0;
+		}
+
+		if (map[fromIndex] === null) {
+			map = mapBuilder();
+		}
+
+		var scrollShift    = eBlockNode.offsetHeight / 2,
+			scrollLevel    = scrollTop + scrollShift,
+			blockIndex     = findBisect(scrollLevel, map[fromIndex]),
+			srcScrollLevel = parseFloat(map[toIndex][blockIndex.val] * (1 - blockIndex.part));
+
+		if (map[toIndex][blockIndex.val + 1]) {
+			srcScrollLevel += parseFloat(map[toIndex][blockIndex.val + 1] * blockIndex.part);
+		}
+
+		return srcScrollLevel - scrollShift;
+	}
+}
 
 /**
  * Searches start position for text blocks
@@ -267,7 +292,8 @@ function findScrollMarks() {
 		line,
 		mapSrc = [0],
 		mapResult = [0],
-		i = 0, len = resElements.length;
+		i = 0,
+		len = resElements.length;
 
 	for (; i < len; i++) {
 		line = parseInt(resElements[i].getAttribute('data-line'));
@@ -294,50 +320,28 @@ function findScrollMarks() {
 		}
 	}
 
-	mapScroll = [mapSrc, mapResult];
+	return [mapSrc, mapResult];
 }
 
-function getPositionFromMaps(eBlockNode, fromIndex, toIndex) {
-	var	scrollTop = eBlockNode.scrollTop;
-
-	if (scrollTop == 0) {
-		return 0;
-	}
-
-	if (mapScroll[fromIndex] === null) {
-		findScrollMarks();
-	}
-
-	var scrollShift    = eBlockNode.offsetHeight / 2,
-		scrollLevel    = scrollTop + scrollShift,
-		blockIndex     = findBisect(scrollLevel, mapScroll[fromIndex]),
-		srcScrollLevel = parseFloat(mapScroll[toIndex][blockIndex.val] * (1 - blockIndex.part));
-
-	if (mapScroll[toIndex][blockIndex.val + 1]) {
-		srcScrollLevel += parseFloat(mapScroll[toIndex][blockIndex.val + 1] * blockIndex.part);
-	}
-
-	return srcScrollLevel - scrollShift;
-}
-
-var decorator;
+var decorator, scrollMap;
 
 /**
+ * @param scrollMap
  * @param animatorSrc
  * @param animatorResult
  * @param eSrc
  * @param eResult
  * @constructor
  */
-function SyncScroll(animatorSrc, animatorResult, eSrc, eResult) {
+function SyncScroll(scrollMap, animatorSrc, animatorResult, eSrc, eResult) {
 	// Synchronize scroll position from source to result
 	var syncResultScroll = function () {
-		animatorResult.setPos(getPositionFromMaps(eSrc, 0, 1));
+		animatorResult.setPos(scrollMap.getPosition(eSrc, 0, 1));
 	};
 
 	// Synchronize scroll position from result to source
 	var syncSrcScroll = function () {
-		animatorSrc.setPos(getPositionFromMaps(eResult, 1, 0));
+		animatorSrc.setPos(scrollMap.getPosition(eResult, 1, 0));
 	};
 
 	this.switchScrollToSrc = function () {
@@ -371,6 +375,8 @@ documentReady(function() {
 	// .source has been changed after TextareaDecorator call
 	var eNodeSource = document.getElementsByClassName('source')[0];
 
+	scrollMap = new ScrollMap(findScrollMarks);
+
 	var animatorSrc = new Animator(
 		function () {
 			return eNodeSource.scrollTop;
@@ -389,7 +395,7 @@ documentReady(function() {
 		}
 	);
 
-	var syncScroll = new SyncScroll(animatorSrc, animatorResult, eNodeSource, eResultHtml);
+	var syncScroll = new SyncScroll(scrollMap, animatorSrc, animatorResult, eNodeSource, eResultHtml);
 
 	// Setup listeners
 	var updateText = debounce(updateResult, 300, { maxWait: 3000 });
@@ -425,7 +431,7 @@ documentReady(function() {
 
 	// Need to recalculate line positions on window resize
 	window.addEventListener('resize', function () {
-		resetScrollMap();
+		scrollMap.reset();
 		recalcHeight();
 	});
 
