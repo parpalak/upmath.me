@@ -23,7 +23,8 @@ module.exports = function(grunt) {
 					'bower_components/markdown-it-sub/dist/markdown-it-sub.min.js',
 					'bower_components/markdown-it-sup/dist/markdown-it-sup.min.js',
 					'bower_components/LDT/lib/TextareaDecorator.js',
-					'bower_components/file-saver.js/FileSaver.js'
+					'bower_components/file-saver.js/FileSaver.js',
+					'www/page/lib/highlight.js/highlight.pack.js'
 				],
 				dest: 'www/page/dist/js/vendors.js'
 			}
@@ -98,6 +99,7 @@ module.exports = function(grunt) {
 			page: {
 				src: [
 					'bower_components/LDT/lib/TextareaDecorator.css',
+					'www/page/lib/highlight.js/solarized-light.css',
 					'www/page/src/css/editor.css'
 				],
 				dest: 'www/page/dist/css/style.min.css'

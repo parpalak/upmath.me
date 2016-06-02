@@ -25,13 +25,13 @@ $formats = [
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="icon" type="image/png" href="/favicon.png" />
-	<link rel="stylesheet" href="https://cdn.jsdelivr.net/highlight.js/8.5.0/styles/solarized_light.min.css">
 
 <?php if (defined('USE_MINIFICATION') && USE_MINIFICATION): ?>
 	<link rel="stylesheet" href="/page/dist/css/style.min.css?<?php include 'dist/css/style.min.css.md5'; ?>">
 <?php else: ?>
 	<link rel="stylesheet" href="/page/dist/css/TextareaDecorator.css">
 	<link rel="stylesheet" href="/page/src/css/editor.css">
+	<link rel="stylesheet" href="/page/lib/highlight.js/solarized-light.css">
 <?php endif; ?>
 </head>
 <body>
@@ -100,8 +100,6 @@ foreach ($formats as $class => $name)
 		document.getElementsByClassName('source')[0].value = data || <?php echo json_encode(file_get_contents('sample.md'), JSON_UNESCAPED_UNICODE); ?>;
 	}());
 </script>
-<script src="//cdnjs.cloudflare.com/ajax/libs/es5-shim/4.0.5/es5-shim.min.js"></script>
-<script src="//cdn.jsdelivr.net/highlight.js/8.5.0/highlight.min.js"></script>
 <?php if (defined('USE_MINIFICATION') && USE_MINIFICATION): ?>
 	<script src="/page/dist/js/vendors.min.js?<?php include 'dist/js/vendors.min.js.md5'; ?>"></script>
 	<script src="/page/dist/js/scripts.min.js?<?php include 'dist/js/scripts.min.js.md5'; ?>"></script>
@@ -111,6 +109,7 @@ foreach ($formats as $class => $name)
 	<script src="/page/dist/js/markdown-it-sup.min.js"></script>
 	<script src="/page/dist/js/FileSaver.js"></script>
 	<script src="/page/dist/js/TextareaDecorator.js"></script>
+	<script src="/page/lib/highlight.js/highlight.pack.js"></script>
 
 	<script src="/page/src/js/utils.js"></script>
 	<script src="/page/src/js/markdown-it-s2-tex.js"></script>
