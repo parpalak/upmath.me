@@ -4,7 +4,7 @@
  * (c) Roman Parpalak, 2016
  */
 
-(function () {
+(function (document, window) {
 	'use strict';
 
 	var defaults = {
@@ -446,4 +446,4 @@
 
 		parserCollection.updateResult();
 	});
-})();
+})(document, window);
