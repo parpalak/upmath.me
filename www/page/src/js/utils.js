@@ -565,6 +565,79 @@ function ImageLoader(preloader, protocol) {
 }
 
 /**
+ * Access to the map between blocks in sync scroll.
+ *
+ * @param mapBuilder
+ * @constructor
+ */
+function ScrollMap(mapBuilder) {
+	var map = null;
+
+	this.reset = function () {
+		map = [null, null];
+	};
+
+	this.getPosition = function (eBlockNode, fromIndex, toIndex) {
+		var	scrollTop = eBlockNode.scrollTop;
+
+		if (scrollTop == 0) {
+			return 0;
+		}
+
+		if (map[fromIndex] === null) {
+			map = mapBuilder();
+		}
+
+		var scrollShift    = eBlockNode.offsetHeight / 2,
+			scrollLevel    = scrollTop + scrollShift,
+			blockIndex     = findBisect(scrollLevel, map[fromIndex]),
+			srcScrollLevel = parseFloat(map[toIndex][blockIndex.val] * (1 - blockIndex.part));
+
+		if (map[toIndex][blockIndex.val + 1]) {
+			srcScrollLevel += parseFloat(map[toIndex][blockIndex.val + 1] * blockIndex.part);
+		}
+
+		return srcScrollLevel - scrollShift;
+	}
+}
+
+/**
+ * Controls sync scroll of the source and preview blocks
+ *
+ * @param scrollMap
+ * @param animatorSrc
+ * @param animatorResult
+ * @param eSrc
+ * @param eResult
+ * @constructor
+ */
+function SyncScroll(scrollMap, animatorSrc, animatorResult, eSrc, eResult) {
+	// Synchronize scroll position from source to result
+	var syncResultScroll = function () {
+		animatorResult.setPos(scrollMap.getPosition(eSrc, 0, 1));
+	};
+
+	// Synchronize scroll position from result to source
+	var syncSrcScroll = function () {
+		animatorSrc.setPos(scrollMap.getPosition(eResult, 1, 0));
+	};
+
+	this.switchScrollToSrc = function () {
+		eResult.removeEventListener('scroll', syncSrcScroll);
+		eSrc.removeEventListener('scroll', syncResultScroll);
+		eSrc.addEventListener('scroll', syncResultScroll);
+		// animatorSrc.stop();
+	};
+
+	this.switchScrollToResult = function () {
+		eSrc.removeEventListener('scroll', syncResultScroll);
+		eResult.removeEventListener('scroll', syncSrcScroll);
+		eResult.addEventListener('scroll', syncSrcScroll);
+		// animatorResult.stop();
+	}
+}
+
+/**
  * Functions from lodash.js
  * @see https://github.com/lodash/lodash/
  */

@@ -31,7 +31,6 @@ $formats = [
 	<link rel="stylesheet" href="/page/dist/css/style.min.css?<?php include 'dist/css/style.min.css.md5'; ?>">
 <?php else: ?>
 	<link rel="stylesheet" href="/page/dist/css/TextareaDecorator.css">
-	<link rel="stylesheet" href="/page/dist/css/likely.css">
 	<link rel="stylesheet" href="/page/src/css/editor.css">
 <?php endif; ?>
 </head>
@@ -117,7 +116,6 @@ foreach ($formats as $class => $name)
 	<script src="/page/src/js/markdown-it-s2-tex.js"></script>
 	<script src="/page/src/js/parser.js"></script>
 	<script src="/page/src/js/editor.js"></script>
-	<script src="/page/src/js/interface.js"></script>
 <?php endif; ?>
 </body>
 </html>
