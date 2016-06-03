@@ -316,15 +316,14 @@
 	}
 
 	documentReady(function () {
-		var eTextarea = document.getElementsByClassName('source')[0];
-
-		// start the decorator
-		var decorator = new TextareaDecorator(eTextarea, mdParser);
+		var eTextarea = document.getElementsByClassName('source')[0],
+			eResultHtml = document.getElementsByClassName('result-html')[0];
 
 		var recalcHeight = debounce(function () {
 				decorator.recalcHeight()
-			}, 100),
-			eResultHtml = document.getElementsByClassName('result-html')[0];
+			}, 100);
+
+		var scrollMap = new ScrollMap(domFindScrollMarks);
 
 		var parserCollection = new ParserCollection(
 			defaults,
@@ -332,10 +331,10 @@
 			window.markdownit,
 			domSetResultView,
 			function domGetSource() {
-				return document.querySelector('.source .ldt-textarea').value;
+				return eTextarea.value;
 			},
 			function domSetSource(text) {
-				document.querySelector('.source .ldt-textarea').value = text;
+				eTextarea.value = text;
 				decorator.update();
 			},
 			domSetPreviewHTML,
@@ -352,10 +351,13 @@
 			}
 		);
 
+		parserCollection.updateResult();
+
+		// start the decorator
+		var decorator = new TextareaDecorator(eTextarea, mdParser);
+
 		// .source has been changed after TextareaDecorator call
 		var eNodeSource = document.getElementsByClassName('source')[0];
-
-		var scrollMap = new ScrollMap(domFindScrollMarks);
 
 		var syncScroll = new SyncScroll(
 			scrollMap,
@@ -443,7 +445,5 @@
 			scrollMap.reset();
 			recalcHeight();
 		});
-
-		parserCollection.updateResult();
 	});
 })(document, window);
