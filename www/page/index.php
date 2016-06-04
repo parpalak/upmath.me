@@ -48,8 +48,8 @@ $formats = [
 		</script>
 	</div>
 </div>
-<div class="container full-height">
-	<div class="half-width full-height">
+<div class="container full-height" id="container-block">
+	<div class="half-width full-height" id="source-block">
 		<div class="toolbar left">
 			<input type="file" id="fileElem" style="display:none">
 			<button class="toolbar-button _upload-source" title="Upload">⇑</button>
@@ -59,7 +59,7 @@ $formats = [
 		</div><!--
 		--><textarea class="source full-height"></textarea><!--
 	--></div><!--
-	--><div class="half-width full-height">
+	--><div class="half-width full-height" id="result-block">
 		<div class="toolbar right">
 			<button class="toolbar-button _download-result" title="Download">⇓</button>
 		</div>

@@ -9,7 +9,7 @@ body,
 	box-sizing: border-box;
 }
 body {
-	min-width: 600px;
+	min-width: 320px;
 	margin: 0;
 	padding: 0;
 	background-color: #fff;
@@ -132,7 +132,6 @@ textarea {
 	padding: 16px 4%;
 	margin: 0;
 	overflow: auto;
-	background-color: #fff;
 }
 .result-src,
 .result-habr,
@@ -215,6 +214,7 @@ textarea {
 	width: 50%;
 	display: inline-block;
 	vertical-align: top;
+	background-color: #fff;
 }
 
 ::-webkit-scrollbar {
@@ -330,5 +330,59 @@ textarea {
 	h1.title {
 		font-size: 15px;
 		letter-spacing: 0.1em;
+	}
+}
+
+@media screen and (max-width: 600px) {
+	div.header {
+		padding-top: 0;
+		height: 50px;
+		font-size: 12px;
+	}
+	.container {
+		padding-top: 50px;
+	}
+
+	h1.title {
+		font-size: 13px;
+		text-transform: none;
+		letter-spacing: 0;
+	}
+
+	.copyright {
+		display: none;
+	}
+
+	.container {
+		position: relative;
+	}
+	.half-width {
+		position: absolute;
+		width: 85%;
+		display: block;
+	}
+
+	#source-block {
+		left: 0;
+	}
+	#result-block {
+		right: 0;
+	}
+
+	#container-block-source #source-block,
+	#container-block-result #result-block {
+		z-index: 10;
+	}
+
+	#container-block-source #result-block,
+	#container-block-result #source-block {
+		background: #999;
+		opacity: 0.6;
+	}
+
+	#container-block-source #result-block .toolbar,
+	#container-block-source #result-block .demo-control,
+	#container-block-result #source-block .toolbar {
+		display: none;
 	}
 }

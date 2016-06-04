@@ -372,7 +372,8 @@
 				eResultHtml.scrollTop = y;
 			}),
 			eNodeSource,
-			eResultHtml
+			eResultHtml,
+			document.getElementById('container-block')
 		);
 
 		// Sync scroll listeners
@@ -388,6 +389,8 @@
 
 		eResultHtml.addEventListener('touchstart', syncScroll.switchScrollToResult);
 		eResultHtml.addEventListener('mouseover', syncScroll.switchScrollToResult);
+
+		syncScroll.switchScrollToSrc();
 
 		Array.prototype.forEach.call(document.getElementsByClassName('control-item'), function (eNode, index) {
 			eNode.addEventListener('click', function () {

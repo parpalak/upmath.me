@@ -609,9 +609,10 @@ function ScrollMap(mapBuilder) {
  * @param animatorResult
  * @param eSrc
  * @param eResult
+ * @param eContainer
  * @constructor
  */
-function SyncScroll(scrollMap, animatorSrc, animatorResult, eSrc, eResult) {
+function SyncScroll(scrollMap, animatorSrc, animatorResult, eSrc, eResult, eContainer) {
 	// Synchronize scroll position from source to result
 	var syncResultScroll = function () {
 		animatorResult.setPos(scrollMap.getPosition(eSrc, 0, 1));
@@ -626,6 +627,7 @@ function SyncScroll(scrollMap, animatorSrc, animatorResult, eSrc, eResult) {
 		eResult.removeEventListener('scroll', syncSrcScroll);
 		eSrc.removeEventListener('scroll', syncResultScroll);
 		eSrc.addEventListener('scroll', syncResultScroll);
+		eContainer.id = 'container-block-source';
 		// animatorSrc.stop();
 	};
 
@@ -633,6 +635,7 @@ function SyncScroll(scrollMap, animatorSrc, animatorResult, eSrc, eResult) {
 		eSrc.removeEventListener('scroll', syncResultScroll);
 		eResult.removeEventListener('scroll', syncSrcScroll);
 		eResult.addEventListener('scroll', syncSrcScroll);
+		eContainer.id = 'container-block-result';
 		// animatorResult.stop();
 	}
 }
