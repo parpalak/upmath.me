@@ -353,20 +353,9 @@ textarea {
 		display: none;
 	}
 
-	.container {
-		position: relative;
-	}
 	.half-width {
-		position: absolute;
 		width: 85%;
-		display: block;
-	}
-
-	#source-block {
-		left: 0;
-	}
-	#result-block {
-		right: 0;
+		margin-right: -70%;
 	}
 
 	#container-block-source #source-block,

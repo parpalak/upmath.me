@@ -237,7 +237,7 @@
 				domSetHighlightedContent('result-src-content', _mdSrc.render(source), 'html');
 			}
 
-			updateCallback();
+			updateCallback(source);
 		};
 
 
@@ -339,7 +339,7 @@
 			},
 			domSetPreviewHTML,
 			domSetHighlightedContent,
-			function () {
+			function (source) {
 				// reset lines mapping cache on content update
 				scrollMap.reset();
 
