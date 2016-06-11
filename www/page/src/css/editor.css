@@ -358,6 +358,10 @@ textarea {
 		margin-right: -70%;
 	}
 
+	#source-block {
+		z-index: 1;
+	}
+
 	#container-block-source #source-block,
 	#container-block-result #result-block {
 		z-index: 10;
