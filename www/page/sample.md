@@ -1,6 +1,6 @@
 # Math Online Editor
 
-This editor is designed for writing math texts for the web. It converts the Markdown syntax extended with latex equations support into HTML code you can use anywhere in the web.
+This editor is designed for writing math texts for the web. It converts the Markdown syntax extended with LaTeX equations support into HTML code you can publish anywhere on the web.
 
 ![Latex](//tex.s2cms.ru/i/latex.jpg)
 
@@ -10,11 +10,11 @@ Definition from [Wikipedia](https://en.wikipedia.org/wiki/Markdown):
 
 > Markdown is a lightweight markup language with plain text formatting syntax designed so that it can be converted to HTML and many other formats using a tool by the same name. Markdown is often used to format readme files, for writing messages in online discussion forums, and to create rich text using a plain text editor.
 
-The main idea of Markdown is to use simple plain text markup. It's ~~hard~~ easy to __make__ **bold** _or_ *italic* text. Simple equations can be formatted with subscripts and superscripts: *E*~0~=*mc*^2^. I have added the LaTeX syntax support: $$E_0=mc^2$$.
+The main idea of Markdown is to use a simple plain text markup. It's ~~hard~~ easy to __make__ **bold** _or_ *italic* text. Simple equations can be formatted with subscripts and superscripts: *E*~0~=*mc*^2^. I have added the LaTeX support: $$E_0=mc^2$$.
 
 Among Markdown features are:
 
-* code: `untouched equation source is *E*~0~=*mc*^2^`
+* code: `untouched equation source is *E*~0~=*mc*^2^`;
 * images (see above);
 * links: [service main page](/ "link title");
 * unordered lists--when a line starts with `+`, `-`, or `*`;
@@ -79,30 +79,26 @@ decoration={snake,amplitude=.3mm,segment length=2.5mm,post length=0.9mm},decorat
 \draw[opacity=0](-0.40,-0.14)-- ++(0,5.06);
 \end{tikzpicture}$$
 
-graphs:
+plots:
 
-$$\begin{tikzpicture}\small
-\def\aa{1.5}
-\def\ab{0.3}
-\def\ac{-0.5}
-\begin{axis}[legend pos=south east,mark size=1,samples=2,
-	restrict y to domain=-8:8,
-	width=12cm, height=250pt,
-	xmin=-10.5, xmax=10.5,
-	ytick={-6,-3,...,6},
-	xtick={-9.4247,-3.1416,...,10},
-	xticklabels={$-{3\pi}$,$-{\pi}$,${\pi}$,${3\pi}$},
+$$\begin{tikzpicture}[scale=1.0544]\small
+\begin{axis}[axis line style=gray,
+	samples=120,
+	width=9.0cm,height=6.4cm,
+	xmin=-1.5, xmax=1.5,
+	ymin=0, ymax=1.8,
+	restrict y to domain=-0.2:2,
+	ytick={1},
+	xtick={-1,1},
+	axis equal,
 	axis x line=center,
 	axis y line=center,
-	xlabel=$k$]
-\addplot[blue!70!black,domain=-9.4247:9.4247,semithick,samples=802]{tan(deg(x/2))};
-\addplot[red]{\aa*x};
-\addplot[green!70!black,domain=-9.4247:9.4247]{\ab*x};
-\addplot[olive,domain=-9.4247:9.4247]{\ac*x};
-\addplot[mark=*] coordinates {(2.65,3.97)} node[anchor=west]{$A$};
-\addplot[mark=*] coordinates {(8.69,2.61)} node[anchor=west]{$B$};
-\addplot[mark=*] coordinates {(4.06,-2.03)} node[anchor=west]{$C$};
-\legend{$\tan k/2$,$\aa\,k$,$\ab\,k$,$\ac\,k$}
+	xlabel=$x$,ylabel=$y$]
+\addplot[red,domain=-2:1,semithick]{exp(x)};
+\addplot[black]{x+1};
+\addplot[] coordinates {(1,1.5)} node{$y=x+1$};
+\addplot[red] coordinates {(-1,0.6)} node{$y=e^x$};
+\path (axis cs:0,0) node [anchor=north west,yshift=-0.07cm] {0};
 \end{axis}
 \end{tikzpicture}$$
 
@@ -118,8 +114,8 @@ The source code is [published on Github](https://github.com/parpalak/tex.s2cms.r
 
 ***
 
-Now you can erase this instruction and start writing your own scientific post. If you want to see the instruction again, open the editor in a private tab, a different browser or download and clear your post and refresh the page.
+Now you can erase this instruction and start writing your own scientific post. If you want to see the instruction again, open the editor in a private tab, in a different browser or download and clear your post and refresh the page.
 
 Have a nice day :)
 
-[Roman Parpalak](https://written.ru/), web developer.
+[Roman Parpalak](https://written.ru/), web developer and UX expert.
