@@ -110,6 +110,10 @@ class Processor
 
 	public function saveContent ()
 	{
+		if ($this->cache_exists) {
+			return;
+		}
+
 		// Disconnecting from web-server
 		flush();
 		fastcgi_finish_request();
