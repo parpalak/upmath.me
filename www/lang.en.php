@@ -10,6 +10,8 @@
 
 return [
 	'title'            => 'LaTeX equations for web',
+	'meta-keywords'    => 'LaTeX, equations, SVG-images, formula, convert latex equations to images, markdown latex online editor',
+	'meta-description' => 'Convert LaTeX equations to SVG images ready for publishing on the web.',
 	'header'           => 'LaTeX equations for&nbsp;web',
 	'equation editor'  => 'Equation editor',
 	'formula in latex' => 'LaTeX expression',

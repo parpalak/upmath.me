@@ -42,6 +42,8 @@ else {
 <meta charset="utf-8">
 <title><?php echo __('title'); ?></title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="keywords" content="<?php echo __('meta-keywords'); ?>" />
+<meta name="description" content="<?php echo __('meta-description'); ?>" />
 <link rel="stylesheet" href="/css/style.min.css?<?php echo FINGERPRINT; ?>">
 <link rel="icon" type="image/png" href="/favicon.png" />
 <script src="/latex.js"></script>
