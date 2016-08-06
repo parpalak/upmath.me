@@ -1,12 +1,15 @@
 .idea
 composer.phar
-composer.lock
 config.php
 host.php
 fingerprint.php
 bower_components
 node_modules
 vendor
-www/latex.js
+www/latex.js*
 www/js/*.min*
+www/js/scripts.js
 www/css/*.min*
+www/yandex*.html
+www/google*.html
+*logs*
