@@ -29,10 +29,11 @@ class Templater implements TemplaterInterface
 
 		// Check if there are used certain environments and include corresponding packages
 		$test_env = [
-			'eqnarray'    => 'eqnarray',
-			'tikzcd'      => 'tikz-cd',
-			'tikzpicture' => 'tikz',
-			'align'       => '', // just turns math mode off
+			'eqnarray'        => 'eqnarray',
+			'tikzcd'          => 'tikz-cd',
+			'tikzpicture'     => 'tikz',
+			'sequencediagram' => 'pgf-umlsd',
+			'align'           => '', // just turns math mode off
 		];
 
 		foreach ($test_env as $command => $env) {
