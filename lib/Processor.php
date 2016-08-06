@@ -31,7 +31,7 @@ class Processor
 
 	public function parseURI ($uri)
 	{
-		$a = explode('/', $uri);
+		$a = explode('/', $uri, 3);
 		if (count($a) < 3 || $a[1] !== 'svg' && $a[1] !== 'png')
 			throw new \Exception('Incorrect output format has been requested. Expected SVG or PNG.');
 
