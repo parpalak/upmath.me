@@ -47,11 +47,13 @@ class Templater implements TemplaterInterface
 
 		// Check if there are used certain commands and include corresponding packages
 		$test_command = [
-			'\\addplot' => 'pgfplots',
+			'\\addplot'      => 'pgfplots',
+			'\\smartdiagram' => 'smartdiagram',
 		];
 
 		foreach ($test_command as $command => $env) {
 			if (strpos($formula, $command) !== false) {
+				$math_mode = false; // TODO make an option
 				if ($env) {
 					$extraPackages[] = new Tpl\Package($env);
 				}
@@ -63,8 +65,8 @@ class Templater implements TemplaterInterface
 			$extraPackages[] = new Tpl\Package('xy', ['all']);
 		}
 
+		$extraPackages[] = new Tpl\Package('inputenc', ['utf8']);
 		if (preg_match('#[А-Яа-я]#u', $formula)) {
-			$extraPackages[] = new Tpl\Package('inputenc', ['utf8']);
 			$extraPackages[] = new Tpl\Package('babel', ['russian']);
 		}
 
