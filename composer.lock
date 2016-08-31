@@ -4,20 +4,21 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "2d2b4a0d75e12f9e8b435096084ab0e3",
+    "hash": "170dd822c35ca4002092d0d44c7d6e1a",
+    "content-hash": "32b9406263c70a3ab8f47b56fd54bcb6",
     "packages": [
         {
             "name": "katzgrau/klogger",
-            "version": "1.0.0",
+            "version": "1.2.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/katzgrau/klogger.git",
-                "reference": "46cdd92a9b4a8443120cc955bf831450cb274813"
+                "url": "https://github.com/katzgrau/KLogger.git",
+                "reference": "87735262be7c3bd210740b5cd4831dee3d827c46"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/katzgrau/klogger/zipball/46cdd92a9b4a8443120cc955bf831450cb274813",
-                "reference": "46cdd92a9b4a8443120cc955bf831450cb274813",
+                "url": "https://api.github.com/repos/katzgrau/KLogger/zipball/87735262be7c3bd210740b5cd4831dee3d827c46",
+                "reference": "87735262be7c3bd210740b5cd4831dee3d827c46",
                 "shasum": ""
             },
             "require": {
@@ -42,21 +43,19 @@
             ],
             "authors": [
                 {
-                    "name": "Dan Horrigan",
-                    "email": "dan@dhorrigan.com",
-                    "homepage": "http://dhorrigan.com",
-                    "role": "Lead Developer"
-                },
-                {
                     "name": "Kenny Katzgrau",
                     "email": "katzgrau@gmail.com"
+                },
+                {
+                    "name": "Dan Horrigan",
+                    "email": "dan@dhorrigan.com"
                 }
             ],
             "description": "A Simple Logging Class",
             "keywords": [
                 "logging"
             ],
-            "time": "2014-03-20 02:36:36"
+            "time": "2015-11-04 22:43:22"
         },
         {
             "name": "psr/log",
@@ -95,6 +94,55 @@
                 "psr-3"
             ],
             "time": "2012-12-21 11:40:51"
+        },
+        {
+            "name": "symfony/process",
+            "version": "v2.8.9",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/process.git",
+                "reference": "d20332e43e8774ff8870b394f3dd6020cc7f8e0c"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/process/zipball/d20332e43e8774ff8870b394f3dd6020cc7f8e0c",
+                "reference": "d20332e43e8774ff8870b394f3dd6020cc7f8e0c",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.9"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "2.8-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Symfony\\Component\\Process\\": ""
+                },
+                "exclude-from-classmap": [
+                    "/Tests/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Fabien Potencier",
+                    "email": "fabien@symfony.com"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "https://symfony.com/contributors"
+                }
+            ],
+            "description": "Symfony Process Component",
+            "homepage": "https://symfony.com",
+            "time": "2016-07-28 11:13:19"
         }
     ],
     "packages-dev": [],

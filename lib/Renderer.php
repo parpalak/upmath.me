@@ -6,7 +6,11 @@
  * @link      http://tex.s2cms.ru
  */
 
-namespace Tex;
+namespace S2\Tex;
+
+use Psr\Log\LoggerInterface;
+use Symfony\Component\Process\Exception\ProcessTimedOutException;
+use Symfony\Component\Process\Process;
 
 /**
  * Class Renderer
@@ -22,146 +26,195 @@ class Renderer implements RendererInterface
 	 */
 	private $templater;
 
-	private $is_debug = false;
-	private $log_dir;
+	/**
+	 * @var LoggerInterface
+	 */
+	private $logger;
+
+	/**
+	 * @var string
+	 */
+	protected $tmpDir;
+
+	/**
+	 * @var bool
+	 */
+	private $isDebug = false;
+
 	private $latexCommand;
 	private $pngCommand;
 	private $svgCommand;
 	private $svg2pngCommand;
-	private $svg = '', $png = '';
 
-	public function __construct (TemplaterInterface $templater, $tmpDir, $latexCommand, $svgCommand, $pngCommand = null)
-	{
-		$this->templater    = $templater;
-		$this->tmp_dir      = $tmpDir;
+	/**
+	 * @var string
+	 */
+	private $svg = '';
+
+	/**
+	 * @var string
+	 */
+	private $png = '';
+
+	/**
+	 * Renderer constructor.
+	 *
+	 * @param TemplaterInterface $templater
+	 * @param string             $tmpDir
+	 * @param string             $latexCommand
+	 * @param string             $svgCommand
+	 * @param null               $pngCommand
+	 */
+	public function __construct(
+		TemplaterInterface $templater,
+		$tmpDir,
+		$latexCommand,
+		$svgCommand,
+		$pngCommand = null
+	) {
+		$this->templater = $templater;
+
+		$this->tmpDir = $tmpDir;
+
 		$this->latexCommand = $latexCommand;
 		$this->svgCommand   = $svgCommand;
 		$this->pngCommand   = $pngCommand;
 	}
 
-	public function setDebug ($isDebug)
+	/**
+	 * @param bool $isDebug
+	 *
+	 * @return $this
+	 */
+	public function setIsDebug($isDebug)
 	{
-		$this->is_debug = $isDebug;
+		$this->isDebug = $isDebug;
+
+		return $this;
 	}
 
-	public function setLogDir ($dir)
+	/**
+	 * @param LoggerInterface $logger
+	 *
+	 * @return $this
+	 */
+	public function setLogger(LoggerInterface $logger)
 	{
-		$this->log_dir = $dir;
+		$this->logger = $logger;
+
+		return $this;
 	}
 
-	private function checkFormula($formula)
+	/**
+	 * @param string $formula
+	 *
+	 * @throws \Exception
+	 */
+	private function validateFormula($formula)
 	{
-		foreach (array('\\write', '\\input', '\\usepackage') as $disabledCommand) {
+		foreach (['\\write', '\\input', '\\usepackage'] as $disabledCommand) {
 			if (strpos($formula, $disabledCommand) !== false) {
-				if ($this->log_dir !== null)
-				{
-					$logger = new \Katzgrau\KLogger\Logger($this->log_dir);
-					$logger->error('Forbidden command: ', array($formula));
-					$logger->error('Server vars: ', $_SERVER);
+				if ($this->logger !== null) {
+					$this->logger->error(sprintf('Forbidden command "%s": ', $disabledCommand), [$formula]);
+					$this->logger->error('Server vars: ', $_SERVER);
 				}
 				throw new \Exception('Forbidden commands.');
 			}
 		}
 	}
 
-	public function run ($formula)
+	/**
+	 * @param string $formula
+	 *
+	 * @return null|void
+	 * @throws \Exception
+	 */
+	public function run($formula)
 	{
-		$this->checkFormula($formula);
+		$this->validateFormula($formula);
 
-		$tmp_name = tempnam(TMP_DIR, '');
+		$tmpName = tempnam(TMP_DIR, '');
 
-		$tex_source = $this->templater->run($formula);
-		$this->echoDebug(htmlspecialchars($tex_source));
+		$texSource = $this->templater->run($formula);
+		$this->echoDebug(htmlspecialchars($texSource));
 
 		// Latex
-		file_put_contents($tmp_name, $tex_source);
+		file_put_contents($tmpName, $texSource);
+		$process = new Process($this->latexCommand . ' ' . $tmpName . ' 2>&1');
+		$process
+			->setTimeout(8);
+
 		try {
-			list($out, $status) = Lib::ExecWaitTimeout($this->latexCommand . ' ' . $tmp_name . ' 2>&1');
-			if ($this->is_debug) {
-				echo '<pre>';
-				readfile($tmp_name . '.log');
-				var_dump($status);
-				echo '</pre>';
-			}
+			$exitCode = $process->run();
 		}
 		catch (\Exception $e) {
-			if ($this->log_dir !== null) {
-				$logger = new \Katzgrau\KLogger\Logger($this->log_dir);
-				$logger->error('Cannot run Latex', array($e->getMessage()));
-				$logger->error('source', array($tex_source));
+			if ($this->logger !== null) {
+				$message = $e instanceof ProcessTimedOutException ? 'Latex has been interrupted by a timeout' : 'Cannot run Latex';
+				$this->logger->error($message, [
+					'message' => $e->getMessage(),
+					'command' => $process->getCommandLine(),
+					'source'  => $texSource,
+				]);
 			}
 			throw $e;
 		}
 
-		$is_latex_error = !file_exists($tmp_name . '.dvi') /*|| $status['exitcode'] !== 0*/;
-
-		if (!file_exists($tmp_name . '.dvi') || isset($status['status_kill'])) {
-			// Ohe has to figure out why the process was killed and why no dvi-file is created.
-			if ($this->log_dir !== null) {
-				$logger = new \Katzgrau\KLogger\Logger($this->log_dir);
-				$logger->error('Latex finished incorrectly');
-				$logger->error('status', $status + array("file_exists($tmp_name.dvi)" => file_exists($tmp_name . '.dvi')));
-				$logger->error('source', array($tex_source));
-				$logger->error('trace',  array(file_get_contents($tmp_name.'.log')));
-			}
+		if ($this->isDebug) {
+			echo '<pre>';
+			readfile($tmpName . '.log');
+			var_dump('exitcode', $exitCode);
+			echo '</pre>';
 		}
 
-		if ($is_latex_error) {
+		if (!file_exists($tmpName . '.dvi')) {
+			// Ohe has to figure out why the process was killed and why no dvi-file is created.
+			if ($this->logger !== null) {
+				$this->logger->error('Latex finished incorrectly', [
+					'command'                   => $process->getCommandLine(),
+					'exit_code'                 => $process->getExitCode(),
+					'exit_code_text'            => $process->getExitCodeText(),
+					"file_exists($tmpName.dvi)" => file_exists($tmpName . '.dvi'),
+				]);
+				$this->logger->error('source', [$texSource]);
+				$this->logger->error('trace (' . $tmpName . '.log)', [file_get_contents($tmpName . '.log')]);
+			}
+
 			$this->dumpDebug($this);
-			$this->cleanupTempFiles($tmp_name);
+			$this->cleanupTempFiles($tmpName);
 			throw new \Exception('Invalid formula');
 		}
 
 		// DVI -> SVG
-		$cmd = sprintf($this->svgCommand, $tmp_name);
-		$svg_output = shell_exec($cmd);
+		$cmd       = sprintf($this->svgCommand, $tmpName);
+		$svgOutput = shell_exec($cmd);
 
 		$this->dumpDebug($cmd);
-		$this->dumpDebug($svg_output);
+		$this->dumpDebug($svgOutput);
 
-		$svg = file_get_contents($tmp_name . '.svg');
-
-		// $svg = '...<!--start 19.8752 31.3399 -->...';
-		//                                    x        y
-		$is_start = preg_match('#<!--start ([\d.]+) ([\d.]+) -->#', $svg, $match_start);
-		//                                  x        y        w        h
- 		$is_bbox = preg_match('#<!--bbox ([\d.]+) ([\d.]+) ([\d.]+) ([\d.]+) -->#', $svg, $match_bbox);
-		if ($is_start && $is_bbox) {
-			// SVG contains info about image size and baseline position.
-			// Taking into account OUTER_SCALE since coordinates are in the internal scale.
-			$depth = round(OUTER_SCALE * (- $match_start[2] + $match_bbox[2] + $match_bbox[4]), self::SVG_PRECISION);
-			$height = round(OUTER_SCALE * $match_bbox[4], self::SVG_PRECISION);
-			$width = round(OUTER_SCALE * $match_bbox[3], self::SVG_PRECISION);
-
-			// Embedding script providing that info to the parent.
-			$script = '<script type="text/ecmascript">if(window.parent.postMessage)window.parent.postMessage("'.$depth.'|'.$width.'|'.$height.'|"+window.location,"*");</script>'."\n";
-			$svg = str_replace('<defs>', $script . '<defs>', $svg);
-		}
-
-		$this->svg = $svg;
+		$this->setSvgContent(file_get_contents($tmpName . '.svg'));
 
 		if ($this->svg2pngCommand) {
 			// SVG -> PNG
 			ob_start();
-			passthru(sprintf($this->svg2pngCommand, $tmp_name));
+			passthru(sprintf($this->svg2pngCommand, $tmpName));
 			$this->png = ob_get_clean();
 		}
 		elseif ($this->pngCommand) {
 			// DVI -> PNG
-			exec(sprintf($this->pngCommand, $tmp_name));
-			$this->png = file_get_contents($tmp_name . '.png');
+			exec(sprintf($this->pngCommand, $tmpName));
+			$this->png = file_get_contents($tmpName . '.png');
 		}
 
 		// Cleaning up
-		$this->cleanupTempFiles($tmp_name);
+		$this->cleanupTempFiles($tmpName);
 	}
 
-	public function getSVG ()
+	public function getSVG()
 	{
 		return $this->svg;
 	}
 
-	public function getPNG ()
+	public function getPNG()
 	{
 		return $this->png;
 	}
@@ -169,16 +222,23 @@ class Renderer implements RendererInterface
 	/**
 	 * @param string $tmp_name
 	 */
-	private function cleanupTempFiles ($tmp_name)
+	private function cleanupTempFiles($tmp_name)
 	{
 		foreach (['', '.log', '.aux', '.dvi', '.svg', '.png'] as $ext) {
 			@unlink($tmp_name . $ext);
 		}
 	}
 
-	public function setSVG2PNGCommand ($command)
+	/**
+	 * @param string $command
+	 *
+	 * @return $this
+	 */
+	public function setSVG2PNGCommand($command)
 	{
 		$this->svg2pngCommand = $command;
+
+		return $this;
 	}
 
 	/**
@@ -186,7 +246,7 @@ class Renderer implements RendererInterface
 	 */
 	private function dumpDebug($output)
 	{
-		if ($this->is_debug) {
+		if ($this->isDebug) {
 			echo '<pre>';
 			var_dump($output);
 			echo '</pre>';
@@ -198,10 +258,37 @@ class Renderer implements RendererInterface
 	 */
 	private function echoDebug($output)
 	{
-		if ($this->is_debug) {
+		if ($this->isDebug) {
 			echo '<pre>';
 			echo $output;
 			echo '</pre>';
 		}
+	}
+
+	/**
+	 * @param string $svg
+	 */
+	private function setSvgContent($svg)
+	{
+		// $svg = '...<!--start 19.8752 31.3399 -->...';
+
+		//                                    x        y
+		$hasStart = preg_match('#<!--start ([\d.]+) ([\d.]+) -->#', $svg, $matchStart);
+		//                                  x        y        w        h
+		$hasBbox = preg_match('#<!--bbox ([\d.]+) ([\d.]+) ([\d.]+) ([\d.]+) -->#', $svg, $matchBbox);
+
+		if ($hasStart && $hasBbox) {
+			// SVG contains info about image size and baseline position.
+			// Taking into account OUTER_SCALE since coordinates are in the internal scale.
+			$depth  = round(OUTER_SCALE * (-$matchStart[2] + $matchBbox[2] + $matchBbox[4]), self::SVG_PRECISION);
+			$height = round(OUTER_SCALE * $matchBbox[4], self::SVG_PRECISION);
+			$width  = round(OUTER_SCALE * $matchBbox[3], self::SVG_PRECISION);
+
+			// Embedding script providing that info to the parent.
+			$script = '<script type="text/ecmascript">if(window.parent.postMessage)window.parent.postMessage("' . $depth . '|' . $width . '|' . $height . '|"+window.location,"*");</script>' . "\n";
+			$svg    = str_replace('<defs>', $script . '<defs>', $svg);
+		}
+
+		$this->svg = $svg;
 	}
 }

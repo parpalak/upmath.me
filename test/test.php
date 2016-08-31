@@ -8,9 +8,9 @@
  * @link      http://tex.s2cms.ru
  */
 
-use Tex\Templater;
-use Tex\Tester;
-use Tex\Renderer;
+use S2\Tex\Templater;
+use S2\Tex\Tester;
+use S2\Tex\Renderer;
 
 require '../vendor/autoload.php';
 require '../config.php';
@@ -29,9 +29,11 @@ echo "\n", 'Using ', TEX_PATH, "\n\n";
 $templater = new Templater(TPL_DIR);
 
 $renderer = new Renderer($templater, 'tmp/', LATEX_COMMAND, DVISVG_COMMAND);
-$renderer->setSVG2PNGCommand(SVG2PNG_COMMAND);
-$renderer->setLogDir('log/');
-$renderer->setDebug($isDebug);
+$renderer
+	->setSVG2PNGCommand(SVG2PNG_COMMAND)
+	->setLogger(new \Katzgrau\KLogger\Logger('log/'))
+	->setIsDebug($isDebug)
+;
 
 $tester = new Tester($renderer, 'src/*.tex', '../www/test_out/');
 $tester->run();

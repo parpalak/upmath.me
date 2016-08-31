@@ -8,13 +8,16 @@
  * @link      http://tex.s2cms.ru
  */
 
-namespace Tex;
+namespace S2\Tex;
 
+/**
+ * Class Templater
+ */
 class Templater implements TemplaterInterface
 {
 	private $dir;
 
-	public function __construct ($dir)
+	public function __construct($dir)
 	{
 		$this->dir = $dir;
 	}
@@ -22,9 +25,9 @@ class Templater implements TemplaterInterface
 	/**
 	 * @inheritdoc
 	 */
-	function run ($formula)
+	function run($formula)
 	{
-		$math_mode = true;
+		$isMathMode    = true;
 		$extraPackages = [];
 
 		// Check if there are used certain environments and include corresponding packages
@@ -38,7 +41,7 @@ class Templater implements TemplaterInterface
 
 		foreach ($test_env as $command => $env) {
 			if (strpos($formula, '\\begin{' . $command . '}') !== false || strpos($formula, '\\begin{' . $command . '*}') !== false) {
-				$math_mode = false;
+				$isMathMode = false;
 				if ($env) {
 					$extraPackages[] = new Tpl\Package($env);
 				}
@@ -53,7 +56,7 @@ class Templater implements TemplaterInterface
 
 		foreach ($test_command as $command => $env) {
 			if (strpos($formula, $command) !== false) {
-				$math_mode = false; // TODO make an option
+				$isMathMode = false; // TODO make an option
 				if ($env) {
 					$extraPackages[] = new Tpl\Package($env);
 				}
@@ -72,13 +75,14 @@ class Templater implements TemplaterInterface
 
 		// Other setup
 		if (substr($formula, 0, 7) == '\\inline') {
-			$formula = '\\textstyle '.substr($formula, 7);
+			$formula = '\\textstyle ' . substr($formula, 7);
 		}
 
-		$tpl = $math_mode ? 'displayformula' : 'common';
+		$tpl = $isMathMode ? 'displayformula' : 'common';
 
 		ob_start();
-		include  $this->dir . $tpl . '.php';
+		include $this->dir . $tpl . '.php';
+
 		return ob_get_clean();
 	}
 }

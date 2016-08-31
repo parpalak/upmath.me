@@ -1,5 +1,5 @@
 {
-  "name": "s2cms/latex_renderer",
+  "name": "s2/latex_renderer",
   "description": "S2 Latex Service",
   "version": "0.1.0",
   "minimum-stability": "stable",
@@ -11,11 +11,12 @@
     }
   ],
   "require": {
-    "katzgrau/klogger": "1.0.*"
+    "katzgrau/klogger": "^1.2",
+    "symfony/process": "^2.8"
   },
   "autoload": {
     "psr-4": {
-      "Tex\\": "lib"
+      "S2\\Tex\\": "lib"
     }
   }
 }

@@ -6,7 +6,7 @@
  * @link      http://tex.s2cms.ru
  */
 
-namespace Tex;
+namespace S2\Tex;
 
 /**
  * Class Processor
@@ -16,101 +16,141 @@ namespace Tex;
  */
 class Processor
 {
-	private $ext, $formula, $svg = '', $png = '', $cur_cache_name, $cache_exists = false, $modified_at;
+	/**
+	 * @var string
+	 */
+	protected $cacheFailDir;
+
+	/**
+	 * @var string
+	 */
+	protected $cacheSuccessDir;
+
+	private   $ext, $formula, $svg = '', $png = '', $curCacheName, $cacheExists = false, $modifiedAt;
+
 	private $error;
 	private $renderer;
-	private $svgCommands = array();
-	private $pngCommands = array();
+	private $svgCommands = [];
+	private $pngCommands = [];
 
-	public function __construct (RendererInterface $renderer, $cacheSuccessDir, $cacheFailDir)
+	/**
+	 * Processor constructor.
+	 *
+	 * @param RendererInterface $renderer
+	 * @param string            $cacheSuccessDir
+	 * @param string            $cacheFailDir
+	 */
+	public function __construct(RendererInterface $renderer, $cacheSuccessDir, $cacheFailDir)
 	{
-		$this->renderer = $renderer;
-		$this->cache_fail_dir = $cacheFailDir;
-		$this->cache_success_dir = $cacheSuccessDir;
+		$this->renderer        = $renderer;
+		$this->cacheFailDir    = $cacheFailDir;
+		$this->cacheSuccessDir = $cacheSuccessDir;
 	}
 
-	public function parseURI ($uri)
+	/**
+	 * @param string $uri
+	 *
+	 * @throws \Exception
+	 */
+	public function parseURI($uri)
 	{
 		$a = explode('/', $uri, 3);
-		if (count($a) < 3 || $a[1] !== 'svg' && $a[1] !== 'png')
+		if (count($a) < 3 || $a[1] !== 'svg' && $a[1] !== 'png') {
 			throw new \Exception('Incorrect output format has been requested. Expected SVG or PNG.');
+		}
 
-		$this->ext = $a[1];
+		$this->ext     = $a[1];
 		$this->formula = rawurldecode($a[2]);
 		$this->formula = trim($this->formula);
 
-		$this->cur_cache_name = $this->cachePathFromURI($this->ext);
-		$this->cache_exists = file_exists($this->cur_cache_name);
+		$this->curCacheName = $this->cachePathFromURI($this->ext);
+		$this->cacheExists  = file_exists($this->curCacheName);
 	}
 
+	/**
+	 * @param $command
+	 *
+	 * @return $this
+	 */
 	public function addSVGCommand($command)
 	{
 		$this->svgCommands[] = $command;
+
 		return $this;
 	}
 
+	/**
+	 * @param $command
+	 *
+	 * @return $this
+	 */
 	public function addPNGCommand($command)
 	{
 		$this->pngCommands[] = $command;
+
 		return $this;
 	}
 
-	public function prepareContent ()
+	/**
+	 * @return bool
+	 */
+	public function prepareContent()
 	{
-		if ($this->cache_exists)
-		{
-			$this->modified_at = filemtime($this->cur_cache_name);
-			$this->png = $this->svg = file_get_contents($this->cur_cache_name);
+		if ($this->cacheExists) {
+			$this->modifiedAt = filemtime($this->curCacheName);
+
+			// TODO remove the hack
+			$this->png = $this->svg = file_get_contents($this->curCacheName);
 
 			return true;
 		}
 
-		try
-		{
-			$this->modified_at = time();
+		try {
+			$this->modifiedAt = time();
 			$this->renderer->run($this->formula);
 			$this->svg = $this->renderer->getSVG();
 			$this->png = $this->renderer->getPNG();
 		}
-		catch (\Exception $e)
-		{
+		catch (\Exception $e) {
 			$this->error = $e->getMessage();
 		}
 
 		return !$this->error;
 	}
 
-	public function getError ()
+	/**
+	 * @return string
+	 */
+	public function getError()
 	{
 		return $this->error;
 	}
 
-	public function echoContent ()
+	public function echoContent()
 	{
-		if ($this->error)
+		if ($this->error) {
 			return;
+		}
 
 		$content = '';
-		if ($this->ext == 'svg')
-		{
+		if ($this->ext == 'svg') {
 			header('Content-Type: image/svg+xml');
 			$content = $this->svg;
 		}
-		elseif ($this->ext == 'png')
-		{
+		elseif ($this->ext == 'png') {
 			header('Content-Type: image/png');
 			$content = $this->png;
 		}
 
-		header('Last-Modified: '.gmdate('D, d M Y H:i:s', $this->modified_at).' GMT');
-		header('Content-Length: '.strlen($content));
+		header('Last-Modified: ' . gmdate('D, d M Y H:i:s', $this->modifiedAt) . ' GMT');
+		header('Content-Length: ' . strlen($content));
 
 		echo $content;
 	}
 
-	public function saveContent ()
+	public function saveContent()
 	{
-		if ($this->cache_exists) {
+		if ($this->cacheExists) {
 			return;
 		}
 
@@ -121,22 +161,22 @@ class Processor
 		// Generating cache
 
 		// Caching PNG
-		$png_cache_name = $this->cachePathFromURI('png');
-		self::file_put($png_cache_name, $this->error ? $_SERVER['HTTP_REFERER'] . ' png: '.$this->formula : $this->png);
+		$pngCacheName = $this->cachePathFromURI('png');
+		self::filePut($pngCacheName, $this->error ? $_SERVER['HTTP_REFERER'] . ' png: ' . $this->formula : $this->png);
 
 		// Caching SVG
-		$svg_cache_name = $this->cachePathFromURI('svg');
-		self::file_put($svg_cache_name, $this->error ? $_SERVER['HTTP_REFERER'] . ' svg: '.$this->formula . ' ' . $this->svg : $this->svg);
+		$svgCacheName = $this->cachePathFromURI('svg');
+		self::filePut($svgCacheName, $this->error ? $_SERVER['HTTP_REFERER'] . ' svg: ' . $this->formula . ' ' . $this->svg : $this->svg);
 
 		if (!$this->error) {
 			// Optimizing SVG
 			foreach ($this->svgCommands as $command) {
-				shell_exec(sprintf($command, $svg_cache_name));
+				shell_exec(sprintf($command, $svgCacheName));
 			}
 
 			// Optimizing PNG
 			foreach ($this->pngCommands as $command) {
-				shell_exec(sprintf($command, $png_cache_name));
+				shell_exec(sprintf($command, $pngCacheName));
 			}
 		}
 	}
@@ -150,7 +190,7 @@ class Processor
 	 * @param $filename
 	 * @param $content
 	 */
-	private static function file_put($filename, $content)
+	private static function filePut($filename, $content)
 	{
 		$dir = dirname($filename);
 		if (!file_exists($dir)) {
@@ -167,10 +207,18 @@ class Processor
 		}
 	}
 
+	/**
+	 * Returns the cached path.
+	 * This algorithm should be used by a web-server to process the cache files as a static content.
+	 *
+	 * @param string $ext
+	 *
+	 * @return string
+	 */
 	private function cachePathFromURI($ext)
 	{
 		$hash      = md5($this->formula);
-		$prefixDir = $this->error ? $this->cache_fail_dir : $this->cache_success_dir;
+		$prefixDir = $this->error ? $this->cacheFailDir : $this->cacheSuccessDir;
 
 		return $prefixDir . substr($hash, 0, 2) . '/' . substr($hash, 2, 2) . '/' . substr($hash, 4) . '.' . $ext;
 	}

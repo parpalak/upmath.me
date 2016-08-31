@@ -36,16 +36,18 @@ function error400($error = 'Invalid formula')
 ini_set('max_execution_time', 10);
 header('X-Powered-By: S2 Latex Service');
 
-$templater = new \Tex\Templater(TPL_DIR);
+$templater = new \S2\Tex\Templater(TPL_DIR);
 
-$renderer = new \Tex\Renderer($templater, TMP_DIR, LATEX_COMMAND, DVISVG_COMMAND);
-$renderer->setSVG2PNGCommand(SVG2PNG_COMMAND);
+$renderer = new \S2\Tex\Renderer($templater, TMP_DIR, LATEX_COMMAND, DVISVG_COMMAND);
+$renderer
+	->setSVG2PNGCommand(SVG2PNG_COMMAND)
+	->setIsDebug($isDebug)
+;
 if (defined('LOG_DIR')) {
-	$renderer->setLogDir(LOG_DIR);
+	$renderer->setLogger(new \Katzgrau\KLogger\Logger(LOG_DIR));
 }
-$renderer->setDebug($isDebug);
 
-$processor = new \Tex\Processor($renderer, CACHE_SUCCESS_DIR, CACHE_FAIL_DIR);
+$processor = new \S2\Tex\Processor($renderer, CACHE_SUCCESS_DIR, CACHE_FAIL_DIR);
 $processor
 	->addSVGCommand(SVGO)
 	->addSVGCommand(GZIP)
