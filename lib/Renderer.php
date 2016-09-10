@@ -112,7 +112,7 @@ class Renderer implements RendererInterface
 	 */
 	private function validateFormula($formula)
 	{
-		foreach (['\\write', '\\input', '\\usepackage'] as $disabledCommand) {
+		foreach (['\\write', '\\input', '\\usepackage', '\\special'] as $disabledCommand) {
 			if (strpos($formula, $disabledCommand) !== false) {
 				if ($this->logger !== null) {
 					$this->logger->error(sprintf('Forbidden command "%s": ', $disabledCommand), [$formula]);
@@ -280,13 +280,13 @@ class Renderer implements RendererInterface
 		if ($hasStart && $hasBbox) {
 			// SVG contains info about image size and baseline position.
 			// Taking into account OUTER_SCALE since coordinates are in the internal scale.
-			$depth  = round(OUTER_SCALE * (-$matchStart[2] + $matchBbox[2] + $matchBbox[4]), self::SVG_PRECISION);
+			$depth  = round(OUTER_SCALE * (min(0, -$matchStart[2] + $matchBbox[2]) + $matchBbox[4]), self::SVG_PRECISION);
 			$height = round(OUTER_SCALE * $matchBbox[4], self::SVG_PRECISION);
 			$width  = round(OUTER_SCALE * $matchBbox[3], self::SVG_PRECISION);
 
 			// Embedding script providing that info to the parent.
 			$script = '<script type="text/ecmascript">if(window.parent.postMessage)window.parent.postMessage("' . $depth . '|' . $width . '|' . $height . '|"+window.location,"*");</script>' . "\n";
-			$svg    = str_replace('<defs>', $script . '<defs>', $svg);
+			$svg    = str_replace('</svg>', $script . '</svg>', $svg);
 		}
 
 		$this->svg = $svg;
