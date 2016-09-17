@@ -343,7 +343,7 @@ function ImagePreloader() {
 	}
 
 	/**
-	 * Stores sizes and removes iframe.
+	 * Stores sizes, source and removes the xhr object.
 	 * @param url
 	 * @param svg
 	 */
@@ -355,7 +355,7 @@ function ImagePreloader() {
 
 		svg = makeSvgIdsUnique(svg);
 
-		var m = svg.match(/postMessage\((?:&quot;|")([\d\|\.]*)(?:&quot;|")/); // ["&quot;2.15299|31.42377|11.65223|&quot;", "2.15299|31.42377|11.65223|"]
+		var m = svg.match(/postMessage\((?:&quot;|")([\d\|\.\-]*)(?:&quot;|")/); // ["&quot;2.15299|31.42377|11.65223|&quot;", "2.15299|31.42377|11.65223|"]
 		if (m) {
 			var baselineShift = m && m[1] ? m[1].split('|').shift() : 0; // 2.15299
 		}
@@ -432,7 +432,7 @@ function ImageLoader(preloader, protocol) {
 			}
 		}
 
-		// Many formulas has been changed. We do not display any placenolders.
+		// Many formulas has been changed. We do not display any placeholders.
 		placeholderIndex = null;
 		placeholderUrl = null;
 	}
@@ -476,7 +476,7 @@ function ImageLoader(preloader, protocol) {
 				insertPicture(index, svg, baselineShift, index === placeholderIndex ? 'fade-in' : 'replace');
 
 				if (index === placeholderIndex) {
-					// Clear fade out timer if the new image has just bee
+					// Clear the fade out timer if the new image has just bee
 					clearTimeout(placeholderTimer);
 					placeholderIndex = null;
 					placeholderUrl = null;
