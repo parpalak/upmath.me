@@ -25,9 +25,7 @@ if (!empty($extraPackages)) {
 
 \begin{document}
 \begin{minipage}{0.1in}
-\special{dvisvgm:bbox new formula}
-\special{dvisvgm:raw<!--start {?x} {?y} -->}
-<?php echo $formula; ?>
+\strut\special{dvisvgm:bbox new formula}\special{dvisvgm:raw<!--start {?x} {?y} -->}<?php echo $formula; ?>
 
 \special{dvisvgm:raw<!--bbox {?bbox formula} -->}
 \end{minipage}

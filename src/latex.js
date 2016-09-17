@@ -56,7 +56,7 @@
 		processTree(d.body);
 	});
 
-	function image(f) {
+	function image(f, c) {
 		var s = (ext == 'svg'),
 			i = d.createElement(s ? 'embed' : 'img');
 
@@ -64,6 +64,7 @@
 		s && i.setAttribute('type', 'image/svg+xml');
 		i.setAttribute('style', s ? 'width:0.2em; height:0.2em;' : 'vertical-align:middle; border:0; position: relative; z-index:-1; top:-4px;');
 		!s && i.setAttribute('alt', f);
+		s && c && (i.isCentered = 1);
 
 		return i;
 	}
@@ -87,7 +88,7 @@
 					(/(?:[ \t]*\([ \t]*\S+[ \t]*\))?[ \t]*/.test(as[2])) &&
 					eItem.tagName == 'P' && eItem.childNodes.length <= 2
 				) {
-					s = image(as[1]);
+					s = image(as[1], 1);
 					eItem.insertBefore(s, eCur);
 					eItem.setAttribute('align', 'center');
 
@@ -155,7 +156,7 @@
 
 		for (; i-- ;) {
 			if (ao[i].src == s || decodeURIComponent(ao[i].src) == s) {
-				ao[i].setAttribute('style', 'vertical-align: ' + (-v) + 'pt; width: ' + x + 'pt; height: ' + y + 'pt;');
+				ao[i].setAttribute('style', 'width:' + x + 'pt; height:' + y + 'pt; vertical-align:' + (ao[i].isCentered ? 'top;' : (-v) + 'pt;'));
 			}
 		}
 	}, !1);
