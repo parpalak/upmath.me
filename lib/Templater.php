@@ -2,13 +2,15 @@
 /**
  * Makes latex documents containing a formula.
  *
- * @copyright 2015 Roman Parpalak
+ * @copyright 2015-2016 Roman Parpalak
  * @license   http://www.opensource.org/licenses/mit-license.php MIT
  * @package   S2 Latex Service
  * @link      http://tex.s2cms.ru
  */
 
 namespace S2\Tex;
+
+use S2\Tex\Tpl\Formula;
 
 /**
  * Class Templater
@@ -23,9 +25,9 @@ class Templater implements TemplaterInterface
 	}
 
 	/**
-	 * @inheritdoc
+	 * {@inheritdoc}
 	 */
-	function run($formula)
+	public function run($formula)
 	{
 		$isMathMode    = true;
 		$extraPackages = [];
@@ -82,7 +84,8 @@ class Templater implements TemplaterInterface
 
 		ob_start();
 		include $this->dir . $tpl . '.php';
+		$text = ob_get_clean();
 
-		return ob_get_clean();
+		return new Formula($text, $isMathMode);
 	}
 }

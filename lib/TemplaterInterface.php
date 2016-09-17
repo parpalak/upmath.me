@@ -10,13 +10,16 @@
 
 namespace S2\Tex;
 
+use S2\Tex\Tpl\Formula;
+
 interface TemplaterInterface
 {
 	/**
 	 * Inserts a latex formula into appropriate templates.
 	 *
 	 * @param string $formula in latex
-	 * @return string
+	 *
+	 * @return Formula
 	 */
 	public function run ($formula);
 }

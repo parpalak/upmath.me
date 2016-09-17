@@ -135,14 +135,14 @@ class Renderer implements RendererInterface
 
 		$tmpName = tempnam(TMP_DIR, '');
 
-		$texSource = $this->templater->run($formula);
+		$formulaObj = $this->templater->run($formula);
+		$texSource  = $formulaObj->getText();
 		$this->echoDebug(htmlspecialchars($texSource));
 
 		// Latex
 		file_put_contents($tmpName, $texSource);
 		$process = new Process($this->latexCommand . ' ' . $tmpName . ' 2>&1');
-		$process
-			->setTimeout(8);
+		$process->setTimeout(8);
 
 		try {
 			$exitCode = $process->run();
@@ -191,7 +191,7 @@ class Renderer implements RendererInterface
 		$this->dumpDebug($cmd);
 		$this->dumpDebug($svgOutput);
 
-		$this->setSvgContent(file_get_contents($tmpName . '.svg'));
+		$this->setSvgContent(file_get_contents($tmpName . '.svg'), $formulaObj->hasBaseline());
 
 		if ($this->svg2pngCommand) {
 			// SVG -> PNG
@@ -267,8 +267,9 @@ class Renderer implements RendererInterface
 
 	/**
 	 * @param string $svg
+	 * @param bool   $hasBaseline
 	 */
-	private function setSvgContent($svg)
+	private function setSvgContent($svg, $hasBaseline)
 	{
 		// $svg = '...<!--start 19.8752 31.3399 -->...';
 
@@ -279,10 +280,19 @@ class Renderer implements RendererInterface
 
 		if ($hasStart && $hasBbox) {
 			// SVG contains info about image size and baseline position.
+			$rawHeight = $matchBbox[4];
+			$rawWidth  = $matchBbox[3];
+			$rawY      = $matchBbox[2];
+
+			$rawStartY = $matchStart[2];
+
+			// Typically $rawY < $rawStartY
+			$rawDepth = $hasBaseline ? min(0, $rawY - $rawStartY) + $rawHeight : $rawHeight * 0.5;
+
 			// Taking into account OUTER_SCALE since coordinates are in the internal scale.
-			$depth  = round(OUTER_SCALE * (min(0, -$matchStart[2] + $matchBbox[2]) + $matchBbox[4]), self::SVG_PRECISION);
-			$height = round(OUTER_SCALE * $matchBbox[4], self::SVG_PRECISION);
-			$width  = round(OUTER_SCALE * $matchBbox[3], self::SVG_PRECISION);
+			$depth  = round(OUTER_SCALE * $rawDepth, self::SVG_PRECISION);
+			$height = round(OUTER_SCALE * $rawHeight, self::SVG_PRECISION);
+			$width  = round(OUTER_SCALE * $rawWidth, self::SVG_PRECISION);
 
 			// Embedding script providing that info to the parent.
 			$script = '<script type="text/ecmascript">if(window.parent.postMessage)window.parent.postMessage("' . $depth . '|' . $width . '|' . $height . '|"+window.location,"*");</script>' . "\n";

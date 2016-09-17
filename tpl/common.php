@@ -1,7 +1,7 @@
 <?php
 
 /** @var string $formula */
-/** @var Tex\Tpl\PackageInterface[] $extraPackages */
+/** @var \S2\Tex\Tpl\PackageInterface[] $extraPackages */
 
 ?>
 \documentclass[11pt]{article}
