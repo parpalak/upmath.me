@@ -141,7 +141,9 @@ class Renderer implements RendererInterface
 
 		// Latex
 		file_put_contents($tmpName, $texSource);
-		$process = new Process($this->latexCommand . ' ' . $tmpName . ' 2>&1');
+
+		// See https://github.com/symfony/symfony/issues/5030 for 'exec' hack
+		$process = new Process('exec ' . $this->latexCommand . ' ' . $tmpName . ' 2>&1');
 		$process->setTimeout(8);
 
 		try {
@@ -156,6 +158,8 @@ class Renderer implements RendererInterface
 					'source'  => $texSource,
 				]);
 			}
+			$this->dumpDebug($texSource);
+			$this->cleanupTempFiles($tmpName);
 			throw $e;
 		}
 
