@@ -182,6 +182,13 @@ h2+h3 {margin-top: 0;}
 	transition: border-color 0.2s;
 	resize: none;
 	}
+.editor-preview {
+	-ms-interpolation-mode: nearest-neighbor;
+	image-rendering: -webkit-optimize-contrast;
+	image-rendering: -moz-crisp-edges;
+	image-rendering: -o-crisp-edges;
+	image-rendering: pixelated;
+}
 .add-formula {
 	font-size: 13px;
 	line-height: 15px;
