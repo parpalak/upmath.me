@@ -2,7 +2,7 @@
 
 This editor is designed for writing math texts for the web. It converts the Markdown syntax extended with LaTeX equations support into HTML code you can publish anywhere on the web.
 
-![Latex](//tex.s2cms.ru/i/latex.jpg)
+![Latex](/i/latex.jpg)
 
 ## Markdown
 
@@ -110,7 +110,7 @@ It works in browsers, except equations rendered on the server. The editor stores
 
 I have designed and developed this lightweight editor and the service for converting LaTeX equations into svg-pictures to make publishing math texts on the web easy. I consider client-side rendering, the rival technique implemented in [MathJax](https://www.mathjax.org/), to be too limited and resource-consuming, especially on mobile devices.
 
-The source code is [published on Github](https://github.com/parpalak/tex.s2cms.ru) under MIT license.
+The source code is [published on Github](https://github.com/parpalak/upmath.me) under MIT license.
 
 ***
 

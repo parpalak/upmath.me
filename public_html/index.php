@@ -3,10 +3,10 @@
  * @copyright (C) 2015-2016 Roman Parpalak
  * @license   http://www.opensource.org/licenses/mit-license.php MIT
  * @package   Markdown & LaTeX Editor
- * @link      http://tex.s2cms.ru/page/
+ * @link      https://upmath.me/
  */
 
-@include 'config.php';
+@include '../config.php';
 
 $formats = [
 	'html'    => 'preview',
@@ -29,19 +29,16 @@ $formats = [
 	<link rel="icon" type="image/png" href="/favicon.png" />
 
 <?php if (defined('USE_MINIFICATION') && USE_MINIFICATION): ?>
-	<link rel="stylesheet" href="/page/dist/css/style.min.css?<?php include 'dist/css/style.min.css.md5'; ?>">
+	<link rel="stylesheet" href="/dist/css/style.min.css?<?php include 'dist/css/style.min.css.md5'; ?>">
 <?php else: ?>
-	<link rel="stylesheet" href="/page/dist/css/TextareaDecorator.css">
-	<link rel="stylesheet" href="/page/src/css/editor.css">
-	<link rel="stylesheet" href="/page/lib/highlight.js/solarized-light.css">
+	<link rel="stylesheet" href="/dist/css/TextareaDecorator.css">
+	<link rel="stylesheet" href="/src/css/editor.css">
+	<link rel="stylesheet" href="/lib/highlight.js/solarized-light.css">
 <?php endif; ?>
 </head>
 <body>
 <div class="header">
-	<div class="header-item menu">
-		<a class="link" href="/">&larr; Equations for web</a>
-	</div>
-	<h1 class="header-item title">&nbsp;&middot;&nbsp;Markdown & LaTeX Editor</h1>
+	<h1 class="header-item title">Markdown & LaTeX Editor</h1>
 	<div class="header-item copyright">
 		&copy; 2016
 		<script>
@@ -103,20 +100,20 @@ foreach ($formats as $class => $name)
 	}());
 </script>
 <?php if (defined('USE_MINIFICATION') && USE_MINIFICATION): ?>
-	<script src="/page/dist/js/vendors.min.js?<?php include 'dist/js/vendors.min.js.md5'; ?>"></script>
-	<script src="/page/dist/js/scripts.min.js?<?php include 'dist/js/scripts.min.js.md5'; ?>"></script>
+	<script src="/dist/js/vendors.min.js?<?php include 'dist/js/vendors.min.js.md5'; ?>"></script>
+	<script src="/dist/js/scripts.min.js?<?php include 'dist/js/scripts.min.js.md5'; ?>"></script>
 <?php else: ?>
-	<script src="/page/dist/js/markdown-it.min.js"></script>
-	<script src="/page/dist/js/markdown-it-sub.min.js"></script>
-	<script src="/page/dist/js/markdown-it-sup.min.js"></script>
-	<script src="/page/dist/js/FileSaver.js"></script>
-	<script src="/page/dist/js/TextareaDecorator.js"></script>
-	<script src="/page/lib/highlight.js/highlight.pack.js"></script>
+	<script src="/dist/js/markdown-it.min.js"></script>
+	<script src="/dist/js/markdown-it-sub.min.js"></script>
+	<script src="/dist/js/markdown-it-sup.min.js"></script>
+	<script src="/dist/js/FileSaver.js"></script>
+	<script src="/dist/js/TextareaDecorator.js"></script>
+	<script src="/lib/highlight.js/highlight.pack.js"></script>
 
-	<script src="/page/src/js/utils.js"></script>
-	<script src="/page/src/js/markdown-it-s2-tex.js"></script>
-	<script src="/page/src/js/parser.js"></script>
-	<script src="/page/src/js/editor.js"></script>
+	<script src="/src/js/utils.js"></script>
+	<script src="/src/js/markdown-it-s2-tex.js"></script>
+	<script src="/src/js/parser.js"></script>
+	<script src="/src/js/editor.js"></script>
 <?php endif; ?>
 </body>
 </html>

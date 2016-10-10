@@ -4,59 +4,35 @@ module.exports = function(grunt) {
 		concat: {
 			main: {
 				src: [
-					'bower_components/autosize/dist/autosize.js',
-					'bower_components/Stickyfill/dist/stickyfill.min.js',
-					'bower_components/ilyabirman-likely/release/likely.js',
-					'www/js/init_editor.js'
+					'public_html/src/js/*.js'
 				],
-				dest: 'www/js/scripts.js'
+				dest: 'public_html/dist/js/scripts.js'
 			},
-			page: {
-				src: [
-					'www/page/src/js/*.js'
-				],
-				dest: 'www/page/dist/js/scripts.js'
-			},
-			page_vendors: {
+			vendors: {
 				src: [
 					'bower_components/markdown-it/dist/markdown-it.min.js',
 					'bower_components/markdown-it-sub/dist/markdown-it-sub.min.js',
 					'bower_components/markdown-it-sup/dist/markdown-it-sup.min.js',
 					'bower_components/LDT/lib/TextareaDecorator.js',
 					'bower_components/file-saver.js/FileSaver.js',
-					'www/page/lib/highlight.js/highlight.pack.js'
+					'public_html/lib/highlight.js/highlight.pack.js'
 				],
-				dest: 'www/page/dist/js/vendors.js'
+				dest: 'public_html/dist/js/vendors.js'
 			}
 		},
 		uglify: {
 			main: {
-				files: {
-					'www/js/scripts.min.js': '<%= concat.main.dest %>'
-				}
+				src: ['<%= concat.main.dest %>'],
+				dest: 'public_html/dist/js/scripts.min.js'
 			},
-			page: {
-				src: ['<%= concat.page.dest %>'],
-				dest: 'www/page/dist/js/scripts.min.js'
-			},
-			page_vendors: {
-				src: ['<%= concat.page_vendors.dest %>'],
-				dest: 'www/page/dist/js/vendors.min.js'
+			vendors: {
+				src: ['<%= concat.vendors.dest %>'],
+				dest: 'public_html/dist/js/vendors.min.js'
 			}
 		},
 		copy: {
 			main: {
 				files: [
-					// includes files within path
-					{
-						expand: true,
-						src: [
-							'bower_components/jquery/dist/jquery.min.js'
-						],
-						dest: 'www/js/',
-						filter: 'isFile',
-						flatten: true
-					},
 					{
 						expand: true,
 						src: [
@@ -65,7 +41,7 @@ module.exports = function(grunt) {
 							'bower_components/markdown-it-sub/dist/markdown-it-sub.min.js',
 							'bower_components/markdown-it-sup/dist/markdown-it-sup.min.js'
 						],
-						dest: 'www/page/dist/js/',
+						dest: 'public_html/dist/js/',
 						filter: 'isFile',
 						flatten: true
 					},
@@ -74,7 +50,7 @@ module.exports = function(grunt) {
 						src: [
 							'bower_components/LDT/lib/TextareaDecorator.css'
 						],
-						dest: 'www/page/dist/css/',
+						dest: 'public_html/dist/css/',
 						flatten: true
 					},
 					{
@@ -82,103 +58,53 @@ module.exports = function(grunt) {
 						src: [
 							'bower_components/LDT/lib/TextareaDecorator.js'
 						],
-						dest: 'www/page/dist/js/',
+						dest: 'public_html/dist/js/',
 						flatten: true
 					}
 				]
 			}
 		},
 		cssmin: {
-			target: {
-				src: [
-					'www/css/style.css',
-					'bower_components/ilyabirman-likely/release/likely.css'
-				],
-				dest: 'www/css/style.min.css'
-			},
-			page: {
+			main: {
 				src: [
 					'bower_components/LDT/lib/TextareaDecorator.css',
-					'www/page/lib/highlight.js/solarized-light.css',
-					'www/page/src/css/editor.css'
+					'public_html/lib/highlight.js/solarized-light.css',
+					'public_html/src/css/editor.css'
 				],
-				dest: 'www/page/dist/css/style.min.css'
+				dest: 'public_html/dist/css/style.min.css'
 			}
 		},
 		fingerprint: {
-			assets: {
-				src: [
-					'www/js/*.js',
-					'www/css/*.css'
-				],
-				filename: 'fingerprint.php',
-				template: "<?php define('FINGERPRINT', '<%= fingerprint %>'); ?>"
+			main: {
+				src: 'public_html/dist/js/scripts.min.js',
+				filename: 'public_html/dist/js/scripts.min.js.md5'
 			},
-			page: {
-				src: 'www/page/dist/js/scripts.min.js',
-				filename: 'www/page/dist/js/scripts.min.js.md5'
+			vendors: {
+				src: 'public_html/dist/js/vendors.min.js',
+				filename: 'public_html/dist/js/vendors.min.js.md5'
 			},
-			page_vendors: {
-				src: 'www/page/dist/js/vendors.min.js',
-				filename: 'www/page/dist/js/vendors.min.js.md5'
-			},
-			page_css: {
-				src: 'www/page/dist/css/style.min.css',
-				filename: 'www/page/dist/css/style.min.css.md5'
+			css: {
+				src: 'public_html/dist/css/style.min.css',
+				filename: 'public_html/dist/css/style.min.css.md5'
 			}
 		},
 		shell: {
 			gzipJS: {
 				command: [
-					'gzip -cn6 www/js/scripts.min.js > www/js/scripts.min.js.gz',
-					'gzip -cn6 www/js/jquery.min.js > www/js/jquery.min.js.gz',
-					'gzip -cn6 www/css/style.min.css > www/css/style.min.css.gz'
+					'gzip -cn6 <%= cssmin.main.dest %> > <%= cssmin.main.dest %>.gz',
+					'gzip -cn6 <%= uglify.main.dest %> > <%= uglify.main.dest %>.gz',
+					'gzip -cn6 <%= uglify.vendors.dest %> > <%= uglify.vendors.dest %>.gz'
 				].join(' && ')
-			},
-			gzip_page: {
-				command: [
-					'gzip -cn6 <%= cssmin.page.dest %> > <%= cssmin.page.dest %>.gz',
-					'gzip -cn6 <%= uglify.page.dest %> > <%= uglify.page.dest %>.gz',
-					'gzip -cn6 <%= uglify.page_vendors.dest %> > <%= uglify.page_vendors.dest %>.gz'
-				].join(' && ')
-			},
-			gzipPublic: {
-				command: 'gzip -cn6 www/latex.js > www/latex.js.gz'
-			}
-		},
-		replace: {
-			example: {
-				src: ['src/latex.js'],
-				dest: 'www/latex.js',
-				replacements: [{
-					from: 'tex.s2cms.ru',
-					to: __dirname.split('/').pop()
-				}]
-			}
-		},
-		"file-creator": {
-			"basic": {
-				"host.php": function(fs, fd, done) {
-					fs.writeSync(fd, "<?php define('TEX_HOST', '" + __dirname.split('/').pop() + "'); ?>");
-					done();
-				}
 			}
 		},
 		watch: {
-			scripts: {
-				files: ['www/js/*.js', 'www/css/*.css'],
-				tasks: ['concat', 'uglify', 'fingerprint'],
-				options: {
-					spawn: false
-				}
-			},
-			src: {
-				files: ['src/latex.js'],
-				tasks: ['replace', 'shell:gzipPublic'],
-				options: {
-					spawn: false
-				}
-			}
+			//scripts: {
+			//	files: ['www/js/*.js', 'www/css/*.css'],
+			//	tasks: ['concat', 'uglify', 'fingerprint'],
+			//	options: {
+			//		spawn: false
+			//	}
+			//}
 		}
 	});
 
@@ -188,8 +114,6 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks('grunt-contrib-cssmin');
 	grunt.loadNpmTasks('grunt-fingerprint');
 	grunt.loadNpmTasks('grunt-shell');
-	grunt.loadNpmTasks('grunt-text-replace');
-	grunt.loadNpmTasks('grunt-file-creator');
 	grunt.loadNpmTasks('grunt-contrib-watch');
 
 	grunt.registerTask('default', [
@@ -197,9 +121,7 @@ module.exports = function(grunt) {
 		'uglify',
 		'copy',
 		'cssmin',
-		'replace',
 		'shell',
-		'fingerprint',
-		'file-creator'
+		'fingerprint'
 	]);
 };

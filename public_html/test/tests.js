@@ -4,38 +4,45 @@ QUnit.test("Paragraphs", function (assert) {
 		mdParser.tokenize('ABC\n123'),
 		[{
 			token: 'ABC\n123',
+			line : 0,
 			block: 'paragraph'
 		}], "Line break");
 	assert.deepEqual(
 		mdParser.tokenize('ABC\n\n123'),
 		[
 			{
-				"block": "paragraph",
-				"token": "ABC\n"
+				block: "paragraph",
+				line : 0,
+				token: "ABC\n"
 			},
 			{
-				"block": "empty",
-				"token": "\n"
+				block: "empty",
+				line : 0,
+				token: "\n"
 			},
 			{
-				"block": "paragraph",
-				"token": "123"
+				block: "paragraph",
+				line : 2,
+				token: "123"
 			}
 		], "Empty line");
 	assert.deepEqual(
 		mdParser.tokenize('ABC\n \n123'),
 		[
 			{
-				"block": "paragraph",
-				"token": "ABC\n"
+				block: "paragraph",
+				line : 0,
+				token: "ABC\n"
 			},
 			{
-				"block": "empty",
-				"token": " \n"
+				block: "empty",
+				line : 0,
+				token: " \n"
 			},
 			{
-				"block": "paragraph",
-				"token": "123"
+				block: "paragraph",
+				line : 2,
+				token: "123"
 			}
 		], "Empty line with whitespaces");
 });
@@ -45,8 +52,9 @@ QUnit.test("Fence", function (assert) {
 		mdParser.tokenize('``` js\nfunction a () {\n\treturn 1;\n}\n\nconsole.log(a());\n```\nmy code'),
 		[
 			{
-			    "block": "fence",
-			    "token": "``` js\n\
+			    block: "fence",
+				line : 0,
+			    token: "``` js\n\
 function a () {\n\
 	return 1;\n\
 }\n\
@@ -56,8 +64,9 @@ console.log(a());\n\
 "
 				},
 			{
-				"block": "paragraph",
-				"token": "my code"
+				block: "paragraph",
+				line : 7,
+				token: "my code"
 			}
 		],
 		"Fence multiline no empty line after"
@@ -66,8 +75,9 @@ console.log(a());\n\
 		mdParser.tokenize('``` js\nfunction a () {\n\treturn 1;\n}\n\nconsole.log(a());\n```\n\nmy code'),
 		[
 			{
-				"block": "fence",
-				"token": "``` js\n\
+				block: "fence",
+				line : 0,
+				token: "``` js\n\
 function a () {\n\
 	return 1;\n\
 }\n\
@@ -76,12 +86,14 @@ console.log(a());\n\
 ```\n"
 			},
 			{
-				"block": "empty",
-				"token": "\n"
+				block: "empty",
+				line : 0,
+				token: "\n"
 			},
 			{
-				"block": "paragraph",
-				"token": "my code"
+				block: "paragraph",
+				line : 8,
+				token: "my code"
 			}
 		],
 		"Fence multiline"
@@ -90,8 +102,9 @@ console.log(a());\n\
 		mdParser.tokenize('```aaa\n\nbbb\n\nccc'),
 		[
 			{
-				"block": "fence",
-				"token": '```aaa\n\nbbb\n\nccc'
+				block: "fence",
+				line : 0,
+				token: '```aaa\n\nbbb\n\nccc'
 			}
 		],
 		"Fence unfinished"
@@ -103,34 +116,41 @@ QUnit.test("Blocks", function (assert) {
 		mdParser.tokenize('[1]: aa\n---'),
 		[
 			{
-				"block": "reference",
-				"token": "[1]: aa\n"
+				block: "reference",
+				line : 0,
+				token: "[1]: aa\n"
 			},
 			{
-				"block": "rule",
-				"token": "---"
-			}		],
+				block: "rule",
+				line : 1,
+				token: "---"
+			}
+		],
 		"Links 1"
 	);
 	assert.deepEqual(
 		mdParser.tokenize('***'),
 		[
 			{
-				"block": "rule",
-				"token": "***"
-			}		],
+				block: "rule",
+				line : 0,
+				token: "***"
+			}
+		],
 		"Rule"
 	);
 	assert.deepEqual(
 		mdParser.tokenize('[a b]: aa\n123'),
 		[
 			{
-				"block": "reference",
-				"token": "[a b]: aa\n"
+				block: "reference",
+				line : 0,
+				token: "[a b]: aa\n"
 			},
 			{
-				"block": "paragraph",
-				"token": "123"
+				block: "paragraph",
+				line : 1,
+				token: "123"
 			}
 		],
 		"Links 2"
@@ -140,20 +160,24 @@ QUnit.test("Blocks", function (assert) {
 		mdParser.tokenize('- ab\n- cd'),
 		[
 			{
-				"block": "list-mark",
-				"token": "- "
+				block: "list-mark",
+				line : 0,
+				token: "- "
 			},
 			{
-				"block": "list",
-				"token": "ab\n"
+				block: "list",
+				line : 0,
+				token: "ab\n"
 			},
 			{
-				"block": "list-mark",
-				"token": "- "
+				block: "list-mark",
+				line : 1,
+				token: "- "
 			},
 			{
-				"block": "list",
-				"token": "cd"
+				block: "list",
+				line : 0, // ?
+				token: "cd"
 			}
 		],
 		"List 1"
@@ -162,12 +186,14 @@ QUnit.test("Blocks", function (assert) {
 		mdParser.tokenize('- ab\ncd'),
 		[
 			{
-				"block": "list-mark",
-				"token": "- "
+				block: "list-mark",
+				line : 0,
+				token: "- "
 			},
 			{
-				"block": "list",
-				"token": "ab\ncd"
+				block: "list",
+				line : 0,
+				token: "ab\ncd"
 			}
 		],
 		"List 2"
@@ -178,54 +204,54 @@ QUnit.test("Heading", function (assert) {
 	assert.deepEqual(
 		mdParser.tokenize('# Heading\n\ntext'),
 		[
-			{token: '# Heading\n', block: 'header'},
-			{token: '\n',          block: 'empty'},
-			{token: 'text',        block: 'paragraph'}
+			{token: '# Heading\n', line: 0, block: 'header'},
+			{token: '\n',          line: 0, block: 'empty'},
+			{token: 'text',        line: 2, block: 'paragraph'}
 		],
 		"Heading hashed 1"
 	);
 	assert.deepEqual(
 		mdParser.tokenize('# Heading\ntext'),
 		[
-			{token: '# Heading\n', block: 'header'},
-			{token: 'text',        block: 'paragraph'}
+			{token: '# Heading\n', line: 0, block: 'header'},
+			{token: 'text',        line: 1, block: 'paragraph'}
 		],
 		"Heading hashed 2"
 	);
 	assert.deepEqual(
 		mdParser.tokenize('hello world\n===========\ntext'),
 		[
-			{token: 'hello world\n===========\n', block: 'header2'},
-			{token: 'text',                       block: 'paragraph'}
+			{token: 'hello world\n===========\n', line: 0, block: 'header2'},
+			{token: 'text',                       line: 2, block: 'paragraph'}
 		],
 		"Heading underlined 1"
 	);
 	assert.deepEqual(
 		mdParser.tokenize('hello world\n===========\n\ntext'),
 		[
-			{token: 'hello world\n===========\n', block: 'header2'},
-			{token: '\n',                         block: 'empty'},
-			{token: 'text',                       block: 'paragraph'}
+			{token: 'hello world\n===========\n', line: 0, block: 'header2'},
+			{token: '\n',                         line: 0, block: 'empty'}, // line?
+			{token: 'text',                       line: 3, block: 'paragraph'}
 		],
 		"Heading underlined 2"
 	);
 	assert.deepEqual(
 		mdParser.tokenize('hello world\n===========\n\n text'),
 		[
-			{token: 'hello world\n===========\n', block: 'header2'},
-			{token: '\n',                         block: 'empty'},
-			{token: ' text',                      block: 'paragraph'}
+			{token: 'hello world\n===========\n', line: 0, block: 'header2'},
+			{token: '\n',                         line: 0, block: 'empty'},
+			{token: ' text',                      line: 3, block: 'paragraph'}
 		],
 		"Heading underlined 3"
 	);
 	assert.deepEqual(
 		mdParser.tokenize('hello world\n\n===========\n\ntext'),
 		[
-			{token: 'hello world\n', block: 'paragraph'},
-			{token: '\n',            block: 'empty'},
-			{token: '===========\n', block: 'paragraph'},
-			{token: '\n',            block: 'empty'},
-			{token: 'text',          block: 'paragraph'}
+			{token: 'hello world\n', line: 0, block: 'paragraph'},
+			{token: '\n',            line: 0, block: 'empty'},
+			{token: '===========\n', line: 2, block: 'paragraph'},
+			{token: '\n',            line: 0, block: 'empty'},
+			{token: 'text',          line: 2, block: 'paragraph'} // line ?
 		],
 		"No heading underlined"
 	);
@@ -236,51 +262,64 @@ QUnit.test("Latex", function (assert) {
 		mdParser.tokenize('$$\nf(x) = \\sin(x)$$ (1)'),
 		[
 			{
-				"block": "latexBlock",
-				"token": "$$"
+				block: "latexBlock",
+				line : 0,
+				token: "$$"
 			},
 			{
-				"block": "latexBlock",
-				"token": "\nf"
+				block: "latexBlock",
+				line : 0,
+				token: "\nf"
 			},
 			{
-				"block": "latexBlock",
-				"token": "("
+				block: "latexBlock",
+				line : 0,
+				token: "("
 			},
 			{
-				"block": "latexBlock",
-				"token": "x"
+				block: "latexBlock",
+				line : 0,
+				token: "x"
 			},
 			{
-				"block": "latexBlock",
-				"token": ")"
+				block: "latexBlock",
+				line : 0,
+				token: ")"
 			},
 			{
-				"block": "latexBlock",
-				"token": " = "
-			},			{
-				"block": "latexBlock",
-				"token": "\\sin"
+				block: "latexBlock",
+				line : 0,
+				token: " = "
 			},
 			{
-				"block": "latexBlock",
-				"token": "("
+				block: "latexBlock",
+				line : 0,
+				token: "\\sin"
 			},
 			{
-				"block": "latexBlock",
-				"token": "x"
+				block: "latexBlock",
+				line : 0,
+				token: "("
 			},
 			{
-				"block": "latexBlock",
-				"token": ")"
+				block: "latexBlock",
+				line : 0,
+				token: "x"
 			},
 			{
-				"block": "latexBlock",
-				"token": "$$"
+				block: "latexBlock",
+				line : 0,
+				token: ")"
 			},
 			{
-				"block": "latexBlock",
-				"token": " (1)"
+				block: "latexBlock",
+				line : 0,
+				token: "$$"
+			},
+			{
+				block: "latexBlock",
+				line : 0,
+				token: " (1)"
 			}
 		],
 		"Latex block 1"
@@ -289,48 +328,59 @@ QUnit.test("Latex", function (assert) {
 		mdParser.tokenize(' $$f(x) = \\sin x$$  '),
 		[
 			{
-				"block": "latexBlock",
-				"token": " "
+				block: "latexBlock",
+				line : 0,
+				token: " "
 			},
 			{
-				"block": "latexBlock",
-				"token": "$$"
+				block: "latexBlock",
+				line : 0,
+				token: "$$"
 			},
 			{
-				"block": "latexBlock",
-				"token": "f"
+				block: "latexBlock",
+				line : 0,
+				token: "f"
 			},
 			{
-				"block": "latexBlock",
-				"token": "("
+				block: "latexBlock",
+				line : 0,
+				token: "("
 			},
 			{
-				"block": "latexBlock",
-				"token": "x"
+				block: "latexBlock",
+				line : 0,
+				token: "x"
 			},
 			{
-				"block": "latexBlock",
-				"token": ")"
+				block: "latexBlock",
+				line : 0,
+				token: ")"
 			},
 			{
-				"block": "latexBlock",
-				"token": " = "
+				block: "latexBlock",
+				line : 0,
+				token: " = "
 			},
 			{
-				"block": "latexBlock",
-				"token": "\\sin"
+				block: "latexBlock",
+				line : 0,
+				token: "\\sin"
 			},
 			{
-				"block": "latexBlock",
-				"token": " x"
+				block: "latexBlock",
+				line : 0,
+				token: " x"
 			},
 			{
-				"block": "latexBlock",
-				"token": "$$"
+				block: "latexBlock",
+				line : 0,
+				token: "$$"
 			},
 			{
-				"block": "latexBlock",
-				"token": "  "
+				block: "latexBlock",
+				line : 0,
+				token: "  "
 			}
 		],
 		"Latex block 2"
@@ -339,44 +389,44 @@ QUnit.test("Latex", function (assert) {
 		mdParser.tokenize('$$\nf_x = %comment1\nx%comment2 $$\n(1)'),
 		[
 			{
-				"block": "latexBlock",
-				"token": "$$"
+				block: "latexBlock",
+				token: "$$"
 			},
 			{
-				"block": "latexBlock",
-				"token": "\nf"
+				block: "latexBlock",
+				token: "\nf"
 			},
 			{
-				"block": "latexBlock",
-				"token": "_x"
+				block: "latexBlock",
+				token: "_x"
 			},
 			{
-				"block": "latexBlock",
-				"token": " = "
+				block: "latexBlock",
+				token: " = "
 			},
 			{
-				"block": "latexBlock",
-				"token": "%comment1"
+				block: "latexBlock",
+				token: "%comment1"
 			},
 			{
-				"block": "latexBlock",
-				"token": "\nx"
+				block: "latexBlock",
+				token: "\nx"
 			},
 			{
-				"block": "latexBlock",
-				"token": "%comment2 "
+				block: "latexBlock",
+				token: "%comment2 "
 			},
 			{
-				"block": "latexBlock",
-				"token": "$$"
+				block: "latexBlock",
+				token: "$$"
 			},
 			{
-				"block": "latexBlock",
-				"token": "\n"
+				block: "latexBlock",
+				token: "\n"
 			},
 			{
-				"block": "paragraph",
-				"token": "(1)"
+				block: "paragraph",
+				token: "(1)"
 			}		],
 		"Latex block 3"
 	);
@@ -384,84 +434,84 @@ QUnit.test("Latex", function (assert) {
 		mdParser.tokenize('$$P_\\text{скр}={IlEh\\over c^2}={\\mu E\\over c^2},$$'),
 		[
 			{
-				"block": "latexBlock",
-				"token": "$$"
+				block: "latexBlock",
+				token: "$$"
 			},
 			{
-				"block": "latexBlock",
-				"token": "P"
+				block: "latexBlock",
+				token: "P"
 			},
 			{
-				"block": "latexBlock",
-				"token": "_\\text{скр}"
+				block: "latexBlock",
+				token: "_\\text{скр}"
 			},
 			{
-				"block": "latexBlock",
-				"token": "="
+				block: "latexBlock",
+				token: "="
 			},
 			{
-				"block": "latexBlock",
-				"token": "{"
+				block: "latexBlock",
+				token: "{"
 			},
 			{
-				"block": "latexBlock",
-				"token": "IlEh"
+				block: "latexBlock",
+				token: "IlEh"
 			},
 			{
-				"block": "latexBlock",
-				"token": "\\over"
+				block: "latexBlock",
+				token: "\\over"
 			},
 			{
-				"block": "latexBlock",
-				"token": " c"
+				block: "latexBlock",
+				token: " c"
 			},
 			{
-				"block": "latexBlock",
-				"token": "^2"
+				block: "latexBlock",
+				token: "^2"
 			},
 			{
-				"block": "latexBlock",
-				"token": "}"
+				block: "latexBlock",
+				token: "}"
 			},
 			{
-				"block": "latexBlock",
-				"token": "="
+				block: "latexBlock",
+				token: "="
 			},
 			{
-				"block": "latexBlock",
-				"token": "{"
+				block: "latexBlock",
+				token: "{"
 			},
 			{
-				"block": "latexBlock",
-				"token": "\\mu"
+				block: "latexBlock",
+				token: "\\mu"
 			},
 			{
-				"block": "latexBlock",
-				"token": " E"
+				block: "latexBlock",
+				token: " E"
 			},
 			{
-				"block": "latexBlock",
-				"token": "\\over"
+				block: "latexBlock",
+				token: "\\over"
 			},
 			{
-				"block": "latexBlock",
-				"token": " c"
+				block: "latexBlock",
+				token: " c"
 			},
 			{
-				"block": "latexBlock",
-				"token": "^2"
+				block: "latexBlock",
+				token: "^2"
 			},
 			{
-				"block": "latexBlock",
-				"token": "}"
+				block: "latexBlock",
+				token: "}"
 			},
 			{
-				"block": "latexBlock",
-				"token": ","
+				block: "latexBlock",
+				token: ","
 			},
 			{
-				"block": "latexBlock",
-				"token": "$$"
+				block: "latexBlock",
+				token: "$$"
 			}
 		],
 		"Latex block 4"
@@ -470,8 +520,8 @@ QUnit.test("Latex", function (assert) {
 		mdParser.tokenize('$$f(x) = {dF\\$$'),
 		[
 			{
-				"block": "paragraph",
-				"token": "$$f(x) = {dF\\$$"
+				block: "paragraph",
+				token: "$$f(x) = {dF\\$$"
 			}
 		],
 		"No latex"
@@ -480,24 +530,24 @@ QUnit.test("Latex", function (assert) {
 		mdParser.tokenize('$$3$$ (4) \n\n'),
 		[
 			{
-				"block": "latexBlock",
-				"token": "$$"
+				block: "latexBlock",
+				token: "$$"
 			},
 			{
-				"block": "latexBlock",
-				"token": "3"
+				block: "latexBlock",
+				token: "3"
 			},
 			{
-				"block": "latexBlock",
-				"token": "$$"
+				block: "latexBlock",
+				token: "$$"
 			},
 			{
-				"block": "latexBlock",
-				"token": " (4) \n"
+				block: "latexBlock",
+				token: " (4) \n"
 			},
 			{
-				"block": "empty",
-				"token": "\n"
+				block: "empty",
+				token: "\n"
 			}
 		],
 		"Latex reference"
@@ -517,24 +567,24 @@ QUnit.test("Inline", function (assert) {
 	assert.deepEqual(mdParser.tokenize('one _thing_ has *em*phasis'),
 		[
 			{
-				"block": "paragraph",
-				"token": "one"
+				block: "paragraph",
+				token: "one"
 			},
 			{
-				"block": "paragraph",
-				"token": " _thing_"
+				block: "paragraph",
+				token: " _thing_"
 			},
 			{
-				"block": "paragraph",
-				"token": " has "
+				block: "paragraph",
+				token: " has "
 			},
 			{
-				"block": "paragraph",
-				"token": "*em*"
+				block: "paragraph",
+				token: "*em*"
 			},
 			{
-				"block": "paragraph",
-				"token": "phasis"
+				block: "paragraph",
+				token: "phasis"
 			}
 		], "Mixed 2");
 	assert.deepEqual(mdParser.tokenize('a^b^c'),[
@@ -560,28 +610,28 @@ QUnit.test("Inline", function (assert) {
 	], "No latex");
 	assert.deepEqual(mdParser.tokenize('`1``2`'), [
 		{
-			"block": "paragraph",
-			"token": "`1``2`"
+			block: "paragraph",
+			token: "`1``2`"
 		}
 	], "Code double");
 	assert.deepEqual(mdParser.tokenize('A* B*'), [
 		{
-			"block": "paragraph",
-			"token": "A* B*"
+			block: "paragraph",
+			token: "A* B*"
 		}
 	], "No italic");
 	assert.deepEqual(mdParser.tokenize('*T*.1 *A*'), [
 		{
-			"block": "paragraph",
-			"token": "*T*"
+			block: "paragraph",
+			token: "*T*"
 		},
 		{
-			"block": "paragraph",
-			"token": ".1 "
+			block: "paragraph",
+			token: ".1 "
 		},
 		{
-			"block": "paragraph",
-			"token": "*A*"
+			block: "paragraph",
+			token: "*A*"
 		}
 	], "Double italic");
 });
