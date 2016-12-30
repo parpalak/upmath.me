@@ -17,7 +17,6 @@
 		quotes:      '«»„“',
 
 		// option for tex plugin
-		_tex: {noreplace: false}, // a switch for mdSrc parser; hidden state switch!
 		_habr: {protocol: ''},    // no protocol for habrahabr markup
 
 		// options below are for demo only
@@ -62,20 +61,28 @@
 		domSetHighlightedContent,
 		updateCallback
 	) {
-		var _mdHtml = markdownit(defaults)
-			.use(markdownitS2Tex)
-			.use(markdownitSub)
-			.use(markdownitSup)
+		var
+			_mdHtml = markdownit(defaults)
+				.use(markdownitS2Tex)
+				.use(markdownitSub)
+				.use(markdownitSup)
 			;
-		var _mdSrc = markdownit(defaults)
-			.use(markdownitS2Tex, defaults._tex)
-			.use(markdownitSub)
-			.use(markdownitSup)
+		var
+			_mdSrc = markdownit(defaults)
+				.use(markdownitS2Tex)
+				.use(markdownitSub)
+				.use(markdownitSup)
 			;
-		var _mdHabr = markdownit(defaults)
-			.use(markdownitS2Tex, defaults._habr)
-			.use(markdownitSub)
-			.use(markdownitSup)
+		var
+			_mdOnly = markdownit(defaults)
+				.use(markdownitSub)
+				.use(markdownitSup)
+			;
+		var
+			_mdHabr = markdownit(defaults)
+				.use(markdownitS2Tex, defaults._habr)
+				.use(markdownitSub)
+				.use(markdownitSup)
 			;
 
 		/**
@@ -108,7 +115,7 @@
 		 * @param env
 		 * @param self
 		 */
-		function injectLineNumbers(tokens, idx, options, env, self) {
+		function injectLineNumbersAndCentering(tokens, idx, options, env, self) {
 			var line;
 			if (tokens[idx].map && tokens[idx].level === 0) {
 				line = tokens[idx].map[0];
@@ -125,7 +132,7 @@
 		}
 
 		// Habrahabr ignores <p> tags but uses whitespaces
-		function injectSpaces(tokens, idx, options, env, self) {
+		function injectSpacesAndCentering(tokens, idx, options, env, self) {
 			var prefix = "";
 			if (idx > 0 && tokens[idx - 1].type === 'paragraph_close' && !hasBlockFormula(tokens, idx - 2)) {
 				prefix = "\n";
@@ -138,8 +145,17 @@
 			return prefix + self.renderToken(tokens, idx, options, env, self);
 		}
 
-		_mdHtml.renderer.rules.paragraph_open = _mdHtml.renderer.rules.heading_open = injectLineNumbers;
-		_mdHabr.renderer.rules.paragraph_open = _mdHabr.renderer.rules.heading_open = injectSpaces;
+		function injectCentering(tokens, idx, options, env, self) {
+			// Hack (maybe it is better to use block renderers?)
+			if (hasBlockFormula(tokens, idx + 1)) {
+				tokens[idx].attrPush(['align', 'center']);
+			}
+			return self.renderToken(tokens, idx, options, env, self);
+		}
+
+		_mdHtml.renderer.rules.paragraph_open = _mdHtml.renderer.rules.heading_open = injectLineNumbersAndCentering;
+		_mdHabr.renderer.rules.paragraph_open = _mdHabr.renderer.rules.heading_open = injectSpacesAndCentering;
+		_mdSrc.renderer.rules.paragraph_open = _mdSrc.renderer.rules.heading_open = injectCentering;
 
 		// Custom image embedding for smooth UX
 		_mdHtml.renderer.rules.math_inline = function (tokens, idx) {
@@ -219,8 +235,7 @@
 				imageLoader.fixDom();
 			}
 			else if (_view === 'htmltex') {
-				defaults._tex.noreplace = true;
-				domSetHighlightedContent('result-htmltex-content', _mdSrc.render(source), 'html');
+				domSetHighlightedContent('result-htmltex-content', _mdOnly.render(source), 'html');
 			}
 			else if (_view === 'debug') {
 				domSetHighlightedContent(
@@ -233,7 +248,6 @@
 				domSetHighlightedContent('result-habr-content', getHabraMarkup(source), 'html');
 			}
 			else { /*_view === 'src'*/
-				defaults._tex.noreplace = false;
 				domSetHighlightedContent('result-src-content', _mdSrc.render(source), 'html');
 			}
 
@@ -243,7 +257,7 @@
 
 		this.getDisplayedResult = function () {
 			var source = sourceGetter();
-			return _view === 'habr' ? _mdHabr.render(source) : _mdSrc.render(source);
+			return _view === 'habr' ? _mdHabr.render(source) : (_view === 'htmltex' ? _mdOnly.render(source) : _mdSrc.render(source));
 		};
 
 		this.getDisplayedResultFilename = function () {

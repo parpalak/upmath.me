@@ -146,7 +146,7 @@
 	w.markdownitS2Tex = function math_plugin(md, options) {
 		// Default options
 		options = typeof options === 'object' ? options : {};
-		var inlineOpen = options.inlineOpen || '$$',
+		var inlineOpen  = options.inlineOpen || '$$',
 			inlineClose = options.inlineClose || '$$';
 
 		var math_inline = makeMath_inline(inlineOpen, inlineClose);
@@ -156,13 +156,8 @@
 		md.renderer.rules.math_inline = (function (protocol) {
 			protocol = typeof options.protocol !== 'undefined' ? options.protocol : protocol;
 			return function (tokens, idx) {
-				var formula = tokens[idx].content;
-
-				if (options.noreplace) {
-					return inlineOpen + formula + inlineClose;
-				}
-
-				var url = protocol + '//tex.s2cms.ru/svg/' + encodeURIComponent(formula),
+				var formula  = tokens[idx].content,
+					url      = protocol + '//tex.s2cms.ru/svg/' + encodeURIComponent(formula),
 					isInline = "tex-inline" === tokens[idx].tag;
 
 				return isInline
