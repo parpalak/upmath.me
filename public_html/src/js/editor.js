@@ -75,6 +75,7 @@
 			;
 		var
 			_mdOnly = markdownit(defaults)
+				.use(markdownitS2Tex, {noreplace: true})
 				.use(markdownitSub)
 				.use(markdownitSup)
 			;
