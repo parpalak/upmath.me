@@ -23,10 +23,10 @@ $formats = [
 	<meta charset="UTF-8">
 	<title>Markdown & LaTeX Online Editor</title>
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<meta name="keywords" content="LaTeX, Markdown, equations, markdown latex online editor, tikz" />
-	<meta name="description" content="Markdown & LaTeX Online Editor helps writing math texts for the web. It converts Markdown syntax to HTML, and LaTeX equations to SVG images." />
+	<meta name="keywords" content="LaTeX, Markdown, equations, markdown latex online editor, tikz, latex online">
+	<meta name="description" content="Markdown & LaTeX Online Editor helps writing math texts for the web. It converts Markdown syntax to HTML, and LaTeX equations to SVG images.">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<link rel="icon" type="image/png" href="/favicon.png" />
+	<link rel="icon" type="image/png" href="/favicon.png">
 
 <?php if (defined('USE_MINIFICATION') && USE_MINIFICATION): ?>
 	<link rel="stylesheet" href="/dist/css/style.min.css?<?php include 'dist/css/style.min.css.md5'; ?>">
@@ -35,6 +35,9 @@ $formats = [
 	<link rel="stylesheet" href="/src/css/editor.css">
 	<link rel="stylesheet" href="/lib/highlight.js/solarized-light.css">
 <?php endif; ?>
+	<link rel="dns-prefetch" href="//tex.s2cms.ru">
+	<link rel="preconnect" href="//tex.s2cms.ru" crossorigin>
+	<link rel="prefetch" href="/i/latex.jpg">
 </head>
 <body>
 <div class="header">

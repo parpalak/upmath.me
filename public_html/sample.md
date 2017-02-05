@@ -106,7 +106,7 @@ and [the rest of LaTeX features](https://en.wikibooks.org/wiki/LaTeX/Mathematics
 
 ## About MarkDown & LaTeX Online Editor
 
-It works in browsers, except equations rendered on the server. The editor stores your text in browser to prevent the loss of your work in case of software or hardware failures.
+It works in browsers, except equations rendered [on the server](//tex.s2cms.com/). The editor stores your text in browser to prevent the loss of your work in case of software or hardware failures.
 
 I have designed and developed this lightweight editor and the service for converting LaTeX equations into svg-pictures to make publishing math texts on the web easy. I consider client-side rendering, the rival technique implemented in [MathJax](https://www.mathjax.org/), to be too limited and resource-consuming, especially on mobile devices.
 
