@@ -159,7 +159,13 @@
 				var formula = tokens[idx].content;
 
 				if (options.noreplace) {
-					return inlineOpen + formula + inlineClose;
+					var str = inlineOpen + formula + inlineClose;
+					return str
+						.replace(/&/g, '&amp;')
+						.replace(/>/g, '&gt;')
+						.replace(/</g, '&lt;')
+						.replace(/"/g, '&quot;')
+					;
 				}
 
 				var url      = protocol + '//tex.s2cms.ru/svg/' + encodeURIComponent(formula),
