@@ -132,18 +132,27 @@
 			return self.renderToken(tokens, idx, options, env, self);
 		}
 
-		// Habrahabr ignores <p> tags but uses whitespaces
-		function injectSpacesAndCentering(tokens, idx, options, env, self) {
+		// Habrahabr does not ignore <p> tags and meanwhile uses whitespaces
+		function habrHeading(tokens, idx, options, env, self) {
 			var prefix = "";
 			if (idx > 0 && tokens[idx - 1].type === 'paragraph_close' && !hasBlockFormula(tokens, idx - 2)) {
 				prefix = "\n";
 			}
 
-			// Hack (maybe it is better to use block renderers?)
-			if (hasBlockFormula(tokens, idx + 1)) {
-				tokens[idx].attrPush(['align', 'center']);
-			}
 			return prefix + self.renderToken(tokens, idx, options, env, self);
+		}
+
+		function habrParagraphOpen(tokens, idx, options, env, self) {
+			var prefix = "";
+			if (idx > 0 && tokens[idx - 1].type === 'paragraph_close' && !hasBlockFormula(tokens, idx - 2)) {
+				prefix = "\n";
+			}
+			return prefix; //+ self.renderToken(tokens, idx, options, env, self);
+		}
+
+		function habrParagraphClose(tokens, idx, options, env, self) {
+			var prefix = "\n";
+			return prefix; //+ self.renderToken(tokens, idx, options, env, self);
 		}
 
 		function injectCentering(tokens, idx, options, env, self) {
@@ -155,8 +164,11 @@
 		}
 
 		_mdHtml.renderer.rules.paragraph_open = _mdHtml.renderer.rules.heading_open = injectLineNumbersAndCentering;
-		_mdHabr.renderer.rules.paragraph_open = _mdHabr.renderer.rules.heading_open = injectSpacesAndCentering;
-		_mdSrc.renderer.rules.paragraph_open = _mdSrc.renderer.rules.heading_open = injectCentering;
+		_mdSrc.renderer.rules.paragraph_open  = _mdSrc.renderer.rules.heading_open  = injectCentering;
+
+		_mdHabr.renderer.rules.heading_open    = habrHeading;
+		_mdHabr.renderer.rules.paragraph_open  = habrParagraphOpen;
+		_mdHabr.renderer.rules.paragraph_close = habrParagraphClose;
 
 		// Custom image embedding for smooth UX
 		_mdHtml.renderer.rules.math_inline = function (tokens, idx) {
