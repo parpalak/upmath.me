@@ -1,8 +1,9 @@
-# Math Online Editor
+# Upmath: Math Online Editor
+### _Create web articles and&nbsp;blog posts with&nbsp;equations and&nbsp;diagrams_
 
-This editor is designed for writing math texts for the web. It converts the Markdown syntax extended with LaTeX equations support into HTML code you can publish anywhere on the web.
+Upmath extremely simplifies this task by using Markdown and LaTeX. It converts the Markdown syntax extended with LaTeX equations support into HTML code you can publish anywhere on the web.
 
-![Latex](/i/latex.jpg)
+![Paper written in LaTeX](/i/latex.jpg)
 
 ## Markdown
 
@@ -14,12 +15,12 @@ The main idea of Markdown is to use a simple plain text markup. It's ~~hard~~ ea
 
 Among Markdown features are:
 
-* code: `untouched equation source is *E*~0~=*mc*^2^`;
 * images (see above);
 * links: [service main page](/ "link title");
+* code: `untouched equation source is *E*~0~=*mc*^2^`;
 * unordered lists--when a line starts with `+`, `-`, or `*`;
   1. sub-lists
-  1. and ordered lists;
+  1. and ordered lists too;
 * direct use <nobr>of HTML</nobr>&ndash;for <span style="color: red">anything else</span>. 
 
 Also the editor supports typographic replacements: (c) (r) (tm) (p) +- !!!!!! ???? ,,  -- ---
@@ -104,9 +105,9 @@ $$\begin{tikzpicture}[scale=1.0544]\small
 
 and [the rest of LaTeX features](https://en.wikibooks.org/wiki/LaTeX/Mathematics).
 
-## About MarkDown & LaTeX Online Editor
+## About Upmath
 
-It works in browsers, except equations rendered [on the server](//tex.s2cms.com/). The editor stores your text in browser to prevent the loss of your work in case of software or hardware failures.
+It works in browsers, except equations rendered [on the server](//tex.s2cms.com/). The editor stores your text in the browser to prevent the loss of your work in case of software or hardware failures.
 
 I have designed and developed this lightweight editor and the service for converting LaTeX equations into svg-pictures to make publishing math texts on the web easy. I consider client-side rendering, the rival technique implemented in [MathJax](https://www.mathjax.org/), to be too limited and resource-consuming, especially on mobile devices.
 
