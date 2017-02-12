@@ -578,7 +578,8 @@ function ScrollMap(mapBuilder) {
 	};
 
 	this.getPosition = function (eBlockNode, fromIndex, toIndex) {
-		var	scrollTop = eBlockNode.scrollTop;
+		var offsetHeight = eBlockNode.offsetHeight;
+		var scrollTop    = eBlockNode.scrollTop;
 
 		if (scrollTop == 0) {
 			return 0;
@@ -588,7 +589,12 @@ function ScrollMap(mapBuilder) {
 			map = mapBuilder();
 		}
 
-		var scrollShift    = eBlockNode.offsetHeight / 2,
+		var maxMapIndex = map[fromIndex].length - 1;
+		if (map[fromIndex][maxMapIndex] <= scrollTop + offsetHeight) {
+			return map[toIndex][maxMapIndex] - offsetHeight
+		}
+
+		var scrollShift    = offsetHeight / 2,
 			scrollLevel    = scrollTop + scrollShift,
 			blockIndex     = findBisect(scrollLevel, map[fromIndex]),
 			srcScrollLevel = parseFloat(map[toIndex][blockIndex.val] * (1 - blockIndex.part));

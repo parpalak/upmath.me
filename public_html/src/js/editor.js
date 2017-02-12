@@ -339,6 +339,9 @@
 			}
 		}
 
+		mapSrc.push(document.querySelector('.ldt-pre').scrollHeight);
+		mapResult.push(document.querySelector('.result-html').scrollHeight);
+
 		return [mapSrc, mapResult];
 	}
 
