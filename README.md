@@ -7,7 +7,7 @@
 ```
 git clone git@github.com:parpalak/upmath.me.git
 cd upmath.me
-cp config.php.dist config.php # Create the site config file
+cp config.dist.php config.php # Create the site config file
 npm install
 bower install
 grunt
