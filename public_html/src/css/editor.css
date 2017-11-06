@@ -92,7 +92,7 @@ div.header {
 		line-height: 18px;
 		text-align: right;
 		}
-	.demo-control, .copyright {
+	.open-control, .demo-control, .copyright {
 		white-space: nowrap;
 		}
 	.demo-control, .open-control {
@@ -101,6 +101,16 @@ div.header {
 		.header .toolbar-button {
 			text-decoration: underline;
 		}
+		.header .toolbar-button,
+		.header .width-control,
+		.demo-control .control-item {
+			display: inline-block;
+			vertical-align: middle;
+			}
+		.header .width-control {
+			margin-right: 10px;
+			width: 120px;
+			}
 		.header .toolbar-button,
 		.demo-control .control-item {
 			background-color: rgba(255, 255, 255, 0.3);
@@ -115,8 +125,6 @@ div.header {
 			padding: 0 5px;
 			cursor: pointer;
 			cursor: hand;
-			display: inline-block;
-			vertical-align: top;
 			}
 		.demo-control .control-item {
 			background-color: rgba(255, 255, 255, 0.15);
@@ -335,6 +343,11 @@ textarea {
 	}
 }
 
+@media screen and (max-width: 950px) {
+	.header .width-control { display: none !important; }
+	.half-width { width: 50% !important; }
+}
+
 @media screen and (max-width: 824px) {
 	div.header {font-size: 15px;}
 }
@@ -399,7 +412,7 @@ textarea {
 	}
 
 	.half-width {
-		width: 85%;
+		width: 85% !important;
 		margin-right: -70%;
 	}
 

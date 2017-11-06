@@ -45,6 +45,7 @@ $formats = [
 	<div class="header">
 		<h1 class="header-item title">Markdown & LaTeX Editor</h1>
 		<div class="header-item open-control">
+			<input class="width-control" id="width-control" type="range" step="5" min="10" max="90">
 			<input type="file" id="fileElem" style="display:none">
 			<button class="toolbar-button _upload-source" title="Upload a file">⇑</button>
 			<button class="toolbar-button _download-source" title="Download source">⇓</button>

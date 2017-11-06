@@ -477,6 +477,14 @@
 			reader.readAsText(this.files[0]);
 		});
 
+		var percentageListener = function (e) {
+			document.getElementById('source-block').style.width = this.value + '%';
+			document.getElementById('result-block').style.width = (100 - this.value) + '%';
+			scrollMap.reset();
+		};
+		document.getElementById('width-control').addEventListener('input', percentageListener);
+		document.getElementById('width-control').addEventListener('change', percentageListener);
+
 		// Need to recalculate line positions on window resize
 		window.addEventListener('resize', function () {
 			scrollMap.reset();
