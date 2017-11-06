@@ -34,6 +34,7 @@ module.exports = function(grunt) {
 			main: {
 				files: [
 					{
+						// for non-minified version
 						expand: true,
 						src: [
 							'bower_components/file-saver.js/FileSaver.js',
@@ -54,6 +55,7 @@ module.exports = function(grunt) {
 						flatten: true
 					},
 					{
+						// for non-minified version
 						expand: true,
 						src: [
 							'bower_components/LDT/lib/TextareaDecorator.js'
@@ -64,12 +66,23 @@ module.exports = function(grunt) {
 				]
 			}
 		},
+		imageEmbed: {
+			main: {
+				src: [
+					'public_html/src/css/editor.css'
+				],
+				dest: "public_html/dist/css/editor.css",
+				options: {
+					deleteAfterEncoding: false,
+				}
+			}
+		},
 		cssmin: {
 			main: {
 				src: [
 					'bower_components/LDT/lib/TextareaDecorator.css',
 					'public_html/lib/highlight.js/solarized-light.css',
-					'public_html/src/css/editor.css'
+					'<%= imageEmbed.main.dest %>'
 				],
 				dest: 'public_html/dist/css/style.min.css'
 			}
@@ -115,11 +128,13 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks('grunt-fingerprint');
 	grunt.loadNpmTasks('grunt-shell');
 	grunt.loadNpmTasks('grunt-contrib-watch');
+	grunt.loadNpmTasks("grunt-image-embed");
 
 	grunt.registerTask('default', [
 		'concat',
 		'uglify',
 		'copy',
+		'imageEmbed',
 		'cssmin',
 		'shell',
 		'fingerprint'
