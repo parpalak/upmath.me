@@ -339,7 +339,11 @@
 			}
 		}
 
-		mapSrc.push(document.querySelector('.ldt-pre').scrollHeight);
+		var srcScrollHeight = document.querySelector('.ldt-pre').scrollHeight,
+		    lastSrcElemPos = mapSrc[mapSrc.length - 1],
+			allowedHeight = 5; // workaround for automatic textarea scrolling on entering new source lines
+
+		mapSrc.push(srcScrollHeight - allowedHeight > lastSrcElemPos ? srcScrollHeight - allowedHeight : lastSrcElemPos);
 		mapResult.push(document.querySelector('.result-html').scrollHeight);
 
 		return [mapSrc, mapResult];

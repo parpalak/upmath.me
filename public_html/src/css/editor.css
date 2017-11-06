@@ -167,10 +167,10 @@ pre.ldt-pre span {
 	vertical-align: top;
 }
 .ldt pre, .ldt textarea {
-	padding: 16px 16px;
+	padding: 16px 16px 0;
 }
 textarea.source {
-	padding: 16px 16px;
+	padding: 16px 16px 0;
 	width: 100%;
 }
 textarea {
@@ -218,12 +218,16 @@ textarea {
 	display: block;
 }
 
-.result-html .svg-preview {
-	overflow: visible;
-	-webkit-transition: opacity 0.4s ease-in-out;
-	-moz-transition: opacity 0.4s ease-in-out;
-	transition: opacity 0.4s ease-in-out;
+.result-html {
+	padding-top: 0;
+	padding-bottom: 0;
 	}
+	.result-html .svg-preview {
+		overflow: visible;
+		-webkit-transition: opacity 0.4s ease-in-out;
+		-moz-transition: opacity 0.4s ease-in-out;
+		transition: opacity 0.4s ease-in-out;
+		}
 
 .hljs {
 	background: none;
