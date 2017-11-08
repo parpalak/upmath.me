@@ -1,8 +1,8 @@
-#UpMath
+# UpMath
 
 [LaTeX and Markdown Online Editor](https://upmath.me/)
 
-##Installation
+## Installation
 
 ```
 git clone git@github.com:parpalak/upmath.me.git
