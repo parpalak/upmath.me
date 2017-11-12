@@ -110,14 +110,9 @@ div.header {
 			text-decoration: underline;
 		}
 		.header .toolbar-button,
-		.header .width-control,
 		.demo-control .control-item {
 			display: inline-block;
 			vertical-align: middle;
-			}
-		.header .width-control {
-			margin-right: 10px;
-			width: 120px;
 			}
 		.header .toolbar-button,
 		.demo-control .control-item {
@@ -165,7 +160,31 @@ div.header {
 .container {
 	padding-top: 48px;
 	overflow: hidden;
-}
+	white-space: nowrap;
+	}
+	.half-width, .slider {
+		display: inline-block;
+		vertical-align: top;
+		white-space: normal;
+		}
+	.half-width {
+		position: relative;
+		width: 50%;
+		width: calc(50% - 3px);
+		background-color: #fff;
+		}
+	.slider {
+		width: 6px;
+		cursor: ew-resize;
+		background: radial-gradient(rgba(0, 0, 0, 0.1) 21%, transparent 22%) 3px 3px,
+	radial-gradient(rgba(0, 0, 0, 0.1) 21%, transparent 22%) 0 0;
+		background-size: 6px 6px;
+		/* Disabling draggability */
+		left: 0 !important;
+		top: 0 !important;
+		transform: none !important;
+	}
+
 .opt__strict .not-strict {
 	opacity: 0.3;
 }
@@ -248,14 +267,6 @@ textarea {
 .hljs {
 	background: none;
 	padding: 0;
-}
-
-.half-width {
-	position: relative;
-	width: 50%;
-	display: inline-block;
-	vertical-align: top;
-	background-color: #fff;
 }
 
 ::-webkit-scrollbar {
@@ -352,8 +363,8 @@ textarea {
 }
 
 @media screen and (max-width: 950px) {
-	.header .width-control { display: none !important; }
 	.half-width { width: 50% !important; }
+	.slider { display: none; }
 }
 
 @media screen and (max-width: 824px) {

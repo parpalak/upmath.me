@@ -45,7 +45,6 @@ $formats = [
 	<div class="header">
 		<h1 class="header-item title">Markdown & LaTeX Editor</h1>
 		<div class="header-item open-control">
-			<input class="width-control" id="width-control" type="range" step="5" min="10" max="90">
 			<input type="file" id="fileElem" style="display:none">
 			<button class="toolbar-button _upload-source" title="Upload a file">⇑</button>
 			<button class="toolbar-button _download-source" title="Download source">⇓</button>
@@ -78,6 +77,7 @@ $formats = [
 	</div>
 	<div class="container full-height" id="container-block"><!--
 		--><div class="half-width full-height source-wrap" id="source-block"><textarea class="source full-height"></textarea></div><!--
+		--><div class="slider full-height" id="slider"></div><!--
 		--><div class="half-width full-height" id="result-block">
 			<div class="result-html full-height"></div>
 			<pre class="result-src full-height"><code class="result-src-content"></code></pre>
@@ -103,6 +103,7 @@ $formats = [
 	<script src="/dist/js/markdown-it-sub.min.js"></script>
 	<script src="/dist/js/markdown-it-sup.min.js"></script>
 	<script src="/dist/js/FileSaver.js"></script>
+	<script src="/dist/js/draggabilly.pkgd.min.js"></script>
 	<script src="/dist/js/TextareaDecorator.js"></script>
 	<script src="/lib/highlight.js/highlight.pack.js"></script>
 

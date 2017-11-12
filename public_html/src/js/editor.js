@@ -477,13 +477,27 @@
 			reader.readAsText(this.files[0]);
 		});
 
-		var percentageListener = function (e) {
-			document.getElementById('source-block').style.width = this.value + '%';
-			document.getElementById('result-block').style.width = (100 - this.value) + '%';
-			scrollMap.reset();
-		};
-		document.getElementById('width-control').addEventListener('input', percentageListener);
-		document.getElementById('width-control').addEventListener('change', percentageListener);
+		(function () {
+			var draggie = new Draggabilly( '.slider', {
+				axis: 'x'
+			});
+
+			var sourceBlock = document.getElementById('source-block'),
+				resultBLock = document.getElementById('result-block'),
+				windowWidth;
+
+			draggie.on('dragStart', function( event, pointer, moveVector) {
+				windowWidth = window.innerWidth;
+			});
+			draggie.on('dragMove', function( event, pointer, moveVector) {
+				var rel = 100.0 * pointer.pageX / windowWidth;
+
+				sourceBlock.style.width = 'calc(' + rel + '% - 3px)';
+				resultBLock.style.width = 'calc(' + (100 - rel) + '% - 3px)';
+
+				scrollMap.reset();
+			});
+		})();
 
 		// Need to recalculate line positions on window resize
 		window.addEventListener('resize', function () {

@@ -15,6 +15,7 @@ module.exports = function(grunt) {
 					'bower_components/markdown-it-sup/dist/markdown-it-sup.min.js',
 					'bower_components/LDT/lib/TextareaDecorator.js',
 					'bower_components/file-saver.js/FileSaver.js',
+					'bower_components/draggabilly/dist/draggabilly.pkgd.min.js',
 					'public_html/lib/highlight.js/highlight.pack.js'
 				],
 				dest: 'public_html/dist/js/vendors.js'
@@ -40,7 +41,8 @@ module.exports = function(grunt) {
 							'bower_components/file-saver.js/FileSaver.js',
 							'bower_components/markdown-it/dist/markdown-it.min.js',
 							'bower_components/markdown-it-sub/dist/markdown-it-sub.min.js',
-							'bower_components/markdown-it-sup/dist/markdown-it-sup.min.js'
+							'bower_components/markdown-it-sup/dist/markdown-it-sup.min.js',
+							'bower_components/draggabilly/dist/draggabilly.pkgd.min.js'
 						],
 						dest: 'public_html/dist/js/',
 						filter: 'isFile',

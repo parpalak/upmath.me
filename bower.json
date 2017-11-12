@@ -16,6 +16,7 @@
     "markdown-it-sub": "*",
     "markdown-it-sup": "*",
     "file-saver.js": "~1.20150507.2",
-    "LDT": "git://github.com/parpalak/LDT.git"
+    "LDT": "git://github.com/parpalak/LDT.git",
+    "draggabilly": "^2.1.1"
   }
 }
