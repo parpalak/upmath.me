@@ -225,7 +225,7 @@ textarea {
 .result-debug,
 .result-html {
 	display: none;
-	padding: 16px 16px;
+	padding: 16px 16px 16px 13px;
 	margin: 0;
 	overflow: auto;
 }
@@ -363,6 +363,13 @@ textarea {
 }
 
 @media screen and (max-width: 950px) {
+	.result-src,
+	.result-habr,
+	.result-htmltex,
+	.result-debug,
+	.result-html {
+		padding-left: 16px;
+	}
 	.half-width { width: 50% !important; }
 	.slider { display: none; }
 }
