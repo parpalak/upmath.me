@@ -1,7 +1,7 @@
 /**
  * Markdown and LaTeX Editor
  *
- * (c) Roman Parpalak, 2016
+ * (c) Roman Parpalak, 2016-2017
  */
 
 (function (document, window) {
@@ -21,7 +21,7 @@
 
 		// options below are for demo only
 		_highlight: true,
-		_strict: false
+		_strict:    false
 	};
 
 	function domSetResultView(val) {
@@ -61,30 +61,34 @@
 		domSetHighlightedContent,
 		updateCallback
 	) {
-		var
-			_mdHtml = markdownit(defaults)
-				.use(markdownitS2Tex)
-				.use(markdownitSub)
-				.use(markdownitSup)
-			;
-		var
-			_mdSrc = markdownit(defaults)
-				.use(markdownitS2Tex)
-				.use(markdownitSub)
-				.use(markdownitSup)
-			;
-		var
-			_mdOnly = markdownit(defaults)
-				.use(markdownitS2Tex, {noreplace: true})
-				.use(markdownitSub)
-				.use(markdownitSup)
-			;
-		var
-			_mdHabr = markdownit(defaults)
-				.use(markdownitS2Tex, defaults._habr)
-				.use(markdownitSub)
-				.use(markdownitSup)
-			;
+		var _mdPreview = markdownit(defaults)
+			.use(markdownitS2Tex)
+			.use(markdownitSub)
+			.use(markdownitSup)
+		;
+
+		var _mdHtmlAndImages = markdownit(defaults)
+			.use(markdownitS2Tex)
+			.use(markdownitSub)
+			.use(markdownitSup)
+		;
+
+		var _mdHtmlAndTex = markdownit(defaults)
+			.use(markdownitS2Tex, {noreplace: true})
+			.use(markdownitSub)
+			.use(markdownitSup)
+		;
+
+		var _mdHtmlHabrAndImages = markdownit(defaults)
+			.use(markdownitS2Tex, defaults._habr)
+			.use(markdownitSub)
+			.use(markdownitSup)
+		;
+
+		var _mdMdAndImages = markdownit('zero')
+			.use(markdownitS2Tex)
+			.enable(['backticks'])
+		;
 
 		/**
 		 * Detects if the paragraph contains the only formula.
@@ -163,22 +167,29 @@
 			return self.renderToken(tokens, idx, options, env, self);
 		}
 
-		_mdHtml.renderer.rules.paragraph_open = _mdHtml.renderer.rules.heading_open = injectLineNumbersAndCentering;
-		_mdSrc.renderer.rules.paragraph_open  = _mdSrc.renderer.rules.heading_open  = injectCentering;
+		_mdPreview.renderer.rules.paragraph_open = _mdPreview.renderer.rules.heading_open = injectLineNumbersAndCentering;
+		_mdHtmlAndImages.renderer.rules.paragraph_open = _mdHtmlAndImages.renderer.rules.heading_open = injectCentering;
 
-		_mdHabr.renderer.rules.heading_open    = habrHeading;
-		_mdHabr.renderer.rules.paragraph_open  = habrParagraphOpen;
-		_mdHabr.renderer.rules.paragraph_close = habrParagraphClose;
+		_mdHtmlHabrAndImages.renderer.rules.heading_open    = habrHeading;
+		_mdHtmlHabrAndImages.renderer.rules.paragraph_open  = habrParagraphOpen;
+		_mdHtmlHabrAndImages.renderer.rules.paragraph_close = habrParagraphClose;
+
+		_mdMdAndImages.renderer.rules.code_inline = function (tokens, idx /*, options, env, slf*/) {
+			return '`' + tokens[idx].content + '`';
+		};
+		_mdMdAndImages.renderer.rules.text = function (tokens, idx /*, options, env */) {
+			return tokens[idx].content;
+		};
 
 		// Custom image embedding for smooth UX
-		_mdHtml.renderer.rules.math_inline = function (tokens, idx) {
+		_mdPreview.renderer.rules.math_inline = function (tokens, idx) {
 			return imageLoader.getHtmlStub(tokens[idx].content);
 		};
 
 		/**
 		 * Habrahabr hack for numerating formulas
 		 */
-		_mdHabr.renderer.rules.math_number = function (tokens, idx) {
+		_mdHtmlHabrAndImages.renderer.rules.math_number = function (tokens, idx) {
 			return '<img align="right" src="//tex.s2cms.ru/svg/' + tokens[idx].content + '" />';
 		};
 
@@ -192,9 +203,9 @@
 		 * @param self
 		 * @returns {string}
 		 */
-		_mdHabr.renderer.rules.fence = function (tokens, idx, options, env, self) {
-			var token = tokens[idx],
-				info = token.info ? _mdHabr.utils.unescapeAll(token.info).trim() : '',
+		_mdHtmlHabrAndImages.renderer.rules.fence = function (tokens, idx, options, env, self) {
+			var token    = tokens[idx],
+				info     = token.info ? _mdHtmlHabrAndImages.utils.unescapeAll(token.info).trim() : '',
 				langName = '',
 				highlighted;
 
@@ -204,9 +215,9 @@
 			}
 
 			if (options.highlight) {
-				highlighted = options.highlight(token.content, langName) || _mdHabr.utils.escapeHtml(token.content);
+				highlighted = options.highlight(token.content, langName) || _mdHtmlHabrAndImages.utils.escapeHtml(token.content);
 			} else {
-				highlighted = _mdHabr.utils.escapeHtml(token.content);
+				highlighted = _mdHtmlHabrAndImages.utils.escapeHtml(token.content);
 			}
 
 			return '\n<source' + self.renderAttrs(token) + '>'
@@ -215,7 +226,8 @@
 		};
 
 		function getHabraMarkup(source) {
-			var html = _mdHabr.render(source);
+			var html = _mdHtmlHabrAndImages.render(source);
+
 			html = html.replace('<spoiler ', '\n<spoiler ');
 			return html;
 		}
@@ -228,7 +240,7 @@
 		};
 
 		var _oldSource = null,
-			_view = 'html'; // html / src / debug
+			_view      = 'html'; // html / src / debug
 
 		this.updateResult = function () {
 			var source = sourceGetter();
@@ -241,36 +253,49 @@
 			// Update only active view to avoid slowdowns
 			// (debug & src view with highlighting are a bit slow)
 			if (_view === 'html') {
-				var result = document.getElementsByClassName('result-html');
-
 				imageLoader.reset();
-				domSetPreviewHTML(_mdHtml.render(source));
+				domSetPreviewHTML(_mdPreview.render(source));
 				imageLoader.fixDom();
 			}
 			else if (_view === 'htmltex') {
-				domSetHighlightedContent('result-htmltex-content', _mdOnly.render(source), 'html');
+				domSetHighlightedContent('result-src-content', '<script src="https://tex.s2cms.ru/latex.js"></script>\n' + _mdHtmlAndTex.render(source), 'html');
 			}
 			else if (_view === 'debug') {
 				domSetHighlightedContent(
-					'result-debug-content',
-					JSON.stringify(_mdSrc.parse(source, {references: {}}), null, 2),
+					'result-src-content',
+					JSON.stringify(_mdHtmlAndImages.parse(source, {references: {}}), null, 2),
 					'json'
 				);
 			}
 			else if (_view === 'habr') {
-				domSetHighlightedContent('result-habr-content', getHabraMarkup(source), 'html');
+				domSetHighlightedContent('result-src-content', getHabraMarkup(source), 'html');
+			}
+			else if (_view === 'md') {
+				domSetHighlightedContent('result-src-content', _mdMdAndImages.renderInline(source), 'html');
 			}
 			else { /*_view === 'src'*/
-				domSetHighlightedContent('result-src-content', _mdSrc.render(source), 'html');
+				domSetHighlightedContent('result-src-content', _mdHtmlAndImages.render(source), 'html');
 			}
 
 			updateCallback(source);
 		};
 
-
 		this.getDisplayedResult = function () {
 			var source = sourceGetter();
-			return _view === 'habr' ? _mdHabr.render(source) : (_view === 'htmltex' ? _mdOnly.render(source) : _mdSrc.render(source));
+
+			if (_view === 'habr') {
+				return _mdHtmlHabrAndImages.render(source);
+			}
+
+			if (_view === 'htmltex') {
+				return '<script src="https://tex.s2cms.ru/latex.js"></script>\n' + _mdHtmlAndTex.render(source);
+			}
+
+			if (_view === 'md') {
+				return _mdMdAndImages.renderInline(source);
+			}
+
+			return _mdHtmlAndImages.render(source);
 		};
 
 		this.getDisplayedResultFilename = function () {
@@ -298,7 +323,7 @@
 	}
 
 	function domSetPreviewHTML(html) {
-		var result = document.getElementsByClassName('result-html');
+		var result          = document.getElementsByClassName('result-html');
 		result[0].innerHTML = html;
 	}
 
@@ -306,13 +331,13 @@
 	 * Searches start position for text blocks
 	 */
 	function domFindScrollMarks() {
-		var resElements = document.querySelectorAll('.result-html .line'),
+		var resElements      = document.querySelectorAll('.result-html .line'),
 			resElementHeight = [],
 			line,
-			mapSrc = [0],
-			mapResult = [0],
-			i = 0,
-			len = resElements.length;
+			mapSrc           = [0],
+			mapResult        = [0],
+			i                = 0,
+			len              = resElements.length;
 
 		for (; i < len; i++) {
 			line = parseInt(resElements[i].getAttribute('data-line'));
@@ -323,7 +348,7 @@
 
 		var srcElements = document.querySelectorAll('.ldt-pre .block-start');
 
-		len = srcElements.length;
+		len  = srcElements.length;
 		line = 0;
 
 		for (i = 0; i < len; i++) {
@@ -340,8 +365,8 @@
 		}
 
 		var srcScrollHeight = document.querySelector('.ldt-pre').scrollHeight,
-			lastSrcElemPos = mapSrc[mapSrc.length - 1],
-			allowedHeight = 5; // workaround for automatic textarea scrolling on entering new source lines
+			lastSrcElemPos  = mapSrc[mapSrc.length - 1],
+			allowedHeight   = 5; // workaround for automatic textarea scrolling on entering new source lines
 
 		mapSrc.push(srcScrollHeight - allowedHeight > lastSrcElemPos ? srcScrollHeight - allowedHeight : lastSrcElemPos);
 		mapResult.push(document.querySelector('.result-html').scrollHeight);
@@ -350,7 +375,7 @@
 	}
 
 	documentReady(function () {
-		var eTextarea = document.getElementsByClassName('source')[0],
+		var eTextarea   = document.getElementsByClassName('source')[0],
 			eResultHtml = document.getElementsByClassName('result-html')[0];
 
 		var recalcHeight = debounce(function () {
@@ -467,7 +492,7 @@
 				return;
 			}
 
-			var reader = new FileReader(),
+			var reader    = new FileReader(),
 				fileInput = this;
 
 			reader.onload = function () {
@@ -478,8 +503,8 @@
 		});
 
 		(function () {
-			var eSlider = document.querySelector('.slider'),
-				dragSlider = new Draggabilly(eSlider, {
+			var eSlider     = document.querySelector('.slider'),
+				dragSlider  = new Draggabilly(eSlider, {
 					axis: 'x'
 				}),
 				sourceBlock = document.getElementById('source-block'),

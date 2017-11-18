@@ -9,10 +9,11 @@
 @include '../config.php';
 
 $formats = [
-	'html'    => 'preview',
-	'src'     => 'html',
-	'htmltex' => 'html+tex',
-	'habr'    => 'habr',
+	'html'    => ['preview', 'Example of rendered HTML'],
+	'src'     => ['html', 'HTML with img-equations'],
+	'htmltex' => ['html-tex', 'HTML with raw LaTeX equations'],
+	'md'      => ['md', 'Markdown with img-equations'],
+	'habr'    => ['H', 'A kind of HTML markup for habrahabr.ru'],
 //	'debug' => 'debug',
 ];
 
@@ -54,14 +55,19 @@ $formats = [
 
 			$selected = true;
 
-			foreach ($formats as $class => $name) {
+			foreach ($formats as $class => list($name, $title)) {
 				?><input
 						class="control-input"
 						id="id_<?php echo $class; ?>"
 						type="radio"
 						name="source_type"
 					<?php $selected ? print 'checked="checked"' : null; ?>
-				><label for="id_<?php echo $class; ?>" data-result-as="<?php echo $class; ?>" class="control-item"><?php echo $name; ?></label><?php
+				><label
+					class="control-item"
+					for="id_<?php echo $class; ?>"
+					title="<?php echo htmlspecialchars($title); ?>"
+					data-result-as="<?php echo $class; ?>"
+				><?php echo $name; ?></label><?php
 				$selected = false;
 			}
 			?>
@@ -81,9 +87,6 @@ $formats = [
 		--><div class="half-width full-height" id="result-block">
 			<div class="result-html full-height"></div>
 			<pre class="result-src full-height"><code class="result-src-content"></code></pre>
-			<pre class="result-htmltex full-height"><code class="result-htmltex-content"></code></pre>
-			<pre class="result-habr full-height"><code class="result-habr-content"></code></pre>
-			<pre class="result-debug full-height"><code class="result-debug-content"></code></pre>
 		</div><!--
 	--></div>
 	<script>

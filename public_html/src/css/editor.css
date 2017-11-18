@@ -106,9 +106,6 @@ div.header {
 	.demo-control, .open-control {
 		text-align: center;
 		}
-		.header .toolbar-button {
-			text-decoration: underline;
-		}
 		.header .toolbar-button,
 		.demo-control .control-item {
 			display: inline-block;
@@ -125,7 +122,8 @@ div.header {
 			height: 48px;
 			min-width: 30px;
 			line-height: 30px;
-			padding: 0 5px;
+			padding: 0 4px;
+			text-align: center;
 			cursor: pointer;
 			cursor: hand;
 			}
@@ -220,35 +218,24 @@ textarea {
 	max-width: 100%;
 }
 .result-src,
-.result-habr,
-.result-htmltex,
-.result-debug,
 .result-html {
 	display: none;
 	padding: 16px 16px 16px 13px;
 	margin: 0;
 	overflow: auto;
 }
-.result-src,
-.result-habr,
-.result-htmltex,
-.result-debug {
+.result-src {
 	white-space: pre-wrap;
 }
-.result-debug {
-	font-size: 12px;
-}
-.result-src-content,
-.result-habr-content,
-.result-htmltex-content,
-.result-debug-content {
+.result-src-content{
 	white-space: pre-wrap;
 }
 
 .result-as-html .result-html,
-.result-as-habr .result-habr,
-.result-as-htmltex .result-htmltex,
-.result-as-debug .result-debug,
+.result-as-habr .result-src,
+.result-as-htmltex .result-src,
+.result-as-debug .result-src,
+.result-as-md .result-src,
 .result-as-src .result-src {
 	display: block;
 }
@@ -364,9 +351,6 @@ textarea {
 
 @media screen and (max-width: 950px) {
 	.result-src,
-	.result-habr,
-	.result-htmltex,
-	.result-debug,
 	.result-html {
 		padding-left: 16px;
 	}
@@ -380,9 +364,6 @@ textarea {
 @media screen and (max-width: 639px) {
 	.ldt pre, .ldt textarea, textarea.source,
 	.result-src,
-	.result-habr,
-	.result-htmltex,
-	.result-debug,
 	.result-html,
 	div.header {
 		padding-left: 12px;
@@ -400,9 +381,6 @@ textarea {
 @media screen and (max-width: 459px) {
 	.ldt pre, .ldt textarea, textarea.source,
 	.result-src,
-	.result-habr,
-	.result-htmltex,
-	.result-debug,
 	.result-html,
 	div.header {
 		padding-left: 12px;
@@ -424,9 +402,6 @@ textarea {
 @media screen and (max-width: 599px) {
 	.ldt pre, .ldt textarea, textarea.source,
 	.result-src,
-	.result-habr,
-	.result-htmltex,
-	.result-debug,
 	.result-html,
 	div.header {
 		padding-left: 12px;
