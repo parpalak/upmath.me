@@ -496,12 +496,16 @@
 		Array.prototype.forEach.call(document.getElementsByClassName('control-item'), function (eNode, index) {
 			eNode.addEventListener('click', function () {
 				var view = this.getAttribute('data-result-as');
-				if (view) {
-					parserCollection.switchView(view);
+				if (!view) {
+					return;
+				}
 
+				parserCollection.switchView(view);
+
+				if (view !== 'preview') {
 					// Selecting all block content.
-					var contentBlocks = document.getElementsByClassName('result-' + view + '-content');
-					if (view !== 'preview' && contentBlocks.length) {
+					var contentBlocks = document.getElementsByClassName('result-src-content');
+					if (contentBlocks.length) {
 						setTimeout(function () {
 							selectText(contentBlocks[0]);
 						}, 0);
