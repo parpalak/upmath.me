@@ -355,7 +355,7 @@ function ImagePreloader() {
 
 		svg = makeSvgIdsUnique(svg);
 
-		var m = svg.match(/postMessage\((?:&quot;|")([\d\|\.\-]*)(?:&quot;|")/); // ["&quot;2.15299|31.42377|11.65223|&quot;", "2.15299|31.42377|11.65223|"]
+		var m = svg.match(/postMessage\((?:&quot;|")([\d\|\.\-eE]*)(?:&quot;|")/); // ["&quot;2.15299|31.42377|11.65223|&quot;", "2.15299|31.42377|11.65223|"]
 		if (m) {
 			var baselineShift = m && m[1] ? m[1].split('|').shift() : 0; // 2.15299
 		}
@@ -504,7 +504,7 @@ function ImageLoader(preloader, protocol) {
 
 		if (baselineShift === null) {
 			// svg has been loaded but something went wrong.
-			newSvgAttrs += 'width="10px" height="10px" ';
+			newSvgAttrs += 'width="13px" height="13px" ';
 		}
 		else {
 			newSvgAttrs += 'style="vertical-align:' + (-baselineShift) + 'pt; opacity: ' + startOpacity + '" ';
