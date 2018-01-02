@@ -39,7 +39,7 @@ $formats = [
 
 	<link rel="dns-prefetch" href="//tex.s2cms.ru">
 	<link rel="preconnect" href="//tex.s2cms.ru" crossorigin>
-	<link rel="prefetch" href="/i/latex.jpg">
+	<link rel="prefetch" href="/i/latex.jpg" as=image>
 </head>
 
 <body>
