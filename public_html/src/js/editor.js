@@ -14,7 +14,7 @@
 		langPrefix:  'language-',  // CSS language prefix for fenced blocks
 		linkify:     true,         // autoconvert URL-like texts to links
 		typographer: true,         // Enable smartypants and other sweet transforms
-		quotes:      '«»„“',
+		quotes:      '""\'\'',
 
 		// option for tex plugin
 		_habr: {protocol: ''},    // no protocol for habrahabr markup
