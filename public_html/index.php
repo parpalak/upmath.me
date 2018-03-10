@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright (C) 2015-2017 Roman Parpalak
+ * @copyright (C) 2015-2018 Roman Parpalak
  * @license   http://www.opensource.org/licenses/mit-license.php MIT
  * @package   Markdown & LaTeX Editor
  * @link      https://upmath.me/
@@ -74,15 +74,15 @@ $formats = [
 			<button class="toolbar-button _download-result" title="Download result">⇓</button>
 		</div>
 		<div class="header-item copyright">
-			&copy; 2015–2017<br>
+			&copy; 2015–2018<br>
+			<a class="link" id="mailto-link" title="Drop me a line" href="#">Roman Parpalak</a>
 			<script>
-				var mailto = "roman%"+"40written.ru";
-				document.write('<a class="link" title="Drop me a line" href="mailto:'+unescape(mailto)+'">Roman Parpalak</a>');
+				document.getElementById('mailto-link').href = "mailto:roman%"+"40written.ru";
 			</script>
 		</div>
 	</div>
 	<div class="container full-height" id="container-block"><!--
-		--><div class="half-width full-height source-wrap" id="source-block"><textarea class="source full-height"></textarea></div><!--
+		--><div class="half-width full-height source-wrap" id="source-block"><textarea id="editor-source" class="source full-height"></textarea></div><!--
 		--><div class="slider full-height" id="slider"></div><!--
 		--><div class="half-width full-height" id="result-block">
 			<div class="result-html full-height"></div>
@@ -95,7 +95,7 @@ $formats = [
 				var data = localStorage.getItem("editor_content");
 			}
 			catch (e) {}
-			document.getElementsByClassName('source')[0].value = data || <?php echo json_encode(file_get_contents('sample.md'), JSON_UNESCAPED_UNICODE); ?>;
+			document.getElementById('editor-source').value = data || <?php echo json_encode(file_get_contents('sample.md'), JSON_UNESCAPED_UNICODE); ?>;
 		}());
 	</script>
 <?php if (defined('USE_MINIFICATION') && USE_MINIFICATION): ?>

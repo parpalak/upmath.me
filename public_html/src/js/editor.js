@@ -1,7 +1,7 @@
 /**
  * Markdown and LaTeX Editor
  *
- * (c) Roman Parpalak, 2016-2017
+ * (c) Roman Parpalak, 2016-2018
  */
 
 (function (document, window) {
@@ -419,7 +419,7 @@
 	}
 
 	documentReady(function () {
-		var eTextarea   = document.getElementsByClassName('source')[0],
+		var eTextarea   = document.getElementById('editor-source'),
 			eResultHtml = document.getElementsByClassName('result-html')[0];
 
 		var recalcHeight = debounce(function () {
@@ -430,7 +430,7 @@
 
 		var parserCollection = new ParserCollection(
 			defaults,
-			new ImageLoader(new ImagePreloader(), location.protocol == 'https:' ? 'https:' : 'http:'),
+			new ImageLoader(new ImagePreloader(), location.protocol === 'https:' ? 'https:' : 'http:'),
 			window.markdownit,
 			domSetResultView,
 			function domGetSource() {
@@ -476,7 +476,7 @@
 			}),
 			eNodeSource,
 			eResultHtml,
-			document.getElementById('container-block')
+			document.querySelector('[id^="container-block"]')
 		);
 
 		// Sync scroll listeners
