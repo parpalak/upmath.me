@@ -97,6 +97,13 @@ $formats = [
 			catch (e) {}
 			document.getElementById('editor-source').value = data || <?php echo json_encode(file_get_contents('sample.md'), JSON_UNESCAPED_UNICODE); ?>;
 		}());
+		if(/iPhone|iPad|iPod/i.test(navigator.userAgent)){
+			textareas = document.getElementsByTagName('textarea');
+			for(var i = 0; i < textareas.length; i++){
+				textareas[i].style['padding-left'] = '13px';
+				textareas[i].style['padding-right'] = '13px';
+			}
+		}
 	</script>
 <?php if (defined('USE_MINIFICATION') && USE_MINIFICATION): ?>
 	<script src="/dist/js/vendors.min.js?<?php include 'dist/js/vendors.min.js.md5'; ?>"></script>
