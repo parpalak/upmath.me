@@ -24,7 +24,7 @@ body {
 	position: relative;
 }
 body, textarea, button {
-	font: 16px/1.5 Calibri, "Trebuchet MS", sans-serif;
+	font: 16px/1.5 "Noto Serif", serif;
 }
 sup, sub {
 	vertical-align: baseline;
@@ -43,7 +43,7 @@ hr {
 	padding: 0;
 }
 h1, h2, h3 {
-	font: 16px/1.2 Cambria, Georgia, serif;
+	line-height: 1.2;
 	margin: 1em 0 0;
 	font-weight: normal;
 	}
@@ -167,7 +167,6 @@ div.header {
 		}
 	.half-width {
 		position: relative;
-		width: 50%;
 		width: calc(50% - 3px);
 		background-color: #fff;
 		}
@@ -256,6 +255,9 @@ textarea {
 	padding: 0;
 }
 
+body {
+	scrollbar-color: #c3986a #fce9d1;
+}
 ::-webkit-scrollbar {
 	width: 12px;
 	height: 12px;
@@ -336,8 +338,12 @@ textarea {
 	font-weight: bold;
 }
 
+.ldt textarea {
+	/* More opacity for browsers with no "-webkit-text-fill-color" support */
+	color: rgba(0,0,0,0.6) !important;
+}
 @media screen and (-webkit-min-device-pixel-ratio:0) {
-	/* Chrome hack for the caret color. */
+	/* Chrome hack for the caret color. Works also in FF. */
 	.ldt textarea {
 		color: #000 !important;
 		-webkit-text-fill-color: rgba(0, 0, 0, 0.2);
