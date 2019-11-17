@@ -224,6 +224,9 @@ textarea {
 	overflow: auto;
 	scrollbar-width: thin;
 }
+.ldt {
+	scrollbar-width: thin;
+}
 .result-src {
 	white-space: pre-wrap;
 }
