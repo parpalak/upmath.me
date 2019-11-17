@@ -564,6 +564,7 @@
 				resultBLock.style.width = 'calc(' + (100 - percent) + '% - 3px)';
 
 				scrollMap.reset();
+				recalcHeight();
 			}
 
 			eSlider.addEventListener('dblclick', function () {
