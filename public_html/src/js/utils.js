@@ -55,7 +55,7 @@ function findBisect(maxValue, values) {
 }
 
 /**
- * Count the number of occurances of a substring in a string
+ * Count the number of occurrences of a substring in a string
  *
  * @param substr
  * @param str
