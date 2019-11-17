@@ -248,7 +248,6 @@ textarea {
 	padding-bottom: 0;
 	}
 	.result-html .svg-preview {
-		overflow: visible;
 		-webkit-transition: opacity 0.4s ease-in-out;
 		-moz-transition: opacity 0.4s ease-in-out;
 		transition: opacity 0.4s ease-in-out;
