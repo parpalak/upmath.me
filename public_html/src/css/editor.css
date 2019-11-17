@@ -222,6 +222,7 @@ textarea {
 	padding: 16px 16px 16px 13px;
 	margin: 0;
 	overflow: auto;
+	scrollbar-width: thin;
 }
 .result-src {
 	white-space: pre-wrap;
