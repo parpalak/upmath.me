@@ -8,6 +8,9 @@
 
 @include '../config.php';
 
+header('Link: <//fonts.googleapis.com>; rel=preconnect');
+header('Link: <//tex.s2cms.ru>; rel=dns-prefetch');
+
 $formats = [
 	'html'    => ['preview', 'Example of rendered HTML'],
 	'src'     => ['html', 'HTML with img-equations'],
@@ -29,7 +32,7 @@ $formats = [
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="preconnect" href="//fonts.gstatic.com">
 	<link rel="shortcut icon" type="image/png" href="/favicon.png">
-	<link href="https://fonts.googleapis.com/css?family=Noto+Serif:400,400i,700,700i&amp;subset=cyrillic,greek" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css?family=Noto+Serif:400,400i,700,700i&amp;subset=cyrillic,greek" rel="stylesheet" media="none" onload="if(media!='all')media='all'">
 
 <?php if (defined('USE_MINIFICATION') && USE_MINIFICATION): ?>
 	<link rel="stylesheet" href="/dist/css/style.min.css?<?php include 'dist/css/style.min.css.md5'; ?>">
@@ -39,7 +42,6 @@ $formats = [
 	<link rel="stylesheet" href="/lib/highlight.js/solarized-light.css">
 <?php endif; ?>
 
-	<link rel="dns-prefetch" href="//tex.s2cms.ru">
 	<link rel="preconnect" href="//tex.s2cms.ru" crossorigin>
 	<link rel="prefetch" href="/i/latex.jpg" as=image>
 </head>
