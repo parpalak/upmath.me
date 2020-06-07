@@ -534,7 +534,7 @@ function ImageLoader(preloader, protocol) {
 	 * @returns {string}
 	 */
 	this.getHtmlStub = function (formula) {
-		curItems[n] = protocol + '//tex.s2cms.ru/svg/' + encodeURIComponent(formula);
+		curItems[n] = protocol + '//i.upmath.me/svg/' + encodeURIComponent(formula);
 
 		var html = '<span id="s2tex_' + n + '"></span>';
 

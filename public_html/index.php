@@ -9,7 +9,7 @@
 @include '../config.php';
 
 header('Link: <//fonts.googleapis.com>; rel=preconnect');
-header('Link: <//tex.s2cms.ru>; rel=dns-prefetch');
+header('Link: <//i.upmath.me>; rel=dns-prefetch');
 
 $formats = [
 	'html'    => ['preview', 'Example of rendered HTML'],
@@ -42,7 +42,7 @@ $formats = [
 	<link rel="stylesheet" href="/lib/highlight.js/solarized-light.css">
 <?php endif; ?>
 
-	<link rel="preconnect" href="//tex.s2cms.ru" crossorigin>
+	<link rel="preconnect" href="//i.upmath.me" crossorigin>
 	<link rel="prefetch" href="/i/latex.jpg" as=image>
 </head>
 

@@ -234,7 +234,7 @@
 		 * Habrahabr hack for numerating formulas
 		 */
 		_mdHtmlHabrAndImages.renderer.rules.math_number = function (tokens, idx) {
-			return '<img align="right" src="//tex.s2cms.ru/svg/' + tokens[idx].content + '" />';
+			return '<img align="right" src="//i.upmath.me/svg/' + tokens[idx].content + '" />';
 		};
 
 		/**
@@ -302,7 +302,7 @@
 				imageLoader.fixDom();
 			}
 			else if (_view === 'htmltex') {
-				domSetHighlightedContent('result-src-content', '<script src="https://tex.s2cms.ru/latex.js"></script>\n' + _mdHtmlAndTex.render(source), 'html');
+				domSetHighlightedContent('result-src-content', '<script src="https://i.upmath.me/latex.js"></script>\n' + _mdHtmlAndTex.render(source), 'html');
 			}
 			else if (_view === 'debug') {
 				domSetHighlightedContent(
@@ -332,7 +332,7 @@
 			}
 
 			if (_view === 'htmltex') {
-				return '<script src="https://tex.s2cms.ru/latex.js"></script>\n' + _mdHtmlAndTex.render(source);
+				return '<script src="https://i.upmath.me/latex.js"></script>\n' + _mdHtmlAndTex.render(source);
 			}
 
 			if (_view === 'md') {
