@@ -230,6 +230,11 @@
 			return imageLoader.getHtmlStub(tokens[idx].content);
 		};
 
+		// no conversion required due to latex.js
+		_mdHtmlAndTex.renderer.rules.math_number = function (tokens, idx) {
+			return tokens[idx].content;
+		};
+
 		/**
 		 * Habrahabr hack for numerating formulas
 		 */

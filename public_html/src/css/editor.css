@@ -252,6 +252,17 @@ textarea {
 		-moz-transition: opacity 0.4s ease-in-out;
 		transition: opacity 0.4s ease-in-out;
 		}
+	.result-html p.line[align="center"] {
+		display: flex;
+		align-items: center;
+		flex-wrap: wrap;
+		}
+		.result-html p.line[align="center"] span {
+			margin: 0 0 0 auto;
+			}
+		.result-html p.line[align="center"] .svg-preview {
+			flex-grow: 1;
+			}
 
 .hljs {
 	background: none;

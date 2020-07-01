@@ -122,12 +122,6 @@
 				}
 			}
 
-			if (m) {
-				token = state.push('math_number', 'tex-number', 0);
-				token.content = m[1];
-				token.markup = '()';
-			}
-
 			state.posMax = state.pos;
 			state.pos = start + close.length;
 
@@ -138,6 +132,12 @@
 
 			state.pos = m ? max : state.posMax + close.length;
 			state.posMax = max;
+
+			if (m) {
+				token = state.push('math_number', 'tex-number', 0);
+				token.content = m[1];
+				token.markup = '()';
+			}
 
 			return true;
 		};
