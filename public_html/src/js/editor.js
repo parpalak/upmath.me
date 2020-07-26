@@ -130,7 +130,6 @@
 			// Hack (maybe it is better to use block renderers?)
 			if (hasBlockFormula(tokens, idx + 1)) {
 				tokens[idx].attrPush(['align', 'center']);
-				tokens[idx].attrPush(['style', 'text-align: center;']);
 			}
 
 			return self.renderToken(tokens, idx, options, env, self);
@@ -163,7 +162,6 @@
 			// Hack (maybe it is better to use block renderers?)
 			if (hasBlockFormula(tokens, idx + 1)) {
 				tokens[idx].attrPush(['align', 'center']);
-				tokens[idx].attrPush(['style', 'text-align: center;']);
 			}
 			return self.renderToken(tokens, idx, options, env, self);
 		}

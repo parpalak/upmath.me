@@ -6,11 +6,41 @@
 	width: device-width;
 }
 
-html,
-body,
-.full-height {
-	height: 100%;
+@media screen {
+	html,
+	body,
+	.full-height {
+		height: 100%;
+	}
+
+	.container {
+		padding-top: 48px;
+		overflow: hidden;
+		white-space: nowrap;
+		}
+		.half-width, .slider {
+			display: inline-block;
+			vertical-align: top;
+			white-space: normal;
+			}
+		.half-width {
+			position: relative;
+			width: calc(50% - 3px);
+			background-color: #fff;
+			}
+		.slider {
+			width: 6px;
+			cursor: ew-resize;
+			background: radial-gradient(rgba(0, 0, 0, 0.1) 21%, transparent 22%) 3px 3px,
+		radial-gradient(rgba(0, 0, 0, 0.1) 21%, transparent 22%) 0 0;
+			background-size: 6px 6px;
+			/* Disabling draggability */
+			left: 0 !important;
+			top: 0 !important;
+			transform: none !important;
+			}
 }
+
 * {
 	-webkit-box-sizing: border-box;
 	-moz-box-sizing: border-box;
@@ -155,33 +185,6 @@ div.header {
 	}
 }
 
-.container {
-	padding-top: 48px;
-	overflow: hidden;
-	white-space: nowrap;
-	}
-	.half-width, .slider {
-		display: inline-block;
-		vertical-align: top;
-		white-space: normal;
-		}
-	.half-width {
-		position: relative;
-		width: calc(50% - 3px);
-		background-color: #fff;
-		}
-	.slider {
-		width: 6px;
-		cursor: ew-resize;
-		background: radial-gradient(rgba(0, 0, 0, 0.1) 21%, transparent 22%) 3px 3px,
-	radial-gradient(rgba(0, 0, 0, 0.1) 21%, transparent 22%) 0 0;
-		background-size: 6px 6px;
-		/* Disabling draggability */
-		left: 0 !important;
-		top: 0 !important;
-		transform: none !important;
-	}
-
 .opt__strict .not-strict {
 	opacity: 0.3;
 }
@@ -251,8 +254,12 @@ textarea {
 		-webkit-transition: opacity 0.4s ease-in-out;
 		-moz-transition: opacity 0.4s ease-in-out;
 		transition: opacity 0.4s ease-in-out;
+		break-inside: avoid;
 		}
 	.result-html p.line[align="center"] {
+		text-align: center;
+		break-inside: avoid;
+		break-before: avoid;
 		display: flex;
 		align-items: center;
 		flex-wrap: wrap;
@@ -263,6 +270,25 @@ textarea {
 		.result-html p.line[align="center"] .svg-preview {
 			flex-grow: 1;
 			}
+
+@media print {
+	.result-html {
+		padding: 0;
+	}
+	.source, .ldt pre.ldt-pre, .ldt textarea {
+		display: none;
+	}
+	div.header {
+		display: none;
+	}
+	body:after {
+		margin-top: 0.25em;
+		border-top: #ddd 1px dotted;
+		font-size: 0.75em;
+		display: block;
+		content: "Created in Upmath.me";
+	}
+}
 
 .hljs {
 	background: none;
