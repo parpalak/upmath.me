@@ -113,13 +113,20 @@ module.exports = function(grunt) {
 			}
 		},
 		watch: {
-			//scripts: {
-			//	files: ['www/js/*.js', 'www/css/*.css'],
-			//	tasks: ['concat', 'uglify', 'fingerprint'],
-			//	options: {
-			//		spawn: false
-			//	}
-			//}
+			scripts: {
+				files: ['public_html/src/js/*.js'],
+				tasks: ['concat', 'uglify', 'copy', 'fingerprint', 'shell'],
+				options: {
+					spawn: false
+				}
+			},
+			styles: {
+				files: ['public_html/src/css/*.css'],
+				tasks: ['copy', 'imageEmbed', 'cssmin', 'fingerprint', 'shell'],
+				options: {
+					spawn: false
+				}
+			}
 		}
 	});
 
