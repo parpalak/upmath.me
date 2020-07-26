@@ -382,20 +382,9 @@ body {
 }
 
 .ldt textarea {
-	/* More opacity for browsers with no "-webkit-text-fill-color" support */
-	color: rgba(0,0,0,0.6) !important;
-}
-@media screen and (-webkit-min-device-pixel-ratio:0) {
-	/* Chrome hack for the caret color. Works also in FF. */
-	.ldt textarea {
-		color: #000 !important;
-		-webkit-text-fill-color: rgba(0, 0, 0, 0.2);
-	}
-
-	.ldt textarea::-webkit-input-placeholder {
-		text-shadow: none;
-		-webkit-text-fill-color: initial;
-	}
+	caret-color: #000;
+	/* Some opacity for old browsers and debugging sync problems of textarea and underlying highlighted text. */
+	color: rgba(0,0,0,0.1) !important;
 }
 
 @media screen and (max-width: 950px) {
