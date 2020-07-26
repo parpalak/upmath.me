@@ -23,11 +23,11 @@ Among Markdown features are:
   1. and ordered lists too;
 * direct use <nobr>of HTML</nobr>&ndash;for <span style="color: red">anything else</span>. 
 
-Also the editor supports typographic replacements: (c) (r) (tm) (p) +- !!!!!! ???? ,,  -- ---
+In addition, Upmath supports typographic replacements: (c) (r) (tm) (p) +- !!!!!! ???? ,,  -- ---
 
 ## LaTeX
 
-The editor converts LaTeX equations in double-dollars `$$`: $$ax^2+bx+c=0$$. All equations are rendered as block equations. If you need inline ones, you can add the prefix `\inline`: $$\inline p={1\over q}$$. But it is a good practice to place big equations on separate lines:
+Upmath converts LaTeX equations in double-dollars `$$`: $$ax^2+bx+c=0$$. All equations are rendered as block equations. If you need inline ones, you can add the prefix `\inline`: $$\inline p={1\over q}$$. Place big equations on separate lines:
 
 $$x_{1,2} = {-b\pm\sqrt{b^2 - 4ac} \over 2a}.$$
 
@@ -107,7 +107,10 @@ and [the rest of LaTeX features](https://en.wikibooks.org/wiki/LaTeX/Mathematics
 
 ## About Upmath
 
-It works in browsers, except equations rendered [on the server](//tex.s2cms.com/). The editor stores your text in the browser to prevent the loss of your work in case of software or hardware failures.
+* Upmath works in browsers, except equations rendered [on the server](//i.upmath.me/).
+* Upmath stores your text in the browser to prevent the loss of your work in case of software or hardware failures.
+* You can copy or download the text and the code converted.
+* To print your documents just use the standard browser print dialog.
 
 I have designed and developed this lightweight editor and the service for converting LaTeX equations into svg-pictures to make publishing math texts on the web easy. I consider client-side rendering, the rival technique implemented in [MathJax](https://www.mathjax.org/), to be too limited and resource-consuming, especially on mobile devices.
 
