@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright (C) 2015-2019 Roman Parpalak
+ * @copyright (C) 2015-2020 Roman Parpalak
  * @license   http://www.opensource.org/licenses/mit-license.php MIT
  * @package   Markdown & LaTeX Editor
  * @link      https://upmath.me/
@@ -78,7 +78,7 @@ $formats = [
 			<button class="toolbar-button _download-result" title="Download result">⇓</button>
 		</div>
 		<div class="header-item copyright">
-			&copy; 2015–2019<br>
+			&copy; 2015–2020<br>
 			<a class="link" id="mailto-link" title="Drop me a line" href="#">Roman Parpalak</a>
 			<script>
 				document.getElementById('mailto-link').href = "mailto:roman%"+"40written.ru";
