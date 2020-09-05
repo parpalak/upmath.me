@@ -91,6 +91,27 @@ h1, h2, h3 {
 		font-size: 125%;
 		}
 
+body.e404 {
+	background: #c6b4aa;
+	color: #742600;
+}
+div.e404-body {
+	padding: 0 16px;
+	font-size: 2em;
+}
+.e404-text {
+	font-size: 10em;
+	line-height: 0.9;
+	margin: 0;
+}
+div.e404-header {
+	background: #742600;
+	color: #fff;
+	height: 48px;
+	display: flex;
+	align-items: center;
+	padding: 0 16px;
+}
 div.header {
 	background: #742600;
 	color: #fff;
@@ -407,6 +428,10 @@ body {
 		padding-left: 12px;
 		padding-right: 12px;
 		}
+
+	.e404-text {
+		font-size: 5em;
+	}
 
 	div.header {font-size: 14px;}
 	h1.title {
