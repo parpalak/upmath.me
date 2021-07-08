@@ -32,7 +32,7 @@ $formats = [
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="preconnect" href="//fonts.gstatic.com">
 	<link rel="shortcut icon" type="image/png" href="/favicon.png">
-	<link href="https://fonts.googleapis.com/css?family=Noto+Serif:400,400i,700,700i&amp;subset=cyrillic,greek" rel="stylesheet" media="none" onload="if(media!='all')media='all'">
+	<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,700;1,400;1,700&family=Ubuntu+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet" media="none" onload="if(media!='all')media='all'">
 
 <?php if (defined('USE_MINIFICATION') && USE_MINIFICATION): ?>
 	<link rel="stylesheet" href="/dist/css/style.min.css?<?php include 'dist/css/style.min.css.md5'; ?>">
@@ -42,6 +42,8 @@ $formats = [
 	<link rel="stylesheet" href="/lib/highlight.js/solarized-light.css">
 <?php endif; ?>
 
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 	<link rel="preconnect" href="//i.upmath.me" crossorigin>
 	<link rel="prefetch" href="/i/latex.jpg" as=image>
 </head>
