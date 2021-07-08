@@ -217,7 +217,7 @@ div.header {
 }
 
 .source, .ldt pre.ldt-pre, .ldt textarea {
-	font-family: Consolas, "Liberation Mono", "Ubuntu Mono", monospace; #-menlo, monaco
+	font-family: Consolas, "Liberation Mono", "Ubuntu Mono", monospace;
 	font-size: 14px;
 	line-height: 21px;
 }
