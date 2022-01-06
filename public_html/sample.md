@@ -122,4 +122,4 @@ Now you can erase this instruction and start writing your own scientific post. I
 
 Have a nice day :)
 
-[Roman Parpalak](https://written.ru/), web developer and UX expert.
+[Roman Parpalak](https://parpalak.com/), web developer and UX expert.

@@ -78,10 +78,10 @@ $formats = [
 			<button class="toolbar-button _download-result" title="Download result">⇓</button>
 		</div>
 		<div class="header-item copyright">
-			&copy; 2015–2020<br>
+			&copy; 2015–2022<br>
 			<a class="link" id="mailto-link" title="Drop me a line" href="#">Roman Parpalak</a>
 			<script>
-				document.getElementById('mailto-link').href = "mailto:roman%"+"40written.ru";
+				document.getElementById('mailto-link').href = "mailto:roman%"+"40parpalak.com";
 			</script>
 		</div>
 	</div>
