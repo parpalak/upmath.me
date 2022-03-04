@@ -217,7 +217,7 @@ div.header {
 }
 
 .source, .ldt pre.ldt-pre, .ldt textarea {
-	font-family: Monaco, Consolas, "Courier New", "Liberation Mono", "JetBrains Mono", monospace;
+	font-family: Monaco, Consolas, "Liberation Mono", "JetBrains Mono", monospace;
 	font-size: 14px;
 	line-height: 21px;
 }
