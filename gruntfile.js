@@ -14,7 +14,7 @@ module.exports = function(grunt) {
 					'bower_components/markdown-it-sub/dist/markdown-it-sub.min.js',
 					'bower_components/markdown-it-sup/dist/markdown-it-sup.min.js',
 					'bower_components/LDT/lib/TextareaDecorator.js',
-					'bower_components/file-saver.js/FileSaver.js',
+					'node_modules/file-saver/dist/FileSaver.min.js',
 					'bower_components/draggabilly/dist/draggabilly.pkgd.min.js',
 					'public_html/lib/highlight.js/highlight.pack.js'
 				],
@@ -38,7 +38,7 @@ module.exports = function(grunt) {
 						// for non-minified version
 						expand: true,
 						src: [
-							'bower_components/file-saver.js/FileSaver.js',
+							'node_modules/file-saver/dist/FileSaver.min.js',
 							'bower_components/markdown-it/dist/markdown-it.min.js',
 							'bower_components/markdown-it-sub/dist/markdown-it-sub.min.js',
 							'bower_components/markdown-it-sup/dist/markdown-it-sup.min.js',
@@ -68,14 +68,15 @@ module.exports = function(grunt) {
 				]
 			}
 		},
-		imageEmbed: {
+		dataUri: {
 			main: {
 				src: [
 					'public_html/src/css/editor.css'
 				],
-				dest: "public_html/dist/css/editor.css",
+				dest: "public_html/dist/css/",
 				options: {
-					deleteAfterEncoding: false,
+					target: ['*/i/*.*'],
+					maxBytes : 5000,
 				}
 			}
 		},
@@ -84,7 +85,7 @@ module.exports = function(grunt) {
 				src: [
 					'bower_components/LDT/lib/TextareaDecorator.css',
 					'public_html/lib/highlight.js/solarized-light.css',
-					'<%= imageEmbed.main.dest %>'
+					'<%= dataUri.main.dest %>/editor.css'
 				],
 				dest: 'public_html/dist/css/style.min.css'
 			}
@@ -122,7 +123,7 @@ module.exports = function(grunt) {
 			},
 			styles: {
 				files: ['public_html/src/css/*.css'],
-				tasks: ['copy', 'imageEmbed', 'cssmin', 'fingerprint', 'shell'],
+				tasks: ['copy', 'dataUri', 'cssmin', 'fingerprint', 'shell'],
 				options: {
 					spawn: false
 				}
@@ -137,13 +138,13 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks('grunt-fingerprint');
 	grunt.loadNpmTasks('grunt-shell');
 	grunt.loadNpmTasks('grunt-contrib-watch');
-	grunt.loadNpmTasks("grunt-image-embed");
+	grunt.loadNpmTasks('grunt-data-uri-advanced');
 
 	grunt.registerTask('default', [
 		'concat',
 		'uglify',
 		'copy',
-		'imageEmbed',
+		'dataUri',
 		'cssmin',
 		'shell',
 		'fingerprint'

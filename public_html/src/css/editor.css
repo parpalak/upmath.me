@@ -6,6 +6,62 @@
 	width: device-width;
 }
 
+/* noto-serif-regular - latin_cyrillic */
+@font-face {
+	font-family: 'Noto Serif';
+	font-style: normal;
+	font-weight: 400;
+	src: local(''),
+	url('/fonts/noto-serif-v21-latin_cyrillic-regular.woff2') format('woff2'), /* Chrome 26+, Opera 23+, Firefox 39+ */
+	url('/fonts/noto-serif-v21-latin_cyrillic-regular.woff') format('woff'); /* Chrome 6+, Firefox 3.6+, IE 9+, Safari 5.1+ */
+}
+/* noto-serif-italic - latin_cyrillic */
+@font-face {
+	font-family: 'Noto Serif';
+	font-style: italic;
+	font-weight: 400;
+	src: local(''),
+	url('/fonts/noto-serif-v21-latin_cyrillic-italic.woff2') format('woff2'), /* Chrome 26+, Opera 23+, Firefox 39+ */
+	url('/fonts/noto-serif-v21-latin_cyrillic-italic.woff') format('woff'); /* Chrome 6+, Firefox 3.6+, IE 9+, Safari 5.1+ */
+}
+/* noto-serif-700 - latin_cyrillic */
+@font-face {
+	font-family: 'Noto Serif';
+	font-style: normal;
+	font-weight: 700;
+	src: local(''),
+	url('/fonts/noto-serif-v21-latin_cyrillic-700.woff2') format('woff2'), /* Chrome 26+, Opera 23+, Firefox 39+ */
+	url('/fonts/noto-serif-v21-latin_cyrillic-700.woff') format('woff'); /* Chrome 6+, Firefox 3.6+, IE 9+, Safari 5.1+ */
+}
+/* noto-serif-700italic - latin_cyrillic */
+@font-face {
+	font-family: 'Noto Serif';
+	font-style: italic;
+	font-weight: 700;
+	src: local(''),
+	url('/fonts/noto-serif-v21-latin_cyrillic-700italic.woff2') format('woff2'), /* Chrome 26+, Opera 23+, Firefox 39+ */
+	url('/fonts/noto-serif-v21-latin_cyrillic-700italic.woff') format('woff'); /* Chrome 6+, Firefox 3.6+, IE 9+, Safari 5.1+ */
+}
+
+/* jetbrains-mono-regular - latin_cyrillic */
+@font-face {
+	font-family: 'JetBrains Mono';
+	font-style: normal;
+	font-weight: 400;
+	src: local(''),
+	url('/fonts/jetbrains-mono-v13-latin_cyrillic-regular.woff2') format('woff2'), /* Chrome 26+, Opera 23+, Firefox 39+ */
+	url('/fonts/jetbrains-mono-v13-latin_cyrillic-regular.woff') format('woff'); /* Chrome 6+, Firefox 3.6+, IE 9+, Safari 5.1+ */
+}
+/* jetbrains-mono-700 - latin_cyrillic */
+@font-face {
+	font-family: 'JetBrains Mono';
+	font-style: normal;
+	font-weight: 700;
+	src: local(''),
+	url('/fonts/jetbrains-mono-v13-latin_cyrillic-700.woff2') format('woff2'), /* Chrome 26+, Opera 23+, Firefox 39+ */
+	url('/fonts/jetbrains-mono-v13-latin_cyrillic-700.woff') format('woff'); /* Chrome 6+, Firefox 3.6+, IE 9+, Safari 5.1+ */
+}
+
 @media screen {
 	html,
 	body,

@@ -8,7 +8,6 @@
 
 @include '../config.php';
 
-header('Link: <//fonts.googleapis.com>; rel=preconnect');
 header('Link: <//i.upmath.me>; rel=dns-prefetch');
 
 $formats = [
@@ -32,7 +31,6 @@ $formats = [
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="preconnect" href="//fonts.gstatic.com" crossorigin>
 	<link rel="shortcut icon" type="image/png" href="/favicon.png">
-	<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Noto+Serif:ital,wght@0,400;0,700;1,400;1,700" rel="stylesheet" media="none" onload="if(media!='all')media='all'">
 
 <?php if (defined('USE_MINIFICATION') && USE_MINIFICATION): ?>
 	<link rel="stylesheet" href="/dist/css/style.min.css?<?php include 'dist/css/style.min.css.md5'; ?>">
@@ -116,7 +114,7 @@ $formats = [
 	<script src="/dist/js/markdown-it.min.js"></script>
 	<script src="/dist/js/markdown-it-sub.min.js"></script>
 	<script src="/dist/js/markdown-it-sup.min.js"></script>
-	<script src="/dist/js/FileSaver.js"></script>
+	<script src="/dist/js/FileSaver.min.js"></script>
 	<script src="/dist/js/draggabilly.pkgd.min.js"></script>
 	<script src="/dist/js/TextareaDecorator.js"></script>
 	<script src="/lib/highlight.js/highlight.pack.js"></script>

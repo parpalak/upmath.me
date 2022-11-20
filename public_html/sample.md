@@ -23,7 +23,7 @@ Among Markdown features are:
   1. and ordered lists too;
 * direct use <nobr>of HTML</nobr>&ndash;for <span style="color: red">anything else</span>. 
 
-In addition, Upmath supports typographic replacements: (c) (r) (tm) (p) +- !!!!!! ???? ,,  -- ---
+In addition, Upmath supports typographic replacements: (c) (r) (tm) +- !!!!!! ???? ,,  -- ---
 
 ## LaTeX
 
