@@ -1,7 +1,7 @@
 /**
  * Markdown and LaTeX Editor
  *
- * (c) Roman Parpalak, 2016-2018
+ * (c) Roman Parpalak, 2016-2024
  */
 
 (function (document, window) {
@@ -328,6 +328,10 @@
 		};
 
 		this.getDisplayedResult = function () {
+			if (_view === 'html') {
+				return domGetPreviewHTML();
+			}
+
 			var source = sourceGetter();
 
 			if (_view === 'habr') {
@@ -372,6 +376,10 @@
 	function domSetPreviewHTML(html) {
 		var result          = document.getElementsByClassName('result-html');
 		result[0].innerHTML = html;
+	}
+
+	function domGetPreviewHTML() {
+		return document.getElementsByClassName('result-html')[0].innerHTML;
 	}
 
 	/**
