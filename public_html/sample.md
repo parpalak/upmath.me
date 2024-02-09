@@ -1,7 +1,7 @@
 # Upmath: Math Online Editor
 ### _Create web articles and&nbsp;blog posts with&nbsp;equations and&nbsp;diagrams_
 
-Upmath extremely simplifies this task by using Markdown and LaTeX. It converts the Markdown syntax extended with LaTeX equations support into HTML code you can publish anywhere on the web.
+Upmath significantly simplifies this task by using Markdown and LaTeX. It converts Markdown syntax extended with LaTeX equations support into HTML code you can publish anywhere on the web.
 
 ![Paper written in LaTeX](/i/latex.jpg)
 
@@ -109,16 +109,16 @@ and [the rest of LaTeX features](https://en.wikibooks.org/wiki/LaTeX/Mathematics
 
 * Upmath works in browsers, except equations rendered [on the server](//i.upmath.me/).
 * Upmath stores your text in the browser to prevent the loss of your work in case of software or hardware failures.
-* You can copy or download the text and the code converted.
-* To print your documents just use the standard browser print dialog.
+* You can copy or download the text and the converted code.
+* To print or convert your documents to PDF, use the standard browser print dialog.
 
-I have designed and developed this lightweight editor and the service for converting LaTeX equations into svg-pictures to make publishing math texts on the web easy. I consider client-side rendering, the rival technique implemented in [MathJax](https://www.mathjax.org/), to be too limited and resource-consuming, especially on mobile devices.
+I have designed and developed this lightweight editor and the service for converting LaTeX equations into SVG pictures to make publishing mathematical  texts on the web easy. I consider client-side rendering, the rival technique implemented in [MathJax](https://www.mathjax.org/), to be too limited and resource-consuming, especially on mobile devices.
 
 The source code is [published on Github](https://github.com/parpalak/upmath.me) under MIT license.
 
 ***
 
-Now you can erase this instruction and start writing your own scientific post. If you want to see the instruction again, open the editor in a private tab, in a different browser or download and clear your post and refresh the page.
+Now you can erase this instruction and start writing your own scientific post. If you wish to see the instruction again, open the editor in a private tab, in a different browser or download and clear your post, then refresh the page.
 
 Have a nice day :)
 
