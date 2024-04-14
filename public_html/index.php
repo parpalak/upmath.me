@@ -46,59 +46,71 @@ $formats = [
 
 <body>
 	<div class="header">
-		<h1 class="header-item title">Markdown & LaTeX Editor</h1>
-		<div class="header-item open-control">
-			<input type="file" id="fileElem" style="display:none">
-			<button class="toolbar-button _upload-source" title="Upload a file">⇑</button>
-			<button class="toolbar-button _download-source" title="Download source">⇓</button>
+		<div class="header-item">
+			<div class="menu-container" tabindex="2">
+				<input type="file" id="fileElem" style="display:none">
+			</div>
+			<h1 class="title">Markdown & LaTeX Editor</h1>
+			<div id="storage-warning">
+				Cannot save this text to browser local storage.<br>It will be lost on page refresh.
+			</div>
 		</div>
-		<div class="header-item demo-control">
-			<?php
+		<div class="header-item header-item-right">
+			<div class="demo-control">
+				<?php
 
-			$selected = true;
+				$selected = true;
 
-			foreach ($formats as $class => [$name, $title]) {
-				?><input
-						class="control-input"
-						id="id_<?php echo $class; ?>"
-						type="radio"
-						name="source_type"
-					<?php $selected ? print 'checked="checked"' : null; ?>
-				><label
-					class="control-item"
-					for="id_<?php echo $class; ?>"
-					title="<?php echo htmlspecialchars($title); ?>"
-					data-result-as="<?php echo $class; ?>"
-				><?php echo $name; ?></label><?php
-				$selected = false;
-			}
-			?>
-			<button class="toolbar-button _download-result" title="Download result">⇓</button>
-		</div>
-		<div class="header-item copyright">
-			&copy; 2015–2024<br>
-			<a class="link" id="mailto-link" title="Drop me a line" href="#">Roman Parpalak</a>
-			<script>
-				document.getElementById('mailto-link').href = "mailto:roman%"+"40parpalak.com";
-			</script>
+				foreach ($formats as $class => [$name, $title]) {
+					?><input
+							class="control-input"
+							id="id_<?php echo $class; ?>"
+							type="radio"
+							name="source_type"
+						<?php $selected ? print 'checked="checked"' : null; ?>
+					><label
+						class="control-item"
+						for="id_<?php echo $class; ?>"
+						title="<?php echo htmlspecialchars($title); ?>"
+						data-result-as="<?php echo $class; ?>"
+						tabindex="4"
+					><?php echo $name; ?></label><?php
+					$selected = false;
+				}
+				?>
+				<button class="toolbar-button _download-result" title="Download result" tabindex="4">⇓</button>
+			</div>
+			<div class="copyright">
+				&copy; 2015–2024<br>
+				<a class="link" id="mailto-link" title="Drop me a line" href="#" tabindex="4">Roman Parpalak</a>
+				<script>
+					document.getElementById('mailto-link').href = "mailto:roman%"+"40parpalak.com";
+				</script>
+			</div>
 		</div>
 	</div>
 	<div class="container full-height" id="container-block"><!--
-		--><div class="half-width full-height source-wrap" id="source-block"><textarea id="editor-source" class="source full-height"></textarea></div><!--
+		--><div class="half-width full-height source-wrap" id="source-block"><textarea id="editor-source" class="source full-height" tabindex="1"></textarea></div><!--
 		--><div class="slider full-height" id="slider"></div><!--
 		--><div class="half-width full-height" id="result-block">
 			<div class="result-html full-height"></div>
 			<pre class="result-src full-height"><code class="result-src-content"></code></pre>
 		</div><!--
 	--></div>
+	<dialog id="versionsDialog">
+		<div class="version-list">
+			<h2 class="version-list-title">Recent versions</h2>
+			<div id="versionsList" class="version-list-items">
+			</div>
+		</div>
+		<div class="version-preview">
+			<div id="versionSelectedText"></div>
+			<button id="versionRestoreButton">Restore this version</button>
+			<button id="versionCloseButton">Close</button>
+		</div>
+	</dialog>
 	<script>
-		(function () {
-			try {
-				var data = localStorage.getItem("editor_content");
-			}
-			catch (e) {}
-			document.getElementById('editor-source').value = data || <?php echo json_encode(file_get_contents('sample.md'), JSON_UNESCAPED_UNICODE); ?>;
-		}());
+		instructionText = <?php echo json_encode(file_get_contents('sample.md'), JSON_UNESCAPED_UNICODE); ?>;
 		if(/iPhone|iPad|iPod/i.test(navigator.userAgent)){
 			textareas = document.getElementsByTagName('textarea');
 			for(var i = 0; i < textareas.length; i++){
@@ -123,6 +135,9 @@ $formats = [
 	<script src="/src/js/markdown-it-s2-tex.js"></script>
 	<script src="/src/js/parser.js"></script>
 	<script src="/src/js/editor.js"></script>
+	<script src="/src/js/menu.js"></script>
+	<script src="/src/js/document_storage.js"></script>
+	<script src="/src/js/history_manager.js"></script>
 <?php endif; ?>
 </body>
 </html>

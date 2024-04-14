@@ -1,3 +1,5 @@
+// noinspection ES6ConvertVarToLetConst
+
 /**
  * Markdown and LaTeX Editor
  *
@@ -8,20 +10,20 @@
 	'use strict';
 
 	var defaults = {
-		html:        true,         // Enable HTML tags in source
-		xhtmlOut:    false,        // Use '/' to close single tags (<br />)
-		breaks:      false,        // Convert '\n' in paragraphs into <br>
-		langPrefix:  'language-',  // CSS language prefix for fenced blocks
-		linkify:     true,         // autoconvert URL-like texts to links
+		html: true,         // Enable HTML tags in source
+		xhtmlOut: false,        // Use '/' to close single tags (<br />)
+		breaks: false,        // Convert '\n' in paragraphs into <br>
+		langPrefix: 'language-',  // CSS language prefix for fenced blocks
+		linkify: true,         // autoconvert URL-like texts to links
 		typographer: true,         // Enable smartypants and other sweet transforms
-		quotes:      '""\'\'',
+		quotes: '""\'\'',
 
 		// option for tex plugin
 		_habr: {protocol: ''},    // no protocol for habrahabr markup
 
 		// options below are for demo only
 		_highlight: true,
-		_strict:    false
+		_strict: false
 	};
 
 	function domSetResultView(val) {
@@ -36,16 +38,14 @@
 		].forEach(function (className) {
 			if (eNode.classList) {
 				eNode.classList.remove(className);
-			}
-			else {
+			} else {
 				eNode.className = eNode.className.replace(new RegExp('(^|\\b)' + className.split(' ').join('|') + '(\\b|$)', 'gi'), ' ');
 			}
 		});
 
 		if (eNode.classList) {
 			eNode.classList.add('result-as-' + val);
-		}
-		else {
+		} else {
 			eNode.className += ' ' + 'result-as-' + val;
 		}
 	}
@@ -169,8 +169,8 @@
 		_mdPreview.renderer.rules.paragraph_open = _mdPreview.renderer.rules.heading_open = injectLineNumbersAndCentering;
 		_mdHtmlAndImages.renderer.rules.paragraph_open = _mdHtmlAndImages.renderer.rules.heading_open = injectCentering;
 
-		_mdHtmlHabrAndImages.renderer.rules.heading_open    = habrHeading;
-		_mdHtmlHabrAndImages.renderer.rules.paragraph_open  = habrParagraphOpen;
+		_mdHtmlHabrAndImages.renderer.rules.heading_open = habrHeading;
+		_mdHtmlHabrAndImages.renderer.rules.paragraph_open = habrParagraphOpen;
 		_mdHtmlHabrAndImages.renderer.rules.paragraph_close = habrParagraphClose;
 
 		// A copy of Markdown-it original backticks parser.
@@ -180,13 +180,17 @@
 			var start, max, marker, matchStart, matchEnd, token,
 				pos = state.pos,
 				ch = state.src.charCodeAt(pos);
-			if (ch !== 0x60/* ` */) { return false; }
+			if (ch !== 0x60/* ` */) {
+				return false;
+			}
 
 			start = pos;
 			pos++;
 			max = state.posMax;
 
-			while (pos < max && state.src.charCodeAt(pos) === 0x60/* ` */) { pos++; }
+			while (pos < max && state.src.charCodeAt(pos) === 0x60/* ` */) {
+				pos++;
+			}
 
 			marker = state.src.slice(start, pos);
 
@@ -195,12 +199,14 @@
 			while ((matchStart = state.src.indexOf('`', matchEnd)) !== -1) {
 				matchEnd = matchStart + 1;
 
-				while (matchEnd < max && state.src.charCodeAt(matchEnd) === 0x60/* ` */) { matchEnd++; }
+				while (matchEnd < max && state.src.charCodeAt(matchEnd) === 0x60/* ` */) {
+					matchEnd++;
+				}
 
 				if (matchEnd - matchStart === marker.length) {
 					if (!silent) {
-						token         = state.push('backticks2_inline', 'code', 0); // <-- The change
-						token.markup  = marker;
+						token = state.push('backticks2_inline', 'code', 0); // <-- The change
+						token.markup = marker;
 						token.content = state.src.slice(pos, matchStart)
 					}
 					state.pos = matchEnd;
@@ -208,7 +214,9 @@
 				}
 			}
 
-			if (!silent) { state.pending += marker; }
+			if (!silent) {
+				state.pending += marker;
+			}
 			state.pos += marker.length;
 			return true;
 		});
@@ -251,8 +259,8 @@
 		 * @returns {string}
 		 */
 		_mdHtmlHabrAndImages.renderer.rules.fence = function (tokens, idx, options, env, self) {
-			var token    = tokens[idx],
-				info     = token.info ? _mdHtmlHabrAndImages.utils.unescapeAll(token.info).trim() : '',
+			var token = tokens[idx],
+				info = token.info ? _mdHtmlHabrAndImages.utils.unescapeAll(token.info).trim() : '',
 				langName = '',
 				highlighted;
 
@@ -287,7 +295,7 @@
 		};
 
 		var _oldSource = null,
-			_view      = 'html'; // html / src / debug
+			_view = 'html'; // html / src / debug
 
 		this.updateResult = function () {
 			var source = sourceGetter();
@@ -303,24 +311,19 @@
 				imageLoader.reset();
 				domSetPreviewHTML(_mdPreview.render(source));
 				imageLoader.fixDom();
-			}
-			else if (_view === 'htmltex') {
+			} else if (_view === 'htmltex') {
 				domSetHighlightedContent('result-src-content', '<script src="https://i.upmath.me/latex.js"></script>\n' + _mdHtmlAndTex.render(source), 'html');
-			}
-			else if (_view === 'debug') {
+			} else if (_view === 'debug') {
 				domSetHighlightedContent(
 					'result-src-content',
 					JSON.stringify(_mdHtmlAndImages.parse(source, {references: {}}), null, 2),
 					'json'
 				);
-			}
-			else if (_view === 'habr') {
+			} else if (_view === 'habr') {
 				domSetHighlightedContent('result-src-content', getHabraMarkup(source), 'html');
-			}
-			else if (_view === 'md') {
+			} else if (_view === 'md') {
 				domSetHighlightedContent('result-src-content', _mdMdAndImages.renderInline(source), 'html');
-			}
-			else { /*_view === 'src'*/
+			} else { /*_view === 'src'*/
 				domSetHighlightedContent('result-src-content', _mdHtmlAndImages.render(source), 'html');
 			}
 
@@ -367,14 +370,13 @@
 		var eNode = document.getElementsByClassName(className)[0];
 		if (window.hljs) {
 			eNode.innerHTML = window.hljs.highlight(lang, content).value;
-		}
-		else {
+		} else {
 			eNode.textContent = content;
 		}
 	}
 
 	function domSetPreviewHTML(html) {
-		var result          = document.getElementsByClassName('result-html');
+		var result = document.getElementsByClassName('result-html');
 		result[0].innerHTML = html;
 	}
 
@@ -386,13 +388,13 @@
 	 * Searches start position for text blocks
 	 */
 	function domFindScrollMarks() {
-		var resElements      = document.querySelectorAll('.result-html .line'),
+		var resElements = document.querySelectorAll('.result-html .line'),
 			resElementHeight = [],
 			line,
-			mapSrc           = [0],
-			mapResult        = [0],
-			i                = 0,
-			len              = resElements.length;
+			mapSrc = [0],
+			mapResult = [0],
+			i = 0,
+			len = resElements.length;
 
 		for (; i < len; i++) {
 			line = parseInt(resElements[i].getAttribute('data-line'));
@@ -403,7 +405,7 @@
 
 		var srcElements = document.querySelectorAll('.ldt-pre .block-start');
 
-		len  = srcElements.length;
+		len = srcElements.length;
 		line = 0;
 
 		for (i = 0; i < len; i++) {
@@ -420,8 +422,8 @@
 		}
 
 		var srcScrollHeight = document.querySelector('.ldt-pre').scrollHeight,
-			lastSrcElemPos  = mapSrc[mapSrc.length - 1],
-			allowedHeight   = 5; // workaround for automatic textarea scrolling on entering new source lines
+			lastSrcElemPos = mapSrc[mapSrc.length - 1],
+			allowedHeight = 5; // workaround for automatic textarea scrolling on entering new source lines
 
 		mapSrc.push(srcScrollHeight - allowedHeight > lastSrcElemPos ? srcScrollHeight - allowedHeight : lastSrcElemPos);
 		mapResult.push(document.querySelector('.result-html').scrollHeight);
@@ -430,8 +432,32 @@
 	}
 
 	documentReady(function () {
-		var eTextarea   = document.getElementById('editor-source'),
+		var eTextarea = document.getElementById('editor-source'),
 			eResultHtml = document.getElementsByClassName('result-html')[0];
+
+		var historyManager = new TextHistoryManager(2 * 1024 * 1024, 'file_history_', 300),
+			documentStorage = new DocumentStorage(3 * 1024 * 1024, 'file_storage_', function (id, text) {
+				historyManager.storeText(id, text);
+			}),
+			currentDocumentTracker = new CurrentDocumentTracker(
+				documentStorage,
+				'current_document_id',
+				function () {
+					document.getElementById('storage-warning').style.display = 'block';
+					},
+				function () {
+					document.getElementById('storage-warning').style.display = 'none';
+				}
+				),
+			content = '';
+
+		if (currentDocumentTracker.hasDocument()) {
+			content = currentDocumentTracker.getDocument();
+		} else {
+			content = window.localStorage.getItem("editor_content") || window.instructionText;
+			currentDocumentTracker.createDocument(content);
+		}
+		eTextarea.value = content;
 
 		var recalcHeight = debounce(function () {
 			decorator.recalcHeight()
@@ -458,9 +484,8 @@
 				scrollMap.reset();
 
 				try {
-					localStorage.setItem("editor_content", source);
-				}
-				catch (e) {
+					currentDocumentTracker.updateDocument(source);
+				} catch (e) {
 				}
 			}
 		);
@@ -529,20 +554,152 @@
 
 		// Interface element listeners
 
-		document.querySelector('._download-source').addEventListener('click', function () {
-			var blob = new Blob([parserCollection.getSource()], {type: 'text/markdown;charset=utf-8'});
-			saveAs(blob, 'source.md');
-		});
+		var mainMenu = new MainMenu([
+			{
+				label: "New",
+				action: function () {
+					currentDocumentTracker.createDocument('');
+					parserCollection.setSource('');
+				}
+			},
+			{
+				label: "⇑ Upload a file",
+				action: function () {
+					var eNode = document.getElementById('fileElem');
+					// Fire click on file input
+					(eNode.onclick || eNode.click || function () {
+					}).call(eNode);
+				}
+			},
+			{
+				label: "⇓ Download source",
+				action: function () {
+					var blob = new Blob([parserCollection.getSource()], {type: 'text/markdown;charset=utf-8'});
+					saveAs(blob, 'upmath.me.' + currentDocumentTracker.getCurrentDocumentId() + '.md');
+				}
+			},
+			{
+				label: "Open",
+				items: function () {
+					return documentStorage.getAllDocumentIds().reverse().map(id => {
+						var label = documentStorage.readDocument(id).replace(new RegExp('^[\\s#]+'), '').substring(0, 100);
+						return {
+							label: label === '' ? '[Untitled]' : label,
+							action: function () {
+								parserCollection.setSource(currentDocumentTracker.openDocument(id));
+							}
+						};
+					});
+				}
+			},
+			{
+				label: "Restore from history...",
+				action: function () {
+					var dialog = document.getElementById('versionsDialog');
+					var list = document.getElementById('versionsList');
+					list.innerHTML = '';
+
+					document.getElementById('versionSelectedText').innerHTML = 'No version selected';
+
+					var versions = historyManager.getAllVersions();
+					var selectedTimestamp = null;
+
+					versions.forEach(function (version) {
+						var eListItem = document.createElement('a');
+						eListItem.href = '#';
+						eListItem.classList.add('version-item');
+
+						var eTitle = document.createElement('span');
+						eTitle.classList.add('version-header');
+						eTitle.textContent = version.text.substring(0, 100) + (version.text.length > 100 ? '...' : '');
+						eListItem.appendChild(eTitle);
+
+						var eDate = document.createElement('span');
+						eDate.classList.add('version-date');
+						eDate.textContent = formatTimestamp(version.timestamp);
+						eListItem.appendChild(eDate);
+
+						eListItem.addEventListener('click', function () {
+							var eTextDisplay = document.getElementById('versionSelectedText');
+							selectedTimestamp = version.timestamp;
+							eTextDisplay.textContent = version.text;
+							document.querySelectorAll('a.version-item.selected').forEach(function (eA) {
+								eA.classList.remove('selected');
+							});
+							eListItem.classList.add('selected');
+
+							return false;
+						});
+						list.appendChild(eListItem);
+					});
+
+					dialog.showModal();
+
+					document.getElementById('versionCloseButton').onclick = function () {
+						dialog.close();
+					};
+
+					document.getElementById('versionRestoreButton').onclick = function () {
+						if (!selectedTimestamp) {
+							return;
+						}
+
+						versions.forEach(function (version) {
+							if (version.timestamp === selectedTimestamp) {
+								currentDocumentTracker.createDocument(version.text);
+								parserCollection.setSource(version.text);
+								dialog.close();
+							}
+						})
+					};
+				}
+			},
+			{
+				label: "Open instruction",
+				action: function () {
+					currentDocumentTracker.createDocument(instructionText);
+					parserCollection.setSource(instructionText);
+				}
+			},
+			{
+				label: "Delete",
+				action: function () {
+					var currentText = eTextarea.value;
+					if (
+						currentText.replace(/^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g, "") !== ''
+						&& !confirm('Are you sure you want to delete this document?')
+					) {
+						return;
+					}
+					historyManager.storeText(currentDocumentTracker.getCurrentDocumentId(), currentText, true);
+					parserCollection.setSource(currentDocumentTracker.deleteDocumentAndGetAnother());
+				}
+			},
+			{},
+			{
+				// label: "Print or save PDF <span class='shortcut'>Ctrl+P</span>",
+				label: "Print or save PDF",
+				action: function () {
+					window.print();
+				}
+			},
+			{
+				label: function () {
+					return document.fullscreenElement ? "Exit fullscreen" : "Enter fullscreen";
+				},
+				action: function () {
+					if (document.fullscreenElement) {
+						document.exitFullscreen();
+					} else {
+						document.documentElement.requestFullscreen();
+					}
+				}
+			}
+		], document.getElementsByClassName('menu-container')[0]);
 
 		document.querySelector('._download-result').addEventListener('click', function () {
 			var blob = new Blob([parserCollection.getDisplayedResult()], {type: 'text/html;charset=utf-8'});
 			saveAs(blob, parserCollection.getDisplayedResultFilename());
-		});
-
-		document.querySelector('._upload-source').addEventListener('click', function () {
-			var eNode = document.getElementById('fileElem');
-			// Fire click on file input
-			(eNode.onclick || eNode.click || function () {}).call(eNode);
 		});
 
 		document.getElementById('fileElem').addEventListener('change', function () {
@@ -551,10 +708,11 @@
 				return;
 			}
 
-			var reader    = new FileReader(),
+			var reader = new FileReader(),
 				fileInput = this;
 
 			reader.onload = function () {
+				currentDocumentTracker.createDocument(this.result);
 				parserCollection.setSource(this.result);
 				fileInput.value = fileInput.defaultValue;
 			};
@@ -562,8 +720,8 @@
 		});
 
 		(function () {
-			var eSlider     = document.querySelector('.slider'),
-				dragSlider  = new Draggabilly(eSlider, {
+			var eSlider = document.querySelector('.slider'),
+				dragSlider = new Draggabilly(eSlider, {
 					axis: 'x'
 				}),
 				sourceBlock = document.getElementById('source-block'),

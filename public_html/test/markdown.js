@@ -390,44 +390,55 @@ QUnit.test("Latex", function (assert) {
 		[
 			{
 				block: "latexBlock",
+				line : 0,
 				token: "$$"
 			},
 			{
 				block: "latexBlock",
+				line : 0,
 				token: "\nf"
 			},
 			{
 				block: "latexBlock",
+				line : 0,
 				token: "_x"
 			},
 			{
 				block: "latexBlock",
+				line : 0,
 				token: " = "
 			},
 			{
 				block: "latexBlock",
+				line : 0,
 				token: "%comment1"
 			},
 			{
 				block: "latexBlock",
+				line : 0,
 				token: "\nx"
 			},
 			{
 				block: "latexBlock",
+				line : 0,
 				token: "%comment2 "
 			},
 			{
 				block: "latexBlock",
+				line : 0,
 				token: "$$"
 			},
 			{
 				block: "latexBlock",
+				line : 0,
 				token: "\n"
 			},
 			{
 				block: "paragraph",
+				line : 3,
 				token: "(1)"
-			}		],
+			}
+		],
 		"Latex block 3"
 	);
 	assert.deepEqual(
@@ -435,82 +446,102 @@ QUnit.test("Latex", function (assert) {
 		[
 			{
 				block: "latexBlock",
+				line : 0,
 				token: "$$"
 			},
 			{
 				block: "latexBlock",
+				line : 0,
 				token: "P"
 			},
 			{
 				block: "latexBlock",
+				line : 0,
 				token: "_\\text{скр}"
 			},
 			{
 				block: "latexBlock",
+				line : 0,
 				token: "="
 			},
 			{
 				block: "latexBlock",
+				line : 0,
 				token: "{"
 			},
 			{
 				block: "latexBlock",
+				line : 0,
 				token: "IlEh"
 			},
 			{
 				block: "latexBlock",
+				line : 0,
 				token: "\\over"
 			},
 			{
 				block: "latexBlock",
+				line : 0,
 				token: " c"
 			},
 			{
 				block: "latexBlock",
+				line : 0,
 				token: "^2"
 			},
 			{
 				block: "latexBlock",
+				line : 0,
 				token: "}"
 			},
 			{
 				block: "latexBlock",
+				line : 0,
 				token: "="
 			},
 			{
 				block: "latexBlock",
+				line : 0,
 				token: "{"
 			},
 			{
 				block: "latexBlock",
+				line : 0,
 				token: "\\mu"
 			},
 			{
 				block: "latexBlock",
+				line : 0,
 				token: " E"
 			},
 			{
 				block: "latexBlock",
+				line : 0,
 				token: "\\over"
 			},
 			{
 				block: "latexBlock",
+				line : 0,
 				token: " c"
 			},
 			{
 				block: "latexBlock",
+				line : 0,
 				token: "^2"
 			},
 			{
 				block: "latexBlock",
+				line : 0,
 				token: "}"
 			},
 			{
 				block: "latexBlock",
+				line : 0,
 				token: ","
 			},
 			{
 				block: "latexBlock",
+				line : 0,
 				token: "$$"
 			}
 		],
@@ -521,6 +552,7 @@ QUnit.test("Latex", function (assert) {
 		[
 			{
 				block: "paragraph",
+				line : 0,
 				token: "$$f(x) = {dF\\$$"
 			}
 		],
@@ -531,22 +563,27 @@ QUnit.test("Latex", function (assert) {
 		[
 			{
 				block: "latexBlock",
+				line : 0,
 				token: "$$"
 			},
 			{
 				block: "latexBlock",
+				line : 0,
 				token: "3"
 			},
 			{
 				block: "latexBlock",
+				line : 0,
 				token: "$$"
 			},
 			{
 				block: "latexBlock",
+				line : 0,
 				token: " (4) \n"
 			},
 			{
 				block: "empty",
+				line : 0,
 				token: "\n"
 			}
 		],
@@ -556,81 +593,155 @@ QUnit.test("Latex", function (assert) {
 
 QUnit.test("Inline", function (assert) {
 	assert.deepEqual(mdParser.tokenize('a*b*'), [
-		{token: 'a', block: 'paragraph'},
-		{token: '*b*', block: 'paragraph'}
+		{
+			token: 'a',
+			line : 0,
+			block: 'paragraph'
+		},
+		{
+			token: '*b*',
+			line : 0,
+			block: 'paragraph'
+		}
 	], "Italic 2");
 	assert.deepEqual(mdParser.tokenize('**a** b c*t*'), [
-		{token: '**a**', block: 'paragraph'},
-		{token: ' b c',  block: 'paragraph'},
-		{token: '*t*',   block: 'paragraph'}
+		{
+			token: '**a**',
+			line: 0,
+			block: 'paragraph'
+		},
+		{
+			token: ' b c',
+			line: 0,
+			block: 'paragraph'
+		},
+		{
+			token: '*t*',
+			line: 0,
+			block: 'paragraph'
+		}
 	], "Mixed 1");
 	assert.deepEqual(mdParser.tokenize('one _thing_ has *em*phasis'),
 		[
 			{
 				block: "paragraph",
+				line : 0,
 				token: "one"
 			},
 			{
 				block: "paragraph",
+				line : 0,
 				token: " _thing_"
 			},
 			{
 				block: "paragraph",
+				line : 0,
 				token: " has "
 			},
 			{
 				block: "paragraph",
+				line : 0,
 				token: "*em*"
 			},
 			{
 				block: "paragraph",
+				line : 0,
 				token: "phasis"
 			}
 		], "Mixed 2");
 	assert.deepEqual(mdParser.tokenize('a^b^c'),[
-		{token: 'a',   block: 'paragraph'},
-		{token: '^b^', block: 'paragraph'},
-		{token: 'c',   block: 'paragraph'}
+		{
+			token: 'a',
+			line: 0,
+			block: 'paragraph'
+		},
+		{
+			token: '^b^',
+			line: 0,
+			block: 'paragraph'
+		},
+		{
+			token: 'c',
+			line: 0,
+			block: 'paragraph'
+		}
 	], "Superscript");
 	assert.deepEqual(mdParser.tokenize('a~b~c'), [
-		{token: 'a',   block: 'paragraph'},
-		{token: '~b~', block: 'paragraph'},
-		{token: 'c',   block: 'paragraph'}
+		{
+			token: 'a',
+			line: 0,
+			block: 'paragraph'
+		},
+		{
+			token: '~b~',
+			line: 0,
+			block: 'paragraph'
+		},
+		{
+			token: 'c',
+			line: 0,
+			block: 'paragraph'
+		}
 	], "Subscript");
 	assert.deepEqual(mdParser.tokenize('a~~bc~~'), [
-		{token: 'a',      block: 'paragraph'},
-		{token: '~~bc~~', block: 'paragraph'}
+		{
+			token: 'a',
+			line : 0,
+			block: 'paragraph'
+		},
+		{
+			token: '~~bc~~',
+			line : 0,
+			block: 'paragraph'
+		}
 	], "Strike");
 	assert.deepEqual(mdParser.tokenize('a$$bc$$'), [
-		{token: 'a',      block: 'paragraph'},
-		{token: '$$bc$$', block: 'paragraph'}
+		{
+			token: 'a',
+			line: 0,
+			block: 'paragraph'
+		},
+		{
+			token: '$$bc$$',
+			line: 0,
+			block: 'paragraph'
+		}
 	], "Latex");
 	assert.deepEqual(mdParser.tokenize('a$$bc\\$$'), [
-		{token: 'a$$bc\\$$', block: 'paragraph'}
+		{
+			token: 'a$$bc\\$$',
+			line : 0,
+			block: 'paragraph'
+		}
 	], "No latex");
 	assert.deepEqual(mdParser.tokenize('`1``2`'), [
 		{
 			block: "paragraph",
+			line : 0,
 			token: "`1``2`"
 		}
 	], "Code double");
 	assert.deepEqual(mdParser.tokenize('A* B*'), [
 		{
 			block: "paragraph",
+			line : 0,
 			token: "A* B*"
 		}
 	], "No italic");
 	assert.deepEqual(mdParser.tokenize('*T*.1 *A*'), [
 		{
 			block: "paragraph",
+			line : 0,
 			token: "*T*"
 		},
 		{
 			block: "paragraph",
+			line : 0,
 			token: ".1 "
 		},
 		{
 			block: "paragraph",
+			line : 0,
 			token: "*A*"
 		}
 	], "Double italic");

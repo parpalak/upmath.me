@@ -1,3 +1,5 @@
+// noinspection ES6ConvertVarToLetConst
+
 'use strict';
 
 /**
@@ -13,6 +15,38 @@ function documentReady(fn) {
 		document.addEventListener('DOMContentLoaded', fn);
 	}
 }
+
+/**
+ * Formats a timestamp into a human-readable string representation of the date and time.
+ *
+ * @param {number} timestamp - The timestamp to be formatted
+ * @return {string} The formatted date and time string
+ */
+function formatTimestamp(timestamp) {
+	var date = new Date(timestamp);
+	var now = new Date();
+	var diff = Math.abs(now - date) / 1000;
+
+	if (diff < 60) {
+		return 'Just now';
+	}
+	if (diff < 3600) {
+		var minutes = Math.floor(diff / 60);
+		return minutes === 1 ? '1 minute ago' : minutes + ' minutes ago';
+	}
+	if (diff < 86400) {
+		var hours = Math.floor(diff / 3600);
+		var remainingMinutes = Math.floor((diff % 3600) / 60);
+		if (remainingMinutes === 0) {
+			return hours === 1 ? '1 hour ago' : hours + ' hours ago';
+		} else {
+			return hours + (hours === 1 ? ' hour ' : ' hours ') + remainingMinutes + (remainingMinutes === 1 ? ' minute ago' : ' minutes ago');
+		}
+	}
+
+	return date.toLocaleDateString() + ' ' + date.toLocaleTimeString();
+}
+
 
 /**
  * Find the index of a maximum value in values array
@@ -52,6 +86,72 @@ function findBisect(maxValue, values) {
 	}
 
 	return {val: a, part: (maxValue - f_a) / (f_b - f_a)};
+}
+
+/**
+ * Constructor function for CurrentDocumentTracker.
+ * Wraps the documentStorage for using it in the editor.
+ *
+ * @param {Object} documentStorage - The document storage object.
+ * @param {string} currentDocumentKey - The key for the current document.
+ * @param {function} showStorageWarning - The function to show a storage warning.
+ * @param {function} hideStorageWarning - The function to hide a storage warning.
+ */
+function CurrentDocumentTracker	(documentStorage, currentDocumentKey, showStorageWarning, hideStorageWarning) {
+	this._documentStorage = documentStorage;
+	this._showStorageWarning = showStorageWarning;
+	this._hideStorageWarning = hideStorageWarning;
+	this._currentDocumentKey = currentDocumentKey;
+	this._currentDocumentId = localStorage.getItem(this._currentDocumentKey);
+
+	this.getCurrentDocumentId = function () {
+		return this._currentDocumentId;
+	};
+	this.hasDocument = function () {
+		return this._currentDocumentId !== null;
+	};
+	this.getDocument = function () {
+		return this._documentStorage.readDocument(this._currentDocumentId);
+	};
+	this.createDocument = function (content) {
+		this._currentDocumentId = documentStorage.createNewDocument(content);
+		if (this._currentDocumentId === null) {
+			this._showStorageWarning();
+		} else {
+			this._hideStorageWarning();
+			window.localStorage.setItem(this._currentDocumentKey, this._currentDocumentId);
+		}
+	};
+	this.updateDocument = function (content) {
+		if (this._currentDocumentId === null) {
+			this.createDocument(content);
+			return;
+		}
+
+		if (!this._documentStorage.writeDocument(this._currentDocumentId, content)) {
+			this._showStorageWarning();
+		} else {
+			this._hideStorageWarning();
+		}
+	};
+	this.openDocument = function (id) {
+		this._currentDocumentId = id;
+		window.localStorage.setItem(this._currentDocumentKey, this._currentDocumentId);
+
+		return this._documentStorage.readDocument(id);
+	}
+	this.deleteDocumentAndGetAnother = function () {
+		this._documentStorage.deleteDocument(this._currentDocumentId);
+
+		var allDocumentIds = this._documentStorage.getAllDocumentIds();
+		if (allDocumentIds.length === 0) {
+			this.createDocument('');
+
+			return '';
+		}
+
+		return this.openDocument(allDocumentIds[allDocumentIds.length - 1])
+	};
 }
 
 /**
@@ -402,7 +502,7 @@ function ImageLoader(preloader, protocol) {
 		placeholderUrl = null;
 
 	/**
-	 * Find if user has edited only one formula formula.
+	 * Find if user has edited only one formula.
 	 */
 	function detectPlaceholderFormula() {
 		if (n == prevItems.length) {
