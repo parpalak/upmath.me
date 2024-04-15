@@ -394,6 +394,7 @@ textarea.source {
 	padding: 16px 16px 0;
 	width: 100%;
 }
+/* Styles to be applied before LDT initialization */
 textarea {
 	resize: none;
 	display: block;
@@ -566,7 +567,6 @@ body {
 }
 
 .ldt textarea {
-	caret-color: #000;
 	/* Some opacity for old browsers and debugging sync problems of textarea and underlying highlighted text. */
 	color: rgba(0,0,0,0.1) !important;
 }
