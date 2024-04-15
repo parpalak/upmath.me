@@ -10,9 +10,9 @@ module.exports = function(grunt) {
 			},
 			vendors: {
 				src: [
-					'bower_components/markdown-it/dist/markdown-it.min.js',
-					'bower_components/markdown-it-sub/dist/markdown-it-sub.min.js',
-					'bower_components/markdown-it-sup/dist/markdown-it-sup.min.js',
+					'node_modules/markdown-it/dist/markdown-it.min.js',
+					'node_modules/markdown-it-sub/dist/markdown-it-sub.min.js',
+					'node_modules/markdown-it-sup/dist/markdown-it-sup.min.js',
 					'bower_components/LDT/lib/TextareaDecorator.js',
 					'node_modules/file-saver/dist/FileSaver.min.js',
 					'bower_components/draggabilly/dist/draggabilly.pkgd.min.js',
@@ -39,9 +39,9 @@ module.exports = function(grunt) {
 						expand: true,
 						src: [
 							'node_modules/file-saver/dist/FileSaver.min.js',
-							'bower_components/markdown-it/dist/markdown-it.min.js',
-							'bower_components/markdown-it-sub/dist/markdown-it-sub.min.js',
-							'bower_components/markdown-it-sup/dist/markdown-it-sup.min.js',
+							'node_modules/markdown-it/dist/markdown-it.min.js',
+							'node_modules/markdown-it-sub/dist/markdown-it-sub.min.js',
+							'node_modules/markdown-it-sup/dist/markdown-it-sup.min.js',
 							'bower_components/draggabilly/dist/draggabilly.pkgd.min.js'
 						],
 						dest: 'public_html/dist/js/',

@@ -22,6 +22,9 @@
   "author": "Roman Parpalak",
   "license": "MIT",
   "dependencies": {
-    "file-saver": "^2.0.5"
+    "file-saver": "^2.0.5",
+    "markdown-it": "^14.1.0",
+    "markdown-it-sub": "^2.0.0",
+    "markdown-it-sup": "^2.0.0"
   }
 }
