@@ -53,15 +53,16 @@ TextHistoryManager.prototype.storeText = function (id, newText, required) {
 			localStorageUsage = [],
 			totalLength = 0;
 
-		while (this.localStorage.getItem(newKey)) {
-			timestamp++;
-			newKey = this.localStoragePrefix + timestamp;
-		}
-
 		for (var i = this.localStorage.length; i--;) {
 			var storedKey = this.localStorage.key(i);
 			if (storedKey.startsWith(this.localStoragePrefix)) {
 				var storedSize = storedKey.length + this.localStorage.getItem(storedKey).length;
+
+				// keys should be strictly monotonically increasing
+				while (newKey <= storedKey) {
+					timestamp++;
+					newKey = this.localStoragePrefix + timestamp;
+				}
 
 				totalLength += storedSize;
 				localStorageUsage.push({key: storedKey, size: storedSize});
