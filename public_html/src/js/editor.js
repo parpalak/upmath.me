@@ -444,11 +444,11 @@
 				'current_document_id',
 				function () {
 					document.getElementById('storage-warning').style.display = 'block';
-					},
+				},
 				function () {
 					document.getElementById('storage-warning').style.display = 'none';
 				}
-				),
+			),
 			content = '';
 
 		if (currentDocumentTracker.hasDocument()) {
@@ -699,7 +699,12 @@
 			],
 			document.getElementsByClassName('menu-container')[0],
 			function () {
-				eTextarea.focus();
+				// Here is a strange behavour. Textarea is scrolled to the bottom on focus.
+				// It causes an early scrolling of the preview content without images loaded.
+				// This leads to a wrong ScrollMap content.
+				// setTimeout(function () {
+				// 	eTextarea.focus();
+				// }, 0);
 			}
 		);
 
