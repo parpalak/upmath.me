@@ -295,9 +295,9 @@ div.header {
 	h1.title {
 		position: relative;
 		margin: 0;
-		width: 139px;
 		height: 30px;
-		background: 0 50% no-repeat url(../../i/logo_.svg);
+		width: 239px;
+		background: 0 4px no-repeat url(../../i/logo_.svg), 100% 3px no-repeat url(../../i/sublogo2.svg);
 		text-indent: -9999em;
 		}
 	#storage-warning {
@@ -571,7 +571,7 @@ body {
 	color: rgba(0,0,0,0.1) !important;
 }
 
-@media screen and (max-width: 1200px) {
+@media screen and (max-width: 1490px) {
 	#storage-warning {
 		position: absolute;
 		background-color: rgba(116, 38, 0, 0.75);
@@ -593,6 +593,10 @@ body {
 
 @media screen and (max-width: 874px) {
 	div.header {font-size: 15px;}
+	h1.title {
+		width: 139px;
+		background: 0 4px no-repeat url(../../i/logo_.svg);
+	}
 }
 @media screen and (max-width: 639px) {
 	.ldt pre, .ldt textarea, textarea.source,
@@ -719,8 +723,8 @@ body {
 				display: block;
 				text-decoration: none;
 				color: currentColor;
-				padding: 5px 16px;
-				line-height: 1;
+				padding: 3px 16px;
+				line-height: 20px;
 				}
 				.version-list-items a.version-item.selected {
 					background: #b54711;
@@ -730,6 +734,9 @@ body {
 					}
 				.version-list-items .version-date {
 					font-size: 0.625em;
+					line-height: 1;
+					position: relative;
+					top: -3px;
 					}
 				.version-list-items .version-header {
 					overflow: hidden;
@@ -737,6 +744,8 @@ body {
 					white-space: nowrap;
 					max-width: 100%;
 					display: block;
+					position: relative;
+					top: 1px;
 					}
 	#versionRestoreButton, #versionCloseButton {
 		position: absolute;

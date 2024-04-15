@@ -554,148 +554,154 @@
 
 		// Interface element listeners
 
-		var mainMenu = new MainMenu([
-			{
-				label: "New",
-				action: function () {
-					currentDocumentTracker.createDocument('');
-					parserCollection.setSource('');
-				}
-			},
-			{
-				label: "⇑ Upload a file",
-				action: function () {
-					var eNode = document.getElementById('fileElem');
-					// Fire click on file input
-					(eNode.onclick || eNode.click || function () {
-					}).call(eNode);
-				}
-			},
-			{
-				label: "⇓ Download source",
-				action: function () {
-					var blob = new Blob([parserCollection.getSource()], {type: 'text/markdown;charset=utf-8'});
-					saveAs(blob, 'upmath.me.' + currentDocumentTracker.getCurrentDocumentId() + '.md');
-				}
-			},
-			{
-				label: "Open",
-				items: function () {
-					return documentStorage.getAllDocumentIds().reverse().map(id => {
-						var label = documentStorage.readDocument(id).replace(new RegExp('^[\\s#]+'), '').substring(0, 100);
-						return {
-							label: label === '' ? '[Untitled]' : label,
-							action: function () {
-								parserCollection.setSource(currentDocumentTracker.openDocument(id));
-							}
-						};
-					});
-				}
-			},
-			{
-				label: "Restore from history...",
-				action: function () {
-					var dialog = document.getElementById('versionsDialog');
-					var list = document.getElementById('versionsList');
-					list.innerHTML = '';
-
-					document.getElementById('versionSelectedText').innerHTML = 'No version selected';
-
-					var versions = historyManager.getAllVersions();
-					var selectedTimestamp = null;
-
-					versions.forEach(function (version) {
-						var eListItem = document.createElement('a');
-						eListItem.href = '#';
-						eListItem.classList.add('version-item');
-
-						var eTitle = document.createElement('span');
-						eTitle.classList.add('version-header');
-						eTitle.textContent = version.text.substring(0, 100) + (version.text.length > 100 ? '...' : '');
-						eListItem.appendChild(eTitle);
-
-						var eDate = document.createElement('span');
-						eDate.classList.add('version-date');
-						eDate.textContent = formatTimestamp(version.timestamp);
-						eListItem.appendChild(eDate);
-
-						eListItem.addEventListener('click', function () {
-							var eTextDisplay = document.getElementById('versionSelectedText');
-							selectedTimestamp = version.timestamp;
-							eTextDisplay.textContent = version.text;
-							document.querySelectorAll('a.version-item.selected').forEach(function (eA) {
-								eA.classList.remove('selected');
-							});
-							eListItem.classList.add('selected');
-
-							return false;
+		var mainMenu = new MainMenu(
+			[
+				{
+					label: "New",
+					action: function () {
+						currentDocumentTracker.createDocument('');
+						parserCollection.setSource('');
+					}
+				},
+				{
+					label: "⇑ Upload a file",
+					action: function () {
+						var eNode = document.getElementById('fileElem');
+						// Fire click on file input
+						(eNode.onclick || eNode.click || function () {
+						}).call(eNode);
+					}
+				},
+				{
+					label: "⇓ Download source",
+					action: function () {
+						var blob = new Blob([parserCollection.getSource()], {type: 'text/markdown;charset=utf-8'});
+						saveAs(blob, 'upmath.me.' + currentDocumentTracker.getCurrentDocumentId() + '.md');
+					}
+				},
+				{
+					label: "Open",
+					items: function () {
+						return documentStorage.getAllDocumentIds().reverse().map(id => {
+							var label = documentStorage.readDocument(id).replace(new RegExp('^[\\s#]+'), '').substring(0, 100);
+							return {
+								label: label === '' ? '[Untitled]' : label,
+								action: function () {
+									parserCollection.setSource(currentDocumentTracker.openDocument(id));
+								}
+							};
 						});
-						list.appendChild(eListItem);
-					});
+					}
+				},
+				{
+					label: "Restore from history...",
+					action: function () {
+						var dialog = document.getElementById('versionsDialog');
+						var list = document.getElementById('versionsList');
+						list.innerHTML = '';
 
-					dialog.showModal();
+						document.getElementById('versionSelectedText').innerHTML = 'No version selected';
 
-					document.getElementById('versionCloseButton').onclick = function () {
-						dialog.close();
-					};
-
-					document.getElementById('versionRestoreButton').onclick = function () {
-						if (!selectedTimestamp) {
-							return;
-						}
+						var versions = historyManager.getAllVersions();
+						var selectedTimestamp = null;
 
 						versions.forEach(function (version) {
-							if (version.timestamp === selectedTimestamp) {
-								currentDocumentTracker.createDocument(version.text);
-								parserCollection.setSource(version.text);
-								dialog.close();
+							var eListItem = document.createElement('a');
+							eListItem.href = '#';
+							eListItem.classList.add('version-item');
+
+							var eTitle = document.createElement('span');
+							eTitle.classList.add('version-header');
+							eTitle.textContent = version.text === '' ? '[Untitled]' : version.text.substring(0, 100) + (version.text.length > 100 ? '...' : '');
+							eListItem.appendChild(eTitle);
+
+							var eDate = document.createElement('span');
+							eDate.classList.add('version-date');
+							eDate.textContent = formatTimestamp(version.timestamp);
+							eListItem.appendChild(eDate);
+
+							eListItem.addEventListener('click', function () {
+								var eTextDisplay = document.getElementById('versionSelectedText');
+								selectedTimestamp = version.timestamp;
+								eTextDisplay.textContent = version.text;
+								document.querySelectorAll('a.version-item.selected').forEach(function (eA) {
+									eA.classList.remove('selected');
+								});
+								eListItem.classList.add('selected');
+
+								return false;
+							});
+							list.appendChild(eListItem);
+						});
+
+						dialog.showModal();
+
+						document.getElementById('versionCloseButton').onclick = function () {
+							dialog.close();
+						};
+
+						document.getElementById('versionRestoreButton').onclick = function () {
+							if (!selectedTimestamp) {
+								return;
 							}
-						})
-					};
-				}
-			},
-			{
-				label: "Open instruction",
-				action: function () {
-					currentDocumentTracker.createDocument(instructionText);
-					parserCollection.setSource(instructionText);
-				}
-			},
-			{
-				label: "Delete",
-				action: function () {
-					var currentText = eTextarea.value;
-					if (
-						currentText.replace(/^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g, "") !== ''
-						&& !confirm('Are you sure you want to delete this document?')
-					) {
-						return;
+
+							versions.forEach(function (version) {
+								if (version.timestamp === selectedTimestamp) {
+									currentDocumentTracker.createDocument(version.text);
+									parserCollection.setSource(version.text);
+									dialog.close();
+								}
+							})
+						};
 					}
-					historyManager.storeText(currentDocumentTracker.getCurrentDocumentId(), currentText, true);
-					parserCollection.setSource(currentDocumentTracker.deleteDocumentAndGetAnother());
-				}
-			},
-			{},
-			{
-				// label: "Print or save PDF <span class='shortcut'>Ctrl+P</span>",
-				label: "Print or save PDF",
-				action: function () {
-					window.print();
-				}
-			},
-			{
-				label: function () {
-					return document.fullscreenElement ? "Exit fullscreen" : "Enter fullscreen";
 				},
-				action: function () {
-					if (document.fullscreenElement) {
-						document.exitFullscreen();
-					} else {
-						document.documentElement.requestFullscreen();
+				{
+					label: "Open instruction",
+					action: function () {
+						currentDocumentTracker.createDocument(instructionText);
+						parserCollection.setSource(instructionText);
+					}
+				},
+				{
+					label: "Delete",
+					action: function () {
+						var currentText = eTextarea.value;
+						if (
+							currentText.replace(/^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g, "") !== ''
+							&& !confirm('Are you sure you want to delete this document?')
+						) {
+							return;
+						}
+						historyManager.storeText(currentDocumentTracker.getCurrentDocumentId(), currentText, true);
+						parserCollection.setSource(currentDocumentTracker.deleteDocumentAndGetAnother());
+					}
+				},
+				{},
+				{
+					// label: "Print or save PDF <span class='shortcut'>Ctrl+P</span>",
+					label: "Print or save PDF",
+					action: function () {
+						window.print();
+					}
+				},
+				{
+					label: function () {
+						return document.fullscreenElement ? "Exit fullscreen" : "Enter fullscreen";
+					},
+					action: function () {
+						if (document.fullscreenElement) {
+							document.exitFullscreen();
+						} else {
+							document.documentElement.requestFullscreen();
+						}
 					}
 				}
+			],
+			document.getElementsByClassName('menu-container')[0],
+			function () {
+				eTextarea.focus();
 			}
-		], document.getElementsByClassName('menu-container')[0]);
+		);
 
 		document.querySelector('._download-result').addEventListener('click', function () {
 			var blob = new Blob([parserCollection.getDisplayedResult()], {type: 'text/html;charset=utf-8'});

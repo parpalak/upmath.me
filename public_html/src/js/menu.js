@@ -6,7 +6,7 @@
  * (c) Roman Parpalak, 2024
  */
 
-function MainMenu(menuConfig, menuContainer) {
+function MainMenu(menuConfig, menuContainer, onClose) {
 
 	var escapeMenuListener = function (event) {
 		if (event.key === 'Escape') {
@@ -148,6 +148,7 @@ function MainMenu(menuConfig, menuContainer) {
 			a.onclick = function () {
 				action();
 				hideMenu();
+				onClose && onClose();
 			};
 			a.href = '#';
 		} else {
