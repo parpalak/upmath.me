@@ -27,7 +27,6 @@ function MainMenu(menuConfig, menuContainer, onClose) {
 	});
 
 	menuContainer.addEventListener('keydown', function (e) {
-		// Проверяем, была ли нажата клавиша Enter
 		if (e.target === this && (e.code === 'Space' || e.code === 'Enter')) {
 			toggleMenu();
 		}
@@ -149,6 +148,8 @@ function MainMenu(menuConfig, menuContainer, onClose) {
 				action();
 				hideMenu();
 				onClose && onClose();
+
+				return false;
 			};
 			a.href = '#';
 		} else {

@@ -104,7 +104,7 @@ body {
 body, textarea, button {
 	font: 16px/1.5 "Noto Serif", serif;
 }
-:focus {
+:focus-visible {
 	outline-offset: -2px;
 	outline: 2px solid #ff8b42;
 	box-shadow: 0 0 3px 1px #ff8b42;
@@ -196,7 +196,7 @@ div.header {
 		height: 16px;
 		display: inline-block;
 		}
-		.header a.link:focus {
+		.header a.link:focus-visible {
 			outline-offset: 0;
 			}
 	.menu-container {
@@ -209,11 +209,11 @@ div.header {
 		margin: 0 0 0 -16px;
 		background: 16px 50% no-repeat url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='20'%3E%3Cpath d='M0 1 h24 M0 10 h24 M0 19 h24' stroke='%23fff' stroke-width='2'/%3E%3C/svg%3E");
 		}
-		.menu-container:focus {
+		.menu-container:focus-visible {
 			outline: none;
 			box-shadow: none;
 			}
-			.menu-container:focus::after {
+			.menu-container:focus-visible::after {
 				content: '';
 				position: absolute;
 				top: 2px;
@@ -343,13 +343,13 @@ div.header {
 			cursor: hand;
 			position: relative;
 			}
-			.header .toolbar-button:focus,
-			.demo-control .control-item:focus {
+			.header .toolbar-button:focus-visible,
+			.demo-control .control-item:focus-visible {
 				outline: none;
 				box-shadow: none;
 				}
-				.header .toolbar-button:focus::after,
-				.demo-control .control-item:focus::after {
+				.header .toolbar-button:focus-visible::after,
+				.demo-control .control-item:focus-visible::after {
 					content: '';
 					position: absolute;
 					top: 0;
@@ -680,6 +680,7 @@ body {
 
 #versionsDialog[open]::backdrop {
 	background: rgba(71, 23, 0, 0.51);
+	backdrop-filter: blur(2px);
 }
 
 #versionsDialog[open] {

@@ -532,8 +532,8 @@
 		syncScroll.switchScrollToSrc();
 
 		Array.prototype.forEach.call(document.getElementsByClassName('control-item'), function (eNode, index) {
-			eNode.addEventListener('click', function () {
-				var view = this.getAttribute('data-result-as');
+			function clickHandler(e) {
+				var view = e.target.getAttribute('data-result-as');
 				if (!view) {
 					return;
 				}
@@ -549,7 +549,13 @@
 						}, 0);
 					}
 				}
-			})
+			}
+			eNode.addEventListener('click', clickHandler);
+			eNode.addEventListener('keydown', function (e) {
+				if (e.target === this && (e.code === 'Space' || e.code === 'Enter')) {
+					clickHandler(e);
+				}
+			});
 		});
 
 		// Interface element listeners
