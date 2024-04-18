@@ -13,9 +13,9 @@ module.exports = function(grunt) {
 					'node_modules/markdown-it/dist/markdown-it.min.js',
 					'node_modules/markdown-it-sub/dist/markdown-it-sub.min.js',
 					'node_modules/markdown-it-sup/dist/markdown-it-sup.min.js',
-					'bower_components/LDT/lib/TextareaDecorator.js',
+					'node_modules/LDT/lib/TextareaDecorator.js',
 					'node_modules/file-saver/dist/FileSaver.min.js',
-					'bower_components/draggabilly/dist/draggabilly.pkgd.min.js',
+					'node_modules/draggabilly/dist/draggabilly.pkgd.min.js',
 					'public_html/lib/highlight.js/highlight.pack.js'
 				],
 				dest: 'public_html/dist/js/vendors.js'
@@ -42,7 +42,7 @@ module.exports = function(grunt) {
 							'node_modules/markdown-it/dist/markdown-it.min.js',
 							'node_modules/markdown-it-sub/dist/markdown-it-sub.min.js',
 							'node_modules/markdown-it-sup/dist/markdown-it-sup.min.js',
-							'bower_components/draggabilly/dist/draggabilly.pkgd.min.js'
+							'node_modules/draggabilly/dist/draggabilly.pkgd.min.js'
 						],
 						dest: 'public_html/dist/js/',
 						filter: 'isFile',
@@ -51,7 +51,7 @@ module.exports = function(grunt) {
 					{
 						expand: true,
 						src: [
-							'bower_components/LDT/lib/TextareaDecorator.css'
+							'node_modules/LDT/lib/TextareaDecorator.css'
 						],
 						dest: 'public_html/dist/css/',
 						flatten: true
@@ -60,7 +60,7 @@ module.exports = function(grunt) {
 						// for non-minified version
 						expand: true,
 						src: [
-							'bower_components/LDT/lib/TextareaDecorator.js'
+							'node_modules/LDT/lib/TextareaDecorator.js'
 						],
 						dest: 'public_html/dist/js/',
 						flatten: true
@@ -83,7 +83,7 @@ module.exports = function(grunt) {
 		cssmin: {
 			main: {
 				src: [
-					'bower_components/LDT/lib/TextareaDecorator.css',
+					'node_modules/LDT/lib/TextareaDecorator.css',
 					'public_html/lib/highlight.js/solarized-light.css',
 					'<%= dataUri.main.dest %>/editor.css'
 				],
