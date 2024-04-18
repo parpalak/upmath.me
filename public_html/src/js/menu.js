@@ -63,7 +63,7 @@ function MainMenu(menuConfig, menuContainer, onClose) {
 		}
 
 		if (e.code === 'ArrowRight') {
-			if (menuContainer.contains(document.activeElement.parentNode) && document.activeElement.nextSibling ) {
+			if (menuContainer.contains(document.activeElement.parentNode) && document.activeElement.nextSibling) {
 				document.activeElement.nextSibling.firstChild.firstChild.focus();
 			}
 		}
@@ -152,6 +152,10 @@ function MainMenu(menuConfig, menuContainer, onClose) {
 				return false;
 			};
 			a.href = '#';
+		} else if (action === '#') {
+			a.onclick = function () {
+				return false;
+			};
 		} else {
 			a.href = action || '#';
 		}

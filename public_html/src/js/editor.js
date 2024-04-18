@@ -626,7 +626,7 @@
 							eDate.textContent = formatTimestamp(version.timestamp);
 							eListItem.appendChild(eDate);
 
-							eListItem.addEventListener('click', function () {
+							eListItem.addEventListener('click', function (e) {
 								var eTextDisplay = document.getElementById('versionSelectedText');
 								selectedTimestamp = version.timestamp;
 								eTextDisplay.textContent = version.text;
@@ -635,7 +635,7 @@
 								});
 								eListItem.classList.add('selected');
 
-								return false;
+								e.preventDefault();
 							});
 							list.appendChild(eListItem);
 						});
