@@ -7,6 +7,7 @@
  */
 
 function MainMenu(menuConfig, menuContainer, onClose) {
+	'use strict';
 
 	var escapeMenuListener = function (event) {
 		if (event.key === 'Escape') {
@@ -138,7 +139,7 @@ function MainMenu(menuConfig, menuContainer, onClose) {
 	var menu = document.createElement('ul');
 	menu.className = 'menu';
 
-	function makeLinkFromItem(label, action) {
+	function makeLinkFromItem(label, action, title) {
 		var a = document.createElement('a');
 		a.className = 'menu-link';
 		a.tabIndex = menuContainer.tabIndex;
@@ -168,6 +169,10 @@ function MainMenu(menuConfig, menuContainer, onClose) {
 			a.innerHTML = '&nbsp;';
 		}
 
+		if (typeof title === 'string') {
+			a.title = title;
+		}
+
 		return a;
 	}
 
@@ -189,7 +194,7 @@ function MainMenu(menuConfig, menuContainer, onClose) {
 					hideSubMenu(submenu);
 				};
 
-				var eA = makeLinkFromItem(item.label, '#');
+				var eA = makeLinkFromItem(item.label, '#', item.title);
 				eA.onmouseenter = eA.onfocus = function () {
 					showSubMenu(submenu);
 				};
@@ -205,7 +210,7 @@ function MainMenu(menuConfig, menuContainer, onClose) {
 						li.className = 'hr';
 					} else {
 						li.className = 'menu-item';
-						var eA = makeLinkFromItem(item.label, item.action);
+						var eA = makeLinkFromItem(item.label, item.action, item.title);
 						eA.onfocus = function () {
 							showSubMenu(submenu);
 						};
@@ -221,7 +226,7 @@ function MainMenu(menuConfig, menuContainer, onClose) {
 				li.appendChild(submenu);
 			} else {
 				li.className = 'menu-item';
-				li.appendChild(makeLinkFromItem(item.label, item.action));
+				li.appendChild(makeLinkFromItem(item.label, item.action, item.title));
 			}
 
 			menu.appendChild(li);

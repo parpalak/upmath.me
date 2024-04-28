@@ -127,37 +127,57 @@ hr {
 }
 h1, h2, h3 {
 	line-height: 1.2;
-	margin: 1em 0 0;
-	font-weight: normal;
+	margin: 1em 0 0.25em;
 	page-break-after: avoid;
 	break-after: avoid;
 	}
 	h1 {
 		margin: 0.5em 0 0.25em;
 		font-size: 225%;
+		font-weight: normal;
 		}
 	h2 {
-		margin: 1em 0 0.25em;
 		font-size: 175%;
+		font-weight: normal;
 		}
 	h3 {
 		font-size: 125%;
 		}
+p {
+	margin: 0 0 1em;
+}
 
 body.e404 {
 	background: #c6b4aa;
+	background: linear-gradient(to bottom, #cba693, #e3ccc1);
 	color: #742600;
+	contain: paint;
 }
 div.e404-body {
 	padding: 0 16px;
 	font-size: 2em;
 }
+div.whatsnew-body {
+	padding: 0 16px;
+	max-width: 750px;
+}
 .e404-text {
 	font-size: 10em;
 	line-height: 0.9;
-	margin: 0;
-}
-div.e404-header {
+	margin: 0 0 0.125em;
+	color: #fff;
+	}
+	.e404-text:before {
+		content: '404';
+		color: #00000013;
+		position: absolute;
+		filter: blur(10px);
+		transform: perspective(1000px) rotateX(286deg) translate(0px, -40px);
+		transform-origin: bottom;
+		z-index: -1;
+		}
+div.page-header, div.header {
+	font-family: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
 	background: #742600;
 	color: #fff;
 	height: 42px;
@@ -166,18 +186,11 @@ div.e404-header {
 	padding: 0 16px;
 }
 div.header {
-	font-family: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
-	background: #742600;
-	color: #fff;
-	padding: 0 16px;
 	margin: 0;
-	height: 42px;
 	position: absolute;
 	top: 0;
 	left: 0;
 	right: 0;
-	display: flex;
-	align-items: center;
 	justify-content: space-between;
 	z-index: 20;
 	}
@@ -189,14 +202,16 @@ div.header {
 		.header-item-right {
 			justify-content: space-between;
 			}
-	.header a.link {
+	.header a.link,
+	.page-header a.link {
 		color: #fff;
 		text-decoration: none;
 		border-bottom: thin solid rgba(255, 255, 255, 0.7);
 		height: 16px;
 		display: inline-block;
 		}
-		.header a.link:focus-visible {
+		.header a.link:focus-visible,
+		.page-header a.link:focus-visible {
 			outline-offset: 0;
 			}
 	.menu-container {
@@ -308,6 +323,7 @@ div.header {
 		padding: 0 5px 0 45px;
 		margin-left: 16px;
 		color: #ff0;
+		pointer-events: none;
 		}
 	.copyright {
 		line-height: 16px;

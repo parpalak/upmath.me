@@ -684,6 +684,12 @@
 				},
 				{},
 				{
+					label: "What's new",
+					action: '/whatsnew.php',
+					title: 'Last update on 2024-04-28'
+				},
+				{},
+				{
 					// label: "Print or save PDF <span class='shortcut'>Ctrl+P</span>",
 					label: "Print or save PDF",
 					action: function () {
@@ -692,7 +698,7 @@
 				},
 				{
 					label: function () {
-						return document.fullscreenElement ? "Exit fullscreen" : "Enter fullscreen";
+						return document.fullscreenElement ? "Exit full-screen" : "Enter full-screen";
 					},
 					action: function () {
 						if (document.fullscreenElement) {

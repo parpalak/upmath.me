@@ -107,10 +107,12 @@ and [the rest of LaTeX features](https://en.wikibooks.org/wiki/LaTeX/Mathematics
 
 ## About Upmath
 
-* Upmath works in browsers, except equations rendered [on the server](//i.upmath.me/).
+* Upmath works in browsers, except equations rendered [on the server](//i.upmath.me/). Markdown text is not sent anywhere, and attackers cannot intercept it.
 * Upmath stores your text in the browser to prevent the loss of your work in case of software or hardware failures.
-* You can copy or download the text and the converted code.
-* To print or convert your documents to PDF, use the standard browser print dialog.
+* You can create and switch between multiple documents via the "☰ &rarr; New" and "☰ &rarr; Open" menu.
+* Upmath occasionally saves intermediate versions of your texts. They can be restored via the "☰ &rarr; Restore from history" menu.
+* You can copy or download the text ("☰ &rarr; Download source") and the converted code ("⇓" button).
+* To print or convert your documents to PDF, use the standard browser print dialog or the "☰ &rarr; Print or save PDF" menu.
 
 I have designed and developed this lightweight editor and the service for converting LaTeX equations into SVG pictures to make publishing mathematical  texts on the web easy. I consider client-side rendering, the rival technique implemented in [MathJax](https://www.mathjax.org/), to be too limited and resource-consuming, especially on mobile devices.
 
@@ -118,7 +120,7 @@ The source code is [published on Github](https://github.com/parpalak/upmath.me) 
 
 ***
 
-Now you can erase this instruction and start writing your own scientific post. If you wish to see the instruction again, open the editor in a private tab, in a different browser or download and clear your post, then refresh the page.
+Now you can erase this instruction and start writing your own scientific post. If you wish to see the instruction again, use the "☰ &rarr; Open instruction" menu.
 
 Have a nice day :)
 

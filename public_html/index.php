@@ -21,15 +21,13 @@ $formats = [
 
 ?>
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 	<meta charset="UTF-8">
 	<title>Upmath: Markdown & LaTeX Online Editor</title>
-	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="keywords" content="LaTeX, Markdown, equations, markdown latex online editor, tikz, latex online">
 	<meta name="description" content="Upmath helps writing math texts for the web. It converts Markdown syntax to HTML, and LaTeX equations to SVG images.">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<link rel="preconnect" href="//fonts.gstatic.com" crossorigin>
 	<link rel="shortcut icon" type="image/png" href="/favicon.png">
 
 <?php if (defined('USE_MINIFICATION') && USE_MINIFICATION): ?>
