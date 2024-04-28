@@ -134,11 +134,9 @@ h1, h2, h3 {
 	h1 {
 		margin: 0.5em 0 0.25em;
 		font-size: 225%;
-		font-weight: normal;
 		}
 	h2 {
 		font-size: 175%;
-		font-weight: normal;
 		}
 	h3 {
 		font-size: 125%;
@@ -690,7 +688,7 @@ body {
 	}
 }
 
-#versionsDialog, #versionRestoreButton, #versionCloseButton {
+h1, h2, h3, #versionsDialog, #versionRestoreButton, #versionCloseButton {
 	font-family: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
 }
 
