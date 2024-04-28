@@ -1,5 +1,5 @@
 # Upmath: Math Online Editor
-### _Create web articles and&nbsp;blog posts with&nbsp;equations and&nbsp;diagrams_
+_Create web articles and&nbsp;blog posts with&nbsp;equations and&nbsp;diagrams_
 
 Upmath significantly simplifies this task by using Markdown and LaTeX. It converts Markdown syntax extended with LaTeX equations support into HTML code you can publish anywhere on the web.
 

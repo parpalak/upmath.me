@@ -1,9 +1,5 @@
 .idea
-config.php
-bower_components
 node_modules
-vendor
 public_html/dist
-public_html/yandex*.html
-public_html/google*.html
+public_html/*.html
 *logs*

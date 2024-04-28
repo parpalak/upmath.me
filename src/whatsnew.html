@@ -1,14 +1,3 @@
-<?php
-/**
- * @copyright (C) 2020-2024 Roman Parpalak
- * @license   http://www.opensource.org/licenses/mit-license.php MIT
- * @package   Markdown & LaTeX Editor
- * @link      https://upmath.me/
- */
-
-@include '../config.php';
-
-?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -16,13 +5,7 @@
     <title>Upmath: Markdown & LaTeX Online Editor</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="shortcut icon" type="image/png" href="/favicon.png">
-
-<?php if (defined('USE_MINIFICATION') && USE_MINIFICATION): ?>
-    <link rel="stylesheet" href="/dist/css/style.min.css?<?php include 'dist/css/style.min.css.md5'; ?>">
-<?php else: ?>
-    <link rel="stylesheet" href="/src/css/editor.css">
-<?php endif; ?>
-
+	<!-- build:include ../public_html/dist/css/style.min.css.html --><!-- /build -->
     <link rel="preconnect" href="//i.upmath.me" crossorigin>
 </head>
 <body class="whatsnew">

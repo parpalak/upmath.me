@@ -685,7 +685,7 @@
 				{},
 				{
 					label: "What's new",
-					action: '/whatsnew.php',
+					action: '/whatsnew.html',
 					title: 'Last update on 2024-04-28'
 				},
 				{},

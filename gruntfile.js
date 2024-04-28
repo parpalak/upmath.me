@@ -31,43 +31,6 @@ module.exports = function(grunt) {
 				dest: 'public_html/dist/js/vendors.min.js'
 			}
 		},
-		copy: {
-			main: {
-				files: [
-					{
-						// for non-minified version
-						expand: true,
-						src: [
-							'node_modules/file-saver/dist/FileSaver.min.js',
-							'node_modules/markdown-it/dist/markdown-it.min.js',
-							'node_modules/markdown-it-sub/dist/markdown-it-sub.min.js',
-							'node_modules/markdown-it-sup/dist/markdown-it-sup.min.js',
-							'node_modules/draggabilly/dist/draggabilly.pkgd.min.js'
-						],
-						dest: 'public_html/dist/js/',
-						filter: 'isFile',
-						flatten: true
-					},
-					{
-						expand: true,
-						src: [
-							'node_modules/LDT/lib/TextareaDecorator.css'
-						],
-						dest: 'public_html/dist/css/',
-						flatten: true
-					},
-					{
-						// for non-minified version
-						expand: true,
-						src: [
-							'node_modules/LDT/lib/TextareaDecorator.js'
-						],
-						dest: 'public_html/dist/js/',
-						flatten: true
-					}
-				]
-			}
-		},
 		dataUri: {
 			main: {
 				src: [
@@ -102,28 +65,47 @@ module.exports = function(grunt) {
 			css: {
 				src: 'public_html/dist/css/style.min.css',
 				filename: 'public_html/dist/css/style.min.css.md5'
+			},
+			link: {
+				src: 'public_html/dist/css/style.min.css',
+				filename: 'public_html/dist/css/style.min.css.html',
+				template: '<link rel="stylesheet" href="/dist/css/style.min.css?<%= fingerprint %>">'
 			}
 		},
 		shell: {
 			gzipJS: {
 				command: [
-					'gzip -cn6 <%= cssmin.main.dest %> > <%= cssmin.main.dest %>.gz',
 					'gzip -cn6 <%= uglify.main.dest %> > <%= uglify.main.dest %>.gz',
 					'gzip -cn6 <%= uglify.vendors.dest %> > <%= uglify.vendors.dest %>.gz'
 				].join(' && ')
+			},
+			gzipCSS: {
+				command: [
+					'gzip -cn6 <%= cssmin.main.dest %> > <%= cssmin.main.dest %>.gz',
+				].join(' && ')
 			}
+		},
+		processhtml: {
+			error: {
+				src: 'src/404.html',
+				dest: 'public_html/404.html'
+			},
+			news: {
+				src: 'src/whatsnew.html',
+				dest: 'public_html/whatsnew.html'
+			},
 		},
 		watch: {
 			scripts: {
 				files: ['public_html/src/js/*.js'],
-				tasks: ['concat', 'uglify', 'copy', 'fingerprint', 'shell'],
+				tasks: ['concat:main', 'uglify:main', 'fingerprint:main', 'shell:gzipJS'],
 				options: {
 					spawn: false
 				}
 			},
 			styles: {
 				files: ['public_html/src/css/*.css'],
-				tasks: ['copy', 'dataUri', 'cssmin', 'fingerprint', 'shell'],
+				tasks: ['dataUri', 'cssmin', 'fingerprint:css', 'fingerprint:link', 'shell:gzipCSS'],
 				options: {
 					spawn: false
 				}
@@ -133,20 +115,20 @@ module.exports = function(grunt) {
 
 	grunt.loadNpmTasks('grunt-contrib-concat');
 	grunt.loadNpmTasks('grunt-contrib-uglify');
-	grunt.loadNpmTasks('grunt-contrib-copy');
 	grunt.loadNpmTasks('grunt-contrib-cssmin');
 	grunt.loadNpmTasks('grunt-fingerprint');
 	grunt.loadNpmTasks('grunt-shell');
-	grunt.loadNpmTasks('grunt-contrib-watch');
 	grunt.loadNpmTasks('grunt-data-uri-advanced');
+	grunt.loadNpmTasks('grunt-processhtml');
+	grunt.loadNpmTasks('grunt-contrib-watch');
 
 	grunt.registerTask('default', [
 		'concat',
 		'uglify',
-		'copy',
 		'dataUri',
 		'cssmin',
 		'shell',
-		'fingerprint'
+		'fingerprint',
+		'processhtml',
 	]);
 };

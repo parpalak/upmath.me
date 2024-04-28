@@ -6,8 +6,6 @@
  * @link      https://upmath.me/
  */
 
-@include '../config.php';
-
 header('Link: <//i.upmath.me>; rel=dns-prefetch');
 
 $formats = [
@@ -29,15 +27,7 @@ $formats = [
 	<meta name="description" content="Upmath helps writing math texts for the web. It converts Markdown syntax to HTML, and LaTeX equations to SVG images.">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="shortcut icon" type="image/png" href="/favicon.png">
-
-<?php if (defined('USE_MINIFICATION') && USE_MINIFICATION): ?>
 	<link rel="stylesheet" href="/dist/css/style.min.css?<?php include 'dist/css/style.min.css.md5'; ?>">
-<?php else: ?>
-	<link rel="stylesheet" href="/dist/css/TextareaDecorator.css">
-	<link rel="stylesheet" href="/src/css/editor.css">
-	<link rel="stylesheet" href="/lib/highlight.js/solarized-light.css">
-<?php endif; ?>
-
 	<link rel="preconnect" href="//i.upmath.me" crossorigin>
 	<link rel="prefetch" href="/i/latex.jpg" as=image>
 </head>
@@ -117,25 +107,7 @@ $formats = [
 			}
 		}
 	</script>
-<?php if (defined('USE_MINIFICATION') && USE_MINIFICATION): ?>
 	<script src="/dist/js/vendors.min.js?<?php include 'dist/js/vendors.min.js.md5'; ?>"></script>
 	<script src="/dist/js/scripts.min.js?<?php include 'dist/js/scripts.min.js.md5'; ?>"></script>
-<?php else: ?>
-	<script src="/dist/js/markdown-it.min.js"></script>
-	<script src="/dist/js/markdown-it-sub.min.js"></script>
-	<script src="/dist/js/markdown-it-sup.min.js"></script>
-	<script src="/dist/js/FileSaver.min.js"></script>
-	<script src="/dist/js/draggabilly.pkgd.min.js"></script>
-	<script src="/dist/js/TextareaDecorator.js"></script>
-	<script src="/lib/highlight.js/highlight.pack.js"></script>
-
-	<script src="/src/js/utils.js"></script>
-	<script src="/src/js/markdown-it-s2-tex.js"></script>
-	<script src="/src/js/parser.js"></script>
-	<script src="/src/js/editor.js"></script>
-	<script src="/src/js/menu.js"></script>
-	<script src="/src/js/document_storage.js"></script>
-	<script src="/src/js/history_manager.js"></script>
-<?php endif; ?>
 </body>
 </html>
