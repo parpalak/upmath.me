@@ -143,8 +143,10 @@ h1, h2, h3 {
 		}
 p {
 	margin: 0 0 1em;
-}
-
+	}
+	p:first-child {
+		margin: 1em 0;
+		}
 body.e404 {
 	background: #c6b4aa;
 	background: linear-gradient(to bottom, #cba693, #e3ccc1);
