@@ -161,13 +161,13 @@ div.whatsnew-body {
 	padding: 0 16px;
 	max-width: 750px;
 }
-.e404-text {
+p.e404-text {
 	font-size: 10em;
 	line-height: 0.9;
 	margin: 0 0 0.125em;
 	color: #fff;
 	}
-	.e404-text:before {
+	p.e404-text:before {
 		content: '404';
 		color: #00000013;
 		position: absolute;
@@ -623,7 +623,7 @@ body {
 		padding-right: 12px;
 		}
 
-	.e404-text {
+	p.e404-text {
 		font-size: 5em;
 	}
 
