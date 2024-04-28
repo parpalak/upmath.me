@@ -89,8 +89,12 @@ TextHistoryManager.prototype.storeText = function (id, newText, required) {
 			}
 		}
 
-		this.localStorage.setItem(newKey, newText);
-		this.memory[id] = newText;
+		try {
+			this.localStorage.setItem(newKey, newText);
+			this.memory[id] = newText;
+		} catch (error) {
+			console.error('Error storing in localStorage:', error);
+		}
 	}
 };
 

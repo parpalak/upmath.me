@@ -8,6 +8,8 @@
  * @param saveCallback
  */
 function DocumentStorage(maxSize, keyPrefix, saveCallback) {
+	'use strict';
+
 	this.quota = maxSize;
 	this.documentListKey = keyPrefix + '_documentsList';
 	this.nextIdKey = keyPrefix + '_nextId';
