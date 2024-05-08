@@ -464,7 +464,7 @@
 		}, 100);
 
 		var scrollMap = new ScrollMap(domFindScrollMarks);
-
+		var syncScroll;
 		var parserCollection = new ParserCollection(
 			defaults,
 			new ImageLoader(new ImagePreloader(), location.protocol === 'https:' ? 'https:' : 'http:'),
@@ -483,6 +483,11 @@
 				// reset lines mapping cache on content update
 				scrollMap.reset();
 
+				if (syncScroll) {
+					// syncScroll.switchScrollToSrc(); // see comment on eResultHtml.addEventListener('mouseenter') below
+					syncScroll.scrollToBottomIfRequired();
+				}
+
 				try {
 					currentDocumentTracker.updateDocument(source);
 				} catch (e) {
@@ -498,7 +503,7 @@
 		// .source has been changed after TextareaDecorator call
 		var eNodeSource = document.getElementsByClassName('source')[0];
 
-		var syncScroll = new SyncScroll(
+		syncScroll = new SyncScroll(
 			scrollMap,
 			new Animator(function () {
 				return eNodeSource.scrollTop;
@@ -524,10 +529,21 @@
 		eTextarea.addEventListener('mouseup', updateText);
 
 		eTextarea.addEventListener('touchstart', syncScroll.switchScrollToSrc);
-		eTextarea.addEventListener('mouseover', syncScroll.switchScrollToSrc);
+		eNodeSource.addEventListener('mouseenter', syncScroll.switchScrollToSrc);
 
 		eResultHtml.addEventListener('touchstart', syncScroll.switchScrollToResult);
-		eResultHtml.addEventListener('mouseover', syncScroll.switchScrollToResult);
+		/**
+		 * Here is a minor bug related to updating the content of the resulting block via innerHtml,
+		 * causing the mouseenter event to trigger again. If the mouse remains within the preview area
+		 * while we update the source, first switchScrollToSrc is fired,
+		 * and then due to the repeated mouseenter event, switchScrollToResult will be fired.
+		 * This causes the source to jitter slightly. Reattaching mouseenter to the parent did not help.
+		 * Apparently, the reason lies in updating content via innerHtml.
+		 *
+		 * The bug stops manifesting if the mouse is moved outside the result block, for example, into the source block.
+		 * Therefore, for now, I decided to leave it as is, not fixing it at any cost.
+		 */
+		eResultHtml.addEventListener('mouseenter', syncScroll.switchScrollToResult);
 
 		syncScroll.switchScrollToSrc();
 
@@ -686,11 +702,11 @@
 				{
 					label: "What's new",
 					action: '/whatsnew.html',
-					title: 'Last update on 2024-04-28'
+					title: 'Last update on 2024-05-08'
 				},
 				{},
 				{
-					// label: "Print or save PDF <span class='shortcut'>Ctrl+P</span>",
+					// label: "Print or save PDF <span class='shortcut'>Ctrl+P</span>", // OS-dependent?
 					label: "Print or save PDF",
 					action: function () {
 						window.print();

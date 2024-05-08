@@ -729,6 +729,18 @@ function SyncScroll(scrollMap, animatorSrc, animatorResult, eSrc, eResult, eCont
 		animatorSrc.setPos(scrollMap.getPosition(eResult, 1, 0));
 	};
 
+	/**
+	 * If the source scrolling is at the bottom, the result scrolling is also set to the bottom.
+	 * This is useful when the source is edited at the very bottom, and the result is partially hidden.
+	 *
+	 * This method bypasses building the scroll map for performance reasons.
+	 */
+	this.scrollToBottomIfRequired = function () {
+		if (eSrc.scrollHeight >= eSrc.offsetHeight && eSrc.scrollHeight - eSrc.offsetHeight - eSrc.scrollTop < 5) {
+			animatorResult.setPos(eResult.scrollHeight - eResult.offsetHeight);
+		}
+	}
+
 	this.switchScrollToSrc = function () {
 		eResult.removeEventListener('scroll', syncSrcScroll);
 		eSrc.removeEventListener('scroll', syncResultScroll);
