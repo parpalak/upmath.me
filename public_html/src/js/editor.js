@@ -607,7 +607,11 @@
 						return documentStorage.getAllDocumentIds().reverse().map(id => {
 							var label = documentStorage.readDocument(id).replace(new RegExp('^[\\s#]+'), '').substring(0, 100);
 							return {
-								label: label === '' ? '[Untitled]' : label,
+								label: label === '' ? '[Untitled]' : label.replace(/&/g, '&amp;')
+									.replace(/>/g, '&gt;')
+									.replace(/</g, '&lt;')
+									.replace(/"/g, '&quot;')
+								,
 								action: function () {
 									parserCollection.setSource(currentDocumentTracker.openDocument(id));
 								}
