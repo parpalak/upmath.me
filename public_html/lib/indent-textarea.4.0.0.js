@@ -1,5 +1,18 @@
+/**
+ * @copyright Federico Brigante (https://fregante.com)
+ * @see https://github.com/fregante/indent-textarea
+ * @licence https://opensource.org/license/MIT
+ *
+ * Modified by Roman Parpalak
+ * Changes:
+ * 1. Improved unindent algorithm (selection start was moving to the left on Shift+Tab
+ * when there were no spaces to anti-indent and the first selected string has a space inside).
+ * 2. Using 2 spaces instead of tab.
+ */
 (function (exports) {
     'use strict';
+
+	const TAB = '  ';
 
     function withFocus(field, callback) {
         const document = field.ownerDocument;
@@ -40,39 +53,36 @@
             const firstLineStart = value.lastIndexOf('\n', selectionStart - 1) + 1;
             const newSelection = element.value.slice(firstLineStart, selectionEnd - 1);
             const indentedText = newSelection.replaceAll(/^|\n/g,
-            '$&\t');
+            '$&' + TAB);
             const replacementsCount = indentedText.length - newSelection.length;
             element.setSelectionRange(firstLineStart, selectionEnd - 1);
             insertTextIntoField(element, indentedText);
-            element.setSelectionRange(selectionStart + 1, selectionEnd + replacementsCount);
+            element.setSelectionRange(selectionStart + (firstLineStart < selectionStart ? TAB.length : 0), selectionEnd + replacementsCount);
         }
         else {
-            insertTextIntoField(element, '\t');
+            insertTextIntoField(element, TAB);
         }
     }
-    function findLineEnd(value, currentEnd) {
-        const lastLineStart = value.lastIndexOf('\n', currentEnd - 1) + 1;
-        if (value.charAt(lastLineStart) !== '\t') {
-            return currentEnd;
-        }
-        return lastLineStart + 1;
-    }
+
     function unindentSelection(element) {
-        const { selectionStart, selectionEnd, value } = element;
+        const {selectionStart, selectionEnd, value} = element;
         const firstLineStart = value.lastIndexOf('\n', selectionStart - 1) + 1;
-        const minimumSelectionEnd = findLineEnd(value, selectionEnd);
-        const newSelection = element.value.slice(firstLineStart, minimumSelectionEnd);
-        const indentedText = newSelection.replaceAll(/(^|\n)(\t| {1,2})/g, '$1');
-        const replacementsCount = newSelection.length - indentedText.length;
-        element.setSelectionRange(firstLineStart, minimumSelectionEnd);
+        const newSelection = element.value.slice(firstLineStart, selectionEnd); // Old text to be replaced
+        const indentedText = newSelection.replaceAll(/(^|\n)(\t| {1,2})/g, '$1'); // New text
+        const replacementsCount = newSelection.length - indentedText.length; // Number of characters that were deleted
+        element.setSelectionRange(firstLineStart, selectionEnd); // Expand selection since we might have to replace the text before selected area
         insertTextIntoField(element, indentedText);
-        const firstLineIndentation = /\t| {1,2}/.exec(value.slice(firstLineStart, selectionStart));
+        const firstLineIndentation = /^(\t| {1,2})/.exec(newSelection);
+        // Number of characters that were deleted in the first row
         const difference = firstLineIndentation
             ? firstLineIndentation[0].length
             : 0;
-        const newSelectionStart = selectionStart - difference;
-        element.setSelectionRange(selectionStart - difference, Math.max(newSelectionStart, selectionEnd - replacementsCount));
+
+        // If characters were replaced before selection, we have to move the start to the left
+        const newSelectionStart = Math.max(selectionStart - difference, firstLineStart);
+        element.setSelectionRange(newSelectionStart, selectionEnd - replacementsCount);
     }
+
     function tabToIndentListener(event) {
         if (event.defaultPrevented
             || event.metaKey
