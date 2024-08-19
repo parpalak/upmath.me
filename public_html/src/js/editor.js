@@ -709,7 +709,7 @@
 				{},
 				{
 					label: "What's new",
-					action: '/whatsnew.html',
+					action: '/whatsnew.html?2024-08-19',
 					title: 'Last update on 2024-08-19'
 				},
 				{
