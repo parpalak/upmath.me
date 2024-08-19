@@ -710,7 +710,7 @@
 				{
 					label: "What's new",
 					action: '/whatsnew.html',
-					title: 'Last update on 2024-08-18'
+					title: 'Last update on 2024-08-19'
 				},
 				{
 					label: "By me a coffee ☕",

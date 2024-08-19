@@ -1,79 +1,121 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Upmath: Markdown & LaTeX Online Editor</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="shortcut icon" type="image/png" href="/favicon.png">
+	<meta charset="UTF-8">
+	<title>Upmath: Markdown & LaTeX Online Editor</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="shortcut icon" type="image/png" href="/favicon.png">
 	<!-- build:include ../public_html/dist/css/style.min.css.html --><!-- /build -->
-    <link rel="preconnect" href="//i.upmath.me" crossorigin>
+	<link rel="preconnect" href="//i.upmath.me" crossorigin>
 </head>
 <body class="whatsnew">
-    <div class="page-header">
-		<div class="header-item">
-			<a href="/"><h1 class="title">Markdown & LaTeX Editor</h1></a>
-		</div>
-		<div class="copyright">
-			&copy; 2015–2024<br>
-			<a class="link" id="mailto-link" title="Drop me a line" href="#" tabindex="4">Roman Parpalak</a>
-			<script>
-				document.getElementById('mailto-link').href = "mailto:roman%"+"40parpalak.com";
-			</script>
-		</div>
-    </div>
-	<div class="whatsnew-body">
-		<h2>What's new</h2>
+<div class="page-header">
+	<div class="header-item">
+		<a href="/"><h1 class="title">Markdown & LaTeX Editor</h1></a>
+	</div>
+	<div class="copyright">
+		&copy; 2015–2024<br>
+		<a class="link" id="mailto-link" title="Drop me a line" href="#" tabindex="4">Roman Parpalak</a>
+		<script>
+			document.getElementById('mailto-link').href = "mailto:roman%" + "40parpalak.com";
+		</script>
+	</div>
+</div>
+<div class="whatsnew-body">
+	<h2>What's new</h2>
 
-		<h3>2024-05-08 Fixed some inconsistencies in sync scroll</h3>
-		<p>During text editing and appending at the very end, the preview area did not automatically scroll to the bottom, causing inconvenience when entering certain formulas and images.</p>
+	<h3>2024-08-19 Added support for indentation and opened donations</h3>
+	<p>The behavior of the Tab key during text input has changed.
+		Previously, pressing Tab would switch focus to the menu.
+		Now, pressing Tab within the text inserts an indent (2 spaces).
+		If multiple lines are selected, indents are added at the beginning of these lines.
+		Shift+Tab removes indents from the beginning of lines.
+		This change will be useful for editing complex content, such as TikZ pictures.</p>
 
-		<h3>2024-04-28 Multiple Document Support and Version History</h3>
+	<p>I have registered with a donation service. If Upmath is useful to you and you would like to thank the author, you
+		can make a donation:</p>
 
-		<p>
-			This update has some features that enhances your document editing experience
-			and prevents any unfortunate incidents of text loss.
-			Now, you can work with multiple documents and restore old text versions.
-		</p>
+	<p><a
+		style="display:inline-block; color: black; background: #ffd379; text-decoration: none; padding: 10px 15px; border-radius: 15px"
+		href="https://www.buymeacoffee.com/upmath">☕ Buy me a coffee</a></p>
 
-		<p>New features:</p>
-		<ul>
-			<li><b>Main menu</b> accessible via the ☰ button in the header.</li>
-			<li><b>New documents</b> can be created from the "☰ &rarr; New" menu option.</li>
-			<li><b>Switching</b> between several documents is possible via the "☰ &rarr; Open" menu option.</li>
-			<li><b>Version Recovery</b>: Restore previous document versions with the "☰ &rarr; Restore from history."</li>
-			<li><b>Download and Upload</b>: These functions have been moved to the menu.</li>
-			<li><b>Full-Screen</b>: Toggle to full-screen mode through a "☰ &rarr; Enter full-screen" menu item. Perfect for tablet users, as it maximizes workspace by eliminating mobile browser navigation elements.</li>
-		</ul>
+	<h3>2024-07-20. Added a special switch to enable the dvisvgm driver</h3>
+	<p>If you encounter errors in rendering SVG images, such as missing color gradients, you can enable the dvisvgm
+		driver by including <code>\dvisvgm</code> at the beginning of your LaTeX code. See <a
+			href="https://github.com/parpalak/upmath.me/issues/37">the discussion on GitHub</a>. Here is an example of
+		an image that is not rendered without <code>\dvisvgm</code>:</p>
 
-		<h3>2024-02-12 Download HTML with built-in SVG equations</h3>
-		<p>Now you can download HTML with the built-in SVG equations from the "preview" tab. See <a href="https://github.com/parpalak/upmath.me/issues/34">discussion on GitHub</a>.</p>
+	<pre><code>\dvisvgm
+\usepgflibrary{shadings}
+\begin{tikzpicture}
+  \shade[ball color=white] (0,0) circle (2ex);
+  \shade[ball color=red] (1,0) circle (2ex);
+  \shade[ball color=black] (2,0) circle (2ex);
+\end{tikzpicture}</code></pre>
 
-		<h3>2024-01-10 Added "esvect" package</h3>
-		<p>Added "esvect" package support for nice vector arrows: <code>\vv{AB}</code> &rarr; $$\vv{AB}$$.</p>
+	<p>$$\dvisvgm
+		\usepgflibrary{shadings}
+		\begin{tikzpicture}
+		\shade[ball color=white] (0,0) circle (2ex);
+		\shade[ball color=red] (1,0) circle (2ex);
+		\shade[ball color=black] (2,0) circle (2ex);
+		\end{tikzpicture}$$</p>
 
-		<h3>2023-05-11 Korean language support</h3>
-		<p>Now the "kotex" package is automatically enabled if you write Korean characters: <code>\text{안}</code> &rarr; $$\text{안}$$.</p>
+	<h3>2024-05-08 Fixed some inconsistencies in sync scroll</h3>
+	<p>During text editing and appending at the very end, the preview area did not automatically scroll to the bottom,
+		causing inconvenience when entering certain formulas and images.</p>
 
-		<h3>2022-07-03 Added "mhchem" package</h3>
-		<p>You can write chemical equations with the "mhchem" package. Example:</p>
+	<h3>2024-04-28 Multiple document support and version history</h3>
 
-		<pre><code>\ce{Hg^2+ ->[I-] HgI2 ->[I-] [Hg^{II}I4]^2-}</code></pre>
-		<p>$$\ce{Hg^2+ ->[I-] HgI2 ->[I-] [Hg^{II}I4]^2-}}$$.</p>
+	<p>
+		This update has some features that enhances your document editing experience
+		and prevents any unfortunate incidents of text loss.
+		Now, you can work with multiple documents and restore old text versions.
+	</p>
 
-		<h3>2020-07-26 Implemented styles for printing.</h3>
-		<p>You can use the browser print window to print the document or save it as PDF.</p>
+	<p>New features:</p>
+	<ul>
+		<li><b>Main menu</b> accessible via the ☰ button in the header.</li>
+		<li><b>New documents</b> can be created from the "☰ &rarr; New" menu option.</li>
+		<li><b>Switching</b> between several documents is possible via the "☰ &rarr; Open" menu option.</li>
+		<li><b>Version Recovery</b>: Restore previous document versions with the "☰ &rarr; Restore from history."</li>
+		<li><b>Download and Upload</b>: These functions have been moved to the menu.</li>
+		<li><b>Full-Screen</b>: Toggle to full-screen mode through a "☰ &rarr; Enter full-screen" menu item. Perfect for
+			tablet users, as it maximizes workspace by eliminating mobile browser navigation elements.
+		</li>
+	</ul>
 
-		<h3>2019-12-22 Added "xcolor" package</h3>
-		<p>It allows to use different colors in the LaTeX text. Example:</p>
+	<h3>2024-02-12 Download HTML with built-in SVG equations</h3>
+	<p>Now you can download HTML with the built-in SVG equations from the "preview" tab. See <a
+		href="https://github.com/parpalak/upmath.me/issues/34">the discussion on GitHub</a>.</p>
 
-		<pre><code>\pagecolor{yellow!20!white}
+	<h3>2024-01-10 Added "esvect" package</h3>
+	<p>Added "esvect" package support for nice vector arrows: <code>\vv{AB}</code> &rarr; $$\vv{AB}$$.</p>
+
+	<h3>2023-05-11 Korean language support</h3>
+	<p>Now the "kotex" package is automatically enabled if you write Korean characters: <code>\text{안}</code> &rarr;
+		$$\text{안}$$.</p>
+
+	<h3>2022-07-03 Added "mhchem" package</h3>
+	<p>You can write chemical equations with the "mhchem" package. Example:</p>
+
+	<pre><code>\ce{Hg^2+ ->[I-] HgI2 ->[I-] [Hg^{II}I4]^2-}</code></pre>
+	<p>$$\ce{Hg^2+ ->[I-] HgI2 ->[I-] [Hg^{II}I4]^2-}}$$.</p>
+
+	<h3>2020-07-26 Implemented styles for printing.</h3>
+	<p>You can use the browser print window to print the document or save it as PDF.</p>
+
+	<h3>2019-12-22 Added "xcolor" package</h3>
+	<p>It allows to use different colors in the LaTeX text. Example:</p>
+
+	<pre><code>\pagecolor{yellow!20!white}
 \begin{minipage}{10cm}
 \begin{enumerate}
 \color{orange!61!black}
   \item List entries with a color.
   \item List numbers are colored too.
 \end{enumerate}
-
+%
 The background color of text can also be
 \textcolor{red}{easily} set.\\
 For instance, you can change use a
@@ -81,28 +123,29 @@ For instance, you can change use a
 and then continue typing.
 \end{minipage}</code></pre>
 
-		<p>$$\pagecolor{yellow!20!white}
-\begin{minipage}{10cm}
-\begin{enumerate}
-\color{orange!61!black}
-  \item List entries with a color.
-  \item List numbers are colored too.
-\end{enumerate}
+	<p>$$\pagecolor{yellow!20!white}
+		\begin{minipage}{10cm}
+		\begin{enumerate}
+		\color{orange!61!black}
+		\item List entries with a color.
+		\item List numbers are colored too.
+		\end{enumerate}
+		%
+		The background color of text can also be
+		\textcolor{red}{easily} set.\\
+		For instance, you can change use a
+		\colorbox{green!20!white}{green background}
+		and then continue typing.
+		\end{minipage}$$</p>
 
-The background color of text can also be
-\textcolor{red}{easily} set.\\
-For instance, you can change use a
-\colorbox{green!20!white}{green background}
-and then continue typing.
-\end{minipage}$$</p>
+	<h3>2018-05-02 Support for some Unicode characters</h3>
+	<p>Several Unicode characters (like →, ⇒, ⊕, Σ, ...) can now be used directly. See <a
+		href="https://github.com/parpalak/upmath.me/issues/7">the discussion on GitHub</a>.</p>
 
-		<h3>2018-05-02 Support for some Unicode characters</h3>
-		<p>Several Unicode characters (like →, ⇒, ⊕, Σ, ...) can now be used directly. See <a href="https://github.com/parpalak/upmath.me/issues/7">discussion on GitHub</a>.</p>
+	<h3>2018-03-04 Added "circuitikz" package</h3>
+	<p>It allows to draw circuit diagrams:</p>
 
-		<h3>2018-03-04 Added "circuitikz" package</h3>
-		<p>It allows to draw circuit diagrams:</p>
-
-		<pre><code>\begin{circuitikz}
+	<pre><code>\begin{circuitikz}
 \draw
 (0,0) node[above] {$A$} to[short, o-*] ++(0.7,0)
 coordinate (A) to[generic, *-*] ++(2,0)
@@ -112,19 +155,19 @@ coordinate (D) to[short, *-o] ++(0.7,0) node[above] {$B$};
 \draw (A)-- ++(0,-0.7)-| (E) (B)-- ++(0,0.7)-| (D);
 \end{circuitikz}</code></pre>
 
-		<p>$$\begin{circuitikz}
-\draw
-(0,0) node[above] {$A$} to[short, o-*] ++(0.7,0)
-coordinate (A) to[generic, *-*] ++(2,0)
-coordinate (B) to[generic, *-*] ++(2,0)
-coordinate (E) to[generic, *-*] ++(2,0)
-coordinate (D) to[short, *-o] ++(0.7,0) node[above] {$B$};
-\draw (A)-- ++(0,-0.7)-| (E) (B)-- ++(0,0.7)-| (D);
-\end{circuitikz}$$</p>
+	<p>$$\begin{circuitikz}
+		\draw
+		(0,0) node[above] {$A$} to[short, o-*] ++(0.7,0)
+		coordinate (A) to[generic, *-*] ++(2,0)
+		coordinate (B) to[generic, *-*] ++(2,0)
+		coordinate (E) to[generic, *-*] ++(2,0)
+		coordinate (D) to[short, *-o] ++(0.7,0) node[above] {$B$};
+		\draw (A)-- ++(0,-0.7)-| (E) (B)-- ++(0,0.7)-| (D);
+		\end{circuitikz}$$</p>
 
-		<h3>2018-01-03 Added "tikz-3dplot" package</h3>
-		<p>It allows to draw 3D plots:</p>
-		<pre><code>\tdplotsetmaincoords{70}{10}
+	<h3>2018-01-03 Added "tikz-3dplot" package</h3>
+	<p>It allows to draw 3D plots:</p>
+	<pre><code>\tdplotsetmaincoords{70}{10}
 %
 \pgfmathsetmacro{\r}{0.8}
 \pgfmathsetmacro{\ra}{.45}
@@ -158,49 +201,51 @@ coordinate (D) to[short, *-o] ++(0.7,0) node[above] {$B$};
 \draw[orange,thick] (0,\r,0) arc (90+\cms:408:\r);
 \end{tikzpicture}</code></pre>
 
-		<p>$$\tdplotsetmaincoords{70}{10}
-%
-\pgfmathsetmacro{\r}{0.8}
-\pgfmathsetmacro{\ra}{.45}
-\pgfmathsetmacro{\rb}{.5}
-\pgfmathsetmacro{\thetavec}{70}
-\pgfmathsetmacro{\phivec}{20}
-\pgfmathsetmacro{\a}{20}
-\pgfmathsetmacro{\cms}{3}
-%
-\begin{tikzpicture}[scale=5,tdplot_main_coords]
-\coordinate (O) at (0,0,0);
-\draw[->] (-1,0,0) -- (1,0,0) node[anchor=north east]{$x$};
-\draw[->] (0,-1.2,0) -- (0,1.2,0) node[anchor=west]{$y$};
-\draw[->] (0,0,-0.6) -- (0,0,0.6) node[anchor=west]{$z$};
-\tdplotsetcoord{P}{\ra}{90-\a}{\phivec}
-\tdplotsetcoord{G}{\ra}{90-\a}{\phivec+10}
-\tdplotsetcoord{R}{\rb}{90-\a}{\phivec}
-\tdplotsetcoord{T}{\rb}{90-\a}{\phivec+10}
-\draw[dashed] (P) -- (Pxy) (G) -- (Gxy) (T) -- (Txy) (R) -- (Rxy) node[pos=0.4,right] {$h$};
-\draw[fill=red,fill opacity=0.6] (P) -- (G) -- (T) -- (R) -- (P);
-\draw[fill=orange,fill opacity=0.7] (Pxy) -- (Gxy) -- (Txy) -- (Rxy) -- cycle;
-\draw[dashed] (Gy) -- (Gxy) node[pos=0.5,anchor=north,inner sep=2pt] {$x$};
-\draw[] (Gy) -- (G);
-%
-\tdplotsetrotatedcoords{90}{-90}{-90}
-\tdplotdrawarc[tdplot_rotated_coords]{(Gy)}{0.2}{0}{22}{right}{$\alpha$}
-\tdplotsetrotatedcoords{0}{-\a}{0}
-\draw[red,dashed,tdplot_rotated_coords,fill=red,fill opacity=0.1] (0,\r,0) arc (90-\cms:450-\cms:\r);
-\draw[red,thick,tdplot_rotated_coords] (0,\r,0) arc (90-\cms:-200:\r);
-\draw[orange,dashed,fill=orange,fill opacity=0.1] (0,\r,0) arc (90+\cms:450+\cms:\r);
-\draw[orange,thick] (0,\r,0) arc (90+\cms:408:\r);
-\end{tikzpicture}$$</p>
+	<p>$$\tdplotsetmaincoords{70}{10}
+		%
+		\pgfmathsetmacro{\r}{0.8}
+		\pgfmathsetmacro{\ra}{.45}
+		\pgfmathsetmacro{\rb}{.5}
+		\pgfmathsetmacro{\thetavec}{70}
+		\pgfmathsetmacro{\phivec}{20}
+		\pgfmathsetmacro{\a}{20}
+		\pgfmathsetmacro{\cms}{3}
+		%
+		\begin{tikzpicture}[scale=5,tdplot_main_coords]
+		\coordinate (O) at (0,0,0);
+		\draw[->] (-1,0,0) -- (1,0,0) node[anchor=north east]{$x$};
+		\draw[->] (0,-1.2,0) -- (0,1.2,0) node[anchor=west]{$y$};
+		\draw[->] (0,0,-0.6) -- (0,0,0.6) node[anchor=west]{$z$};
+		\tdplotsetcoord{P}{\ra}{90-\a}{\phivec}
+		\tdplotsetcoord{G}{\ra}{90-\a}{\phivec+10}
+		\tdplotsetcoord{R}{\rb}{90-\a}{\phivec}
+		\tdplotsetcoord{T}{\rb}{90-\a}{\phivec+10}
+		\draw[dashed] (P) -- (Pxy) (G) -- (Gxy) (T) -- (Txy) (R) -- (Rxy) node[pos=0.4,right] {$h$};
+		\draw[fill=red,fill opacity=0.6] (P) -- (G) -- (T) -- (R) -- (P);
+		\draw[fill=orange,fill opacity=0.7] (Pxy) -- (Gxy) -- (Txy) -- (Rxy) -- cycle;
+		\draw[dashed] (Gy) -- (Gxy) node[pos=0.5,anchor=north,inner sep=2pt] {$x$};
+		\draw[] (Gy) -- (G);
+		%
+		\tdplotsetrotatedcoords{90}{-90}{-90}
+		\tdplotdrawarc[tdplot_rotated_coords]{(Gy)}{0.2}{0}{22}{right}{$\alpha$}
+		\tdplotsetrotatedcoords{0}{-\a}{0}
+		\draw[red,dashed,tdplot_rotated_coords,fill=red,fill opacity=0.1] (0,\r,0) arc (90-\cms:450-\cms:\r);
+		\draw[red,thick,tdplot_rotated_coords] (0,\r,0) arc (90-\cms:-200:\r);
+		\draw[orange,dashed,fill=orange,fill opacity=0.1] (0,\r,0) arc (90+\cms:450+\cms:\r);
+		\draw[orange,thick] (0,\r,0) arc (90+\cms:408:\r);
+		\end{tikzpicture}$$</p>
 
-		<h3>2017-12-20 Added "stmaryrd" as a default package</h3>
-		<p>This is the new St Mary’s Road symbol font. It provides a number of new symbols, including ones for derivation of functional
-			programming, process algebra, domain theory, multisets and many more.
-			See <a href="https://github.com/parpalak/upmath.me/issues/6">discussion on GitHub</a>.</p>
+	<h3>2017-12-20 Added "stmaryrd" as a default package</h3>
+	<p>This is the new St Mary’s Road symbol font. It provides a number of new symbols, including ones for derivation of
+		functional
+		programming, process algebra, domain theory, multisets and many more.
+		See <a href="https://github.com/parpalak/upmath.me/issues/6">the discussion on GitHub</a>.</p>
 
-		<h3>2017-10-31 Added "bussproofs.sty" package</h3>
-		<p>Sam Buss’s powerful and flexible package bussproofs.sty offers macros for setting natural deduction and sequent proofs.</p>
-	</div>
+	<h3>2017-10-31 Added "bussproofs.sty" package</h3>
+	<p>Sam Buss’s powerful and flexible package bussproofs.sty offers macros for setting natural deduction and sequent
+		proofs.</p>
+</div>
 
-	<script src="//i.upmath.me/latex.js"></script>
+<script src="//i.upmath.me/latex.js"></script>
 </body>
 </html>
