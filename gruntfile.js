@@ -16,7 +16,8 @@ module.exports = function(grunt) {
 					'node_modules/LDT/lib/TextareaDecorator.js',
 					'node_modules/file-saver/dist/FileSaver.min.js',
 					'node_modules/draggabilly/dist/draggabilly.pkgd.min.js',
-					'public_html/lib/highlight.js/highlight.pack.js'
+					'public_html/lib/highlight.js/highlight.pack.js',
+					'public_html/lib/indent-textarea.4.0.0.js'
 				],
 				dest: 'public_html/dist/js/vendors.js'
 			}

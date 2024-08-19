@@ -547,6 +547,9 @@
 
 		syncScroll.switchScrollToSrc();
 
+		// Tab support
+		enableTabToIndent(eTextarea);
+
 		Array.prototype.forEach.call(document.getElementsByClassName('control-item'), function (eNode, index) {
 			function clickHandler(e) {
 				var view = e.target.getAttribute('data-result-as');
@@ -566,6 +569,7 @@
 					}
 				}
 			}
+
 			eNode.addEventListener('click', clickHandler);
 			eNode.addEventListener('keydown', function (e) {
 				if (e.target === this && (e.code === 'Space' || e.code === 'Enter')) {
@@ -706,7 +710,11 @@
 				{
 					label: "What's new",
 					action: '/whatsnew.html',
-					title: 'Last update on 2024-05-08'
+					title: 'Last update on 2024-08-18'
+				},
+				{
+					label: "By me a coffee ☕",
+					action: 'https://buymeacoffee.com/upmath',
 				},
 				{},
 				{
@@ -731,9 +739,10 @@
 			],
 			document.getElementsByClassName('menu-container')[0],
 			function () {
-				// Here is a strange behavour. Textarea is scrolled to the bottom on focus.
+				// Here is a strange behaviour. Textarea is scrolled to the bottom on focus.
 				// It causes an early scrolling of the preview content without images loaded.
 				// This leads to a wrong ScrollMap content.
+				// TODO: uncomment if figure out how to fix this
 				// setTimeout(function () {
 				// 	eTextarea.focus();
 				// }, 0);

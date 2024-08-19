@@ -339,20 +339,25 @@ function Animator(positionGetter, positionSetter) {
 	};
 }
 
-function escapeRegExp(str) {
-	return str.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"); // $& means the whole matched string
-}
+if (typeof String.prototype.replaceAll === "undefined") {
+	function escapeRegExp(str) {
+		return str.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"); // $& means the whole matched string
+	}
 
-/**
- * See http://stackoverflow.com/questions/1144783/replacing-all-occurrences-of-a-string-in-javascript
- * @param search
- * @param replacement
- * @returns {string}
- */
-String.prototype.replaceAll = function (search, replacement) {
-	var target = this;
-	return target.replace(new RegExp(escapeRegExp(search), 'g'), replacement);
-};
+	/**
+	 * See http://stackoverflow.com/questions/1144783/replacing-all-occurrences-of-a-string-in-javascript
+	 * @param search
+	 * @param replacement
+	 * @returns {string}
+	 */
+	String.prototype.replaceAll = function (search, replacement) {
+		var target = this;
+		if (typeof search === "string") {
+			search = new RegExp(escapeRegExp(search), 'g');
+		}
+		return target.replace(search, replacement);
+	};
+}
 
 /**
  *
