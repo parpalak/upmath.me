@@ -67,11 +67,14 @@
     function unindentSelection(element) {
         const {selectionStart, selectionEnd, value} = element;
         const firstLineStart = value.lastIndexOf('\n', selectionStart - 1) + 1;
-        const newSelection = element.value.slice(firstLineStart, selectionEnd); // Old text to be replaced
-        const indentedText = newSelection.replaceAll(/(^|\n)(\t| {1,2})/g, '$1'); // New text
-        const replacementsCount = newSelection.length - indentedText.length; // Number of characters that were deleted
+		const newSelection = element.value.slice(firstLineStart, selectionEnd); // Old text to be replaced
+        const unindentedText = newSelection.replaceAll(/(^|\n)(\t| {1,2})/g, '$1'); // New text
+        const replacementsCount = newSelection.length - unindentedText.length; // Number of characters that were deleted
+		if (replacementsCount === 0) {
+			return;
+		}
         element.setSelectionRange(firstLineStart, selectionEnd); // Expand selection since we might have to replace the text before selected area
-        insertTextIntoField(element, indentedText);
+        insertTextIntoField(element, unindentedText);
         const firstLineIndentation = /^(\t| {1,2})/.exec(newSelection);
         // Number of characters that were deleted in the first row
         const difference = firstLineIndentation

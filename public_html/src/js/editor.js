@@ -709,8 +709,8 @@
 				{},
 				{
 					label: "What's new",
-					action: '/whatsnew.html?2024-08-19',
-					title: 'Last update on 2024-08-19'
+					action: '/whatsnew.html?2024-10-14',
+					title: 'Last update on 2024-10-14'
 				},
 				{
 					label: "By me a coffee ☕",
