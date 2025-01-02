@@ -713,7 +713,7 @@
 					title: 'Last update on 2024-10-14'
 				},
 				{
-					label: "By me a coffee ☕",
+					label: "Buy me a coffee ☕",
 					action: 'https://buymeacoffee.com/upmath',
 				},
 				{},
