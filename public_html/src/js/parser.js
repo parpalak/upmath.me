@@ -262,13 +262,13 @@ mdParser
 		rule:  null,
 		latexBlock: {
 			comment:   /%[^\n]*?(?=\$\$)|%[^\n]*/,
-			reference: /[ \t]*\([ \t]*\S+[ \t]*\)[ \t\n]*$/,
+			reference: /[ \t]*\([ \t]*[a-zA-Zа-яА-я0-9]+[ \t]*\)[ \t\n]*$/,
 			index:     /(?:\^|_)(?:\\[a-zA-Zа-яА-я]+[\*]?(?:\{.*?\})|\{[a-zA-Zа-яА-я0-9]*?\}|[a-zA-Zа-яА-я0-9])/,
 			bracket:   /(?:(?:\\left|\\right)?[\{\}\[\]\(\)\|])/,
 			keyword:   /\\[a-zA-Zа-яА-я]+[\*]?/,
 			keyword2:  /\\[^a-zA-Zа-яА-я0-9]/,
 			keyword3:  /&/,
-			delimeter: /\$\$/
+			delimiter: /\$\$/
 		}
 	})
 	.addRunIn({

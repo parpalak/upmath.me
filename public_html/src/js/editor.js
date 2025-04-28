@@ -174,7 +174,7 @@
 		_mdHtmlHabrAndImages.renderer.rules.paragraph_close = habrParagraphClose;
 
 		// A copy of Markdown-it original backticks parser.
-		// We want to prevent from parsing dollars inside backticks as TeX delimeters (`$$`).
+		// We want to prevent from parsing dollars inside backticks as TeX delimiters (`$$`).
 		// But we do not want HTML in result.
 		_mdMdAndImages.inline.ruler.before('backticks', 'backticks2', function (state, silent) {
 			var start, max, marker, matchStart, matchEnd, token,

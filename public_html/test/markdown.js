@@ -442,6 +442,57 @@ QUnit.test("Latex", function (assert) {
 		"Latex block 3"
 	);
 	assert.deepEqual(
+		mdParser.tokenize('$$f(x)=x^2$$(1)'),
+		[
+			{
+				"block": "latexBlock",
+				"line": 0,
+				"token": "$$"
+			},
+			{
+				"block": "latexBlock",
+				"line": 0,
+				"token": "f"
+			},
+			{
+				"block": "latexBlock",
+				"line": 0,
+				"token": "("
+			},
+			{
+				"block": "latexBlock",
+				"line": 0,
+				"token": "x"
+			},
+			{
+				"block": "latexBlock",
+				"line": 0,
+				"token": ")"
+			},
+			{
+				"block": "latexBlock",
+				"line": 0,
+				"token": "=x"
+			},
+			{
+				"block": "latexBlock",
+				"line": 0,
+				"token": "^2"
+			},
+			{
+				"block": "latexBlock",
+				"line": 0,
+				"token": "$$"
+			},
+			{
+				"block": "latexBlock",
+				"line": 0,
+				"token": "(1)"
+			}
+		],
+		"Latex block 4"
+	);
+	assert.deepEqual(
 		mdParser.tokenize('$$P_\\text{скр}={IlEh\\over c^2}={\\mu E\\over c^2},$$'),
 		[
 			{
@@ -545,7 +596,7 @@ QUnit.test("Latex", function (assert) {
 				token: "$$"
 			}
 		],
-		"Latex block 4"
+		"Latex block 5"
 	);
 	assert.deepEqual(
 		mdParser.tokenize('$$f(x) = {dF\\$$'),
