@@ -709,8 +709,8 @@
 				{},
 				{
 					label: "What's new",
-					action: '/whatsnew.html?2025-03-11',
-					title: 'Last update on 2025-03-11'
+					action: '/whatsnew.html?2025-04-12',
+					title: 'Last update on 2025-04-12'
 				},
 				{
 					label: "Buy me a coffee ☕",

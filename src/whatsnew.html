@@ -14,7 +14,7 @@
 		<a href="/"><h1 class="title">Markdown & LaTeX Editor</h1></a>
 	</div>
 	<div class="copyright">
-		&copy; 2015–2024<br>
+		&copy; 2015–2025<br>
 		<a class="link" id="mailto-link" title="Drop me a line" href="#" tabindex="4">Roman Parpalak</a>
 		<script>
 			document.getElementById('mailto-link').href = "mailto:roman%" + "40parpalak.com";
@@ -23,6 +23,26 @@
 </div>
 <div class="whatsnew-body">
 	<h2>What's new</h2>
+
+	<h3>2025-04-12 Added "array" package</h3>
+	<p>It can be used to simplify the use of the tabular environment.</p>
+	<pre><code>\begin{tabular}{|>{\bfseries}c|>{\itshape}c|>{\raggedleft\arraybackslash}p{3cm}|}
+\hline
+ID & Name & Description \\ \hline
+101 & Alice & Project Manager \\
+102 & Bob & Software Engineer \\
+103 & Charlie & Data Analyst \\ \hline
+\end{tabular}
+</code></pre>
+
+	<p>$$\begin{tabular}{|>{\bfseries}c|>{\itshape}c|>{\raggedleft\arraybackslash}p{4cm}|}
+		\hline
+		ID & Name & Description \\ \hline
+		101 & Alice & Project Manager \\
+		102 & Bob & Software Engineer \\
+		103 & Charlie & Data Analyst \\ \hline
+		\end{tabular}
+		$$</p>
 
 	<h3>2025-03-11 Added "hobby" package</h3>
 	<p>The goal is to produce a curve through a given set of points.
