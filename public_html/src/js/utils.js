@@ -360,10 +360,10 @@ if (typeof String.prototype.replaceAll === "undefined") {
 }
 
 /**
- *
+ * @param protocol  Needed for support the "file:" protocol.
  * @constructor
  */
-function ImagePreloader() {
+function ImagePreloader(protocol) {
 	var data = {},
 		uniqueIndex = 0;
 
@@ -372,8 +372,7 @@ function ImagePreloader() {
 
 		if (this.status >= 200 && this.status < 400) {
 			svg = this.responseText;
-		}
-		else {
+		} else {
 			// We reached our target server, but it returned an error
 			svg = '<svg height="24" version="1.1" width="24" xmlns="http://www.w3.org/2000/svg">' +
 				'<g transform="translate(0 -1028.4)">' +
@@ -384,35 +383,72 @@ function ImagePreloader() {
 				'</g>' +
 				'</svg>';
 		}
-		setImage(this.responseURL || this.s2Url, svg)
+
+		setImage(this.S2formula, svg);
 	}
 
-	function loadImage(url) {
-		var request = new XMLHttpRequest();
-		request.open('GET', url, true);
-		request.s2Url = url;
-		request.onload = ajaxReady;
-		request.onerror = function () {
-			// There was a connection error of some sort
-		};
-		request.send();
+	/**
+	 * Compresses a text and returns a base64 string of the compressed text
+	 *
+	 * @param text
+	 * @param callback
+	 */
+	function deflateRaw(text, callback) {
+		if (typeof CompressionStream === 'undefined') {
+			callback(null);
+			return;
+		}
 
-		return request;
+		try {
+			var stream = new Blob([text]).stream();
+			var compressedStream = stream.pipeThrough(new CompressionStream('deflate-raw'));
+
+			new Response(compressedStream).blob().then(function (compressedBlob) {
+				return compressedBlob.arrayBuffer();
+			}).then(function (buffer) {
+				var compressedArray = new Uint8Array(buffer);
+				var binary = Array.from(compressedArray).map(function (b) {
+					return String.fromCharCode(b);
+				}).join('');
+				var base64 = btoa(binary).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+				callback(base64);
+			}).catch(function () {
+				callback(null);
+			});
+		} catch (e) {
+			callback(null);
+		}
 	}
 
-	this.onLoad = function (url, callback) {
-		if (!data[url]) {
-			data[url] = {
+	function loadImage(formula) {
+		var fallbackUrl = protocol + '//i.upmath.me/svg/' + encodeURIComponent(formula);
+
+		deflateRaw(formula, function (compressed) {
+			var shortUrl = compressed ? protocol + '//i.upmath.me/svgb/' + compressed : null,
+				url = shortUrl && shortUrl.length < fallbackUrl.length ? shortUrl : fallbackUrl;
+
+			var request = new XMLHttpRequest();
+			request.open('GET', url, true);
+			request.S2formula = formula;
+			request.onload = ajaxReady;
+			request.onerror = function () {
+				// Handle load error silently.
+			};
+			request.send();
+		});
+	}
+
+	this.onLoad = function (formula, callback) {
+		if (!data[formula]) {
+			data[formula] = {
 				svg: null,
 				baseline: null,
-				request: loadImage(url),
 				callback: callback
 			};
+			loadImage(formula);
+		} else if (data[formula].svg !== null) {
+			callback(formula, data[formula].svg, data[formula].baseline);
 		}
-		else if (data[url].svg !== null) {
-			callback(url, data[url].svg, data[url].baseline)
-		}
-		// In case of duplicate pictures we skip duplicates (when data[url].svg === null)
 	};
 
 	/**
@@ -449,11 +485,11 @@ function ImagePreloader() {
 
 	/**
 	 * Stores sizes, source and removes the xhr object.
-	 * @param url
+	 * @param formula
 	 * @param svg
 	 */
-	var setImage = function (url, svg) {
-		var urlData = data[url];
+	function setImage(formula, svg) {
+		var urlData = data[formula];
 		if (!urlData) {
 			return;
 		}
@@ -463,40 +499,38 @@ function ImagePreloader() {
 		var m = svg.match(/postMessage\((?:&quot;|")([\d\|\.\-eE]*)(?:&quot;|")/); // ["&quot;2.15299|31.42377|11.65223|&quot;", "2.15299|31.42377|11.65223|"]
 		if (m) {
 			var baselineShift = m && m[1] ? m[1].split('|').shift() : 0; // 2.15299
-		}
-		else {
+		} else {
 			// svg can be empty like "<svg xmlns="http://www.w3.org/2000/svg"/>"
 			// Mark as something is wrong.
 			baselineShift = null;
 		}
 
-		urlData.callback(url, svg, baselineShift);
-
 		urlData.svg = svg;
 		urlData.baseline = baselineShift;
-		urlData.request = null;
-		urlData.callback = null;
-	};
+
+		if (urlData.callback) {
+			urlData.callback(formula, svg, baselineShift);
+			urlData.callback = null;
+		}
+	}
 
 	/**
 	 * External API
 	 *
-	 * @param url
+	 * @param formula
 	 * @returns {null}
 	 */
-	this.getImageDataFromUrl = function (url) {
-		var urlData = data[url];
-		return urlData ? urlData : null;
+	this.getImageDataFromFormula = function (formula) {
+		return data[formula] || null;
 	};
 }
 
 /**
  *
  * @param preloader
- * @param protocol  Needed for support the "file:" protocol.
  * @constructor
  */
-function ImageLoader(preloader, protocol) {
+function ImageLoader(preloader) {
 	var curItems = [],  // current formula content
 		prevItems = [], // previous formula content
 		map = {},       // maps formula content to index
@@ -504,7 +538,7 @@ function ImageLoader(preloader, protocol) {
 
 		placeholderTimer = null,
 		placeholderIndex = null,
-		placeholderUrl = null;
+		placeholderFormula = null;
 
 	/**
 	 * Find if user has edited only one formula.
@@ -525,7 +559,7 @@ function ImageLoader(preloader, protocol) {
 					// A formula has been changed.
 					// Use previous one as a placeholder.
 					placeholderIndex = index;
-					placeholderUrl = prevItems[index];
+					placeholderFormula = prevItems[index];
 					return;
 				}
 				if (placeholderIndex === index) {
@@ -539,19 +573,19 @@ function ImageLoader(preloader, protocol) {
 
 		// Many formulas has been changed. We do not display any placeholders.
 		placeholderIndex = null;
-		placeholderUrl = null;
+		placeholderFormula = null;
 	}
 
 	function buildMap() {
 		map = {};
 		for (var i = n; i--;) {
-			var url = curItems[i];
+			var formula = curItems[i];
 
-			if (typeof map[url] === 'undefined') {
-				map[url] = [i]
+			if (typeof map[formula] === 'undefined') {
+				map[formula] = [i]
 			}
 			else {
-				map[url].push(i);
+				map[formula].push(i);
 			}
 		}
 	}
@@ -567,12 +601,12 @@ function ImageLoader(preloader, protocol) {
 	/**
 	 * Insert SVG images.
 	 *
-	 * @param url
+	 * @param formula
 	 * @param svg
 	 * @param baselineShift
 	 */
-	var callback = function (url, svg, baselineShift) {
-		var indexes = map[url], i;
+	var callback = function (formula, svg, baselineShift) {
+		var indexes = map[formula], i;
 
 		if (indexes && (i = indexes.length)) {
 			for (; i--;) {
@@ -584,7 +618,7 @@ function ImageLoader(preloader, protocol) {
 					// Clear the fade out timer if the new image has just bee
 					clearTimeout(placeholderTimer);
 					placeholderIndex = null;
-					placeholderUrl = null;
+					placeholderFormula = null;
 				}
 			}
 		}
@@ -639,7 +673,7 @@ function ImageLoader(preloader, protocol) {
 	 * @returns {string}
 	 */
 	this.getHtmlStub = function (formula) {
-		curItems[n] = protocol + '//i.upmath.me/svg/' + encodeURIComponent(formula);
+		curItems[n] = formula;
 
 		var html = '<span id="s2tex_' + n + '"></span>';
 
@@ -659,7 +693,7 @@ function ImageLoader(preloader, protocol) {
 		}
 
 		if (placeholderIndex !== null) {
-			var data = preloader.getImageDataFromUrl(placeholderUrl);
+			var data = preloader.getImageDataFromFormula(placeholderFormula);
 			if (data !== null && data.callback === null) {
 				insertPicture(placeholderIndex, data.svg, data.baseline, 'fade-out');
 			}
@@ -769,8 +803,8 @@ function SyncScroll(scrollMap, animatorSrc, animatorResult, eSrc, eResult, eCont
  */
 
 var now = Date.now || function () {
-		return new Date().getTime();
-	};
+	return new Date().getTime();
+};
 
 function debounce(func, wait, options) {
 	var args,

@@ -467,7 +467,7 @@
 		var syncScroll;
 		var parserCollection = new ParserCollection(
 			defaults,
-			new ImageLoader(new ImagePreloader(), location.protocol === 'https:' ? 'https:' : 'http:'),
+			new ImageLoader(new ImagePreloader(location.protocol === 'https:' ? 'https:' : 'http:')),
 			window.markdownit,
 			domSetResultView,
 			function domGetSource() {
