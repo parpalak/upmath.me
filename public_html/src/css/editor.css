@@ -460,6 +460,21 @@ textarea {
 		break-inside: avoid;
 		zoom: 1.07;
 		}
+		.result-html h1 .svg-preview {
+			zoom: 2.14;
+			}
+		.result-html h2 .svg-preview {
+			zoom: 1.8;
+			}
+		.result-html h3 .svg-preview {
+			zoom: 1.25;
+			}
+		.result-html h4 .svg-preview {
+			zoom: 1;
+			}
+		.result-html h5 .svg-preview {
+			zoom: 0.85;
+			}
 	.result-html p.line[align="center"] {
 		text-align: center;
 		break-inside: avoid;
