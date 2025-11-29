@@ -221,7 +221,9 @@ function Animator(positionGetter, positionSetter) {
 
 			positionSetter(x);
 
-			timerId = requestAnimationFrame(loop);
+			timerId = (window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || function (cb) {
+				return window.setTimeout(function () { cb(Date.now()); }, 16);
+			})(loop);
 
 			if (isReInit) {
 				/**
@@ -324,7 +326,9 @@ function Animator(positionGetter, positionSetter) {
 		if (!isReInit) {
 			x = positionGetter();
 			initMotion(nextPos, x);
-			timerId = requestAnimationFrame(loop);
+				timerId = (window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || function (cb) {
+					return window.setTimeout(function () { cb(Date.now()); }, 16);
+				})(loop);
 		}
 		else {
 			reInitPosition = nextPos;

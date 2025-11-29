@@ -55,7 +55,7 @@ TextHistoryManager.prototype.storeText = function (id, newText, required) {
 
 		for (var i = this.localStorage.length; i--;) {
 			var storedKey = this.localStorage.key(i);
-			if (storedKey.startsWith(this.localStoragePrefix)) {
+			if (storedKey.indexOf(this.localStoragePrefix) === 0) {
 				var storedSize = storedKey.length + this.localStorage.getItem(storedKey).length;
 
 				// keys should be strictly monotonically increasing
@@ -102,7 +102,7 @@ TextHistoryManager.prototype.getAllVersions = function () {
 	var versions = [];
 	for (var i = 0; i < this.localStorage.length; i++) {
 		var key = this.localStorage.key(i);
-		if (key.startsWith(this.localStoragePrefix)) {
+		if (key.indexOf(this.localStoragePrefix) === 0) {
 			versions.push({
 				timestamp: parseInt(key.substring(this.localStoragePrefix.length)),
 				text: this.localStorage.getItem(key)

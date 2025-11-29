@@ -608,7 +608,7 @@
 				{
 					label: "Open",
 					items: function () {
-						return documentStorage.getAllDocumentIds().reverse().map(id => {
+						return documentStorage.getAllDocumentIds().reverse().map(function (id) {
 							var label = documentStorage.readDocument(id).replace(new RegExp('^[\\s#]+'), '').substring(0, 100);
 							return {
 								label: label === '' ? '[Untitled]' : label.replace(/&/g, '&amp;')
