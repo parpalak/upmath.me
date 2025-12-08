@@ -114,12 +114,17 @@ function CurrentDocumentTracker	(documentStorage, currentDocumentKey, showStorag
 		return this._documentStorage.readDocument(this._currentDocumentId);
 	};
 	this.createDocument = function (content) {
-		this._currentDocumentId = documentStorage.createNewDocument(content);
-		if (this._currentDocumentId === null) {
+		try {
+			this._currentDocumentId = documentStorage.createNewDocument(content);
+			if (this._currentDocumentId === null) {
+				this._showStorageWarning();
+			} else {
+				this._hideStorageWarning();
+				window.localStorage.setItem(this._currentDocumentKey, this._currentDocumentId);
+			}
+		} catch (e) {
+			console.error('Error creating document in localStorage:', e);
 			this._showStorageWarning();
-		} else {
-			this._hideStorageWarning();
-			window.localStorage.setItem(this._currentDocumentKey, this._currentDocumentId);
 		}
 	};
 	this.updateDocument = function (content) {
@@ -128,10 +133,15 @@ function CurrentDocumentTracker	(documentStorage, currentDocumentKey, showStorag
 			return;
 		}
 
-		if (!this._documentStorage.writeDocument(this._currentDocumentId, content)) {
+		try {
+			if (!this._documentStorage.writeDocument(this._currentDocumentId, content)) {
+				this._showStorageWarning();
+			} else {
+				this._hideStorageWarning();
+			}
+		} catch (e) {
+			console.error('Error updating document in localStorage:', e);
 			this._showStorageWarning();
-		} else {
-			this._hideStorageWarning();
 		}
 	};
 	this.openDocument = function (id) {

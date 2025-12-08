@@ -19,7 +19,18 @@ function DocumentStorage(maxSize, keyPrefix, saveCallback) {
 	this.createNewDocument = function (content) {
 		this._checkStorageSize(content.length);
 		var documentsList = this._getDocumentsList(),
-			documentId = this._getNextId();
+			documentId = this._getNextId(),
+			maxId = 0;
+
+		for (var i = 0; i < documentsList.length; i++) {
+			if (documentsList[i] > maxId) {
+				maxId = documentsList[i];
+			}
+		}
+
+		if (isNaN(documentId) || documentId <= maxId) {
+			documentId = maxId + 1;
+		}
 
 		documentsList.push(documentId);
 
@@ -96,12 +107,27 @@ function DocumentStorage(maxSize, keyPrefix, saveCallback) {
 
 	this._getDocumentsList = function () {
 		var documentsList = localStorage.getItem(this.documentListKey);
-		return documentsList ? JSON.parse(documentsList) : [];
+		if (!documentsList) {
+			return this._restoreDocumentsList();
+		}
+
+		try {
+			var parsed = JSON.parse(documentsList);
+			if (Object.prototype.toString.call(parsed) === '[object Array]') {
+				return parsed;
+			}
+		} catch (e) {
+		}
+
+		// Fallback: rebuild the list by scanning localStorage keys
+		return this._restoreDocumentsList();
 	};
 
 	this._getNextId = function () {
-		var nextId = localStorage.getItem(this.nextIdKey);
-		return nextId ? parseInt(nextId) : 1;
+		var nextIdStr = localStorage.getItem(this.nextIdKey),
+			nextId = nextIdStr ? parseInt(nextIdStr) : NaN;
+
+		return !isNaN(nextId) && nextId >= 1 ? nextId : 1;
 	};
 
 	this._getDocumentKey = function (documentId) {
@@ -122,5 +148,39 @@ function DocumentStorage(maxSize, keyPrefix, saveCallback) {
 		if (totalSize * 2 >= this.quota) { // 2 bytes per char in UTF-16
 			throw new Error('QuotaExceededError: DocumentStorage quota exceeded');
 		}
+	};
+
+	this._scanDocumentIds = function () {
+		var basePrefix = this._getDocumentKey(''),
+			ids = [],
+			seen = {};
+
+		for (var i = 0; i < localStorage.length; i++) {
+			var key = localStorage.key(i);
+			if (key.substring(0, basePrefix.length) === basePrefix) {
+				var id = parseInt(key.substring(basePrefix.length));
+				if (!isNaN(id) && !seen[id]) {
+					seen[id] = true;
+					ids.push(id);
+				}
+			}
+		}
+
+		ids.sort(function (a, b) {
+			return a - b;
+		});
+
+		return ids;
+	};
+
+	this._restoreDocumentsList = function () {
+		var ids = this._scanDocumentIds();
+		try {
+			localStorage.setItem(this.documentListKey, JSON.stringify(ids));
+		} catch (error) {
+			console.error('Error rewriting documents list in localStorage:', error);
+		}
+
+		return ids;
 	};
 }

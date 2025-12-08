@@ -488,10 +488,7 @@
 					syncScroll.scrollToBottomIfRequired();
 				}
 
-				try {
-					currentDocumentTracker.updateDocument(source);
-				} catch (e) {
-				}
+				currentDocumentTracker.updateDocument(source);
 			}
 		);
 
@@ -527,6 +524,20 @@
 		eTextarea.addEventListener('paste', updateText);
 		eTextarea.addEventListener('cut', updateText);
 		eTextarea.addEventListener('mouseup', updateText);
+
+		// Flush latest changes before the page is hidden/unloaded (bypasses debounce).
+		function flushDocument() {
+			try {
+				currentDocumentTracker.updateDocument(eTextarea.value);
+			} catch (e) {
+			}
+		}
+		window.addEventListener('beforeunload', flushDocument);
+		document.addEventListener('visibilitychange', function () {
+			if (document.visibilityState === 'hidden') {
+				flushDocument();
+			}
+		});
 
 		eTextarea.addEventListener('touchstart', syncScroll.switchScrollToSrc);
 		eNodeSource.addEventListener('mouseenter', syncScroll.switchScrollToSrc);
