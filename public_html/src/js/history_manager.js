@@ -116,3 +116,12 @@ TextHistoryManager.prototype.getAllVersions = function () {
 
 	return versions;
 };
+
+TextHistoryManager.prototype.clearAllVersions = function () {
+	for (var i = this.localStorage.length - 1; i >= 0; i--) {
+		var key = this.localStorage.key(i);
+		if (key.indexOf(this.localStoragePrefix) === 0) {
+			this.localStorage.removeItem(key);
+		}
+	}
+};

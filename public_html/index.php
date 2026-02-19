@@ -87,7 +87,7 @@ $formats = [
 	--></div>
 	<dialog id="versionsDialog">
 		<div class="version-list">
-			<h2 class="version-list-title">Recent versions</h2>
+			<h2 class="version-list-title">Recent versions <button id="versionClearButton" type="button">Clear history</button></h2>
 			<div id="versionsList" class="version-list-items">
 			</div>
 		</div>

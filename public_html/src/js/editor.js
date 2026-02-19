@@ -639,12 +639,19 @@
 					action: function () {
 						var dialog = document.getElementById('versionsDialog');
 						var list = document.getElementById('versionsList');
+						var clearButton = document.getElementById('versionClearButton');
+						var restoreButton = document.getElementById('versionRestoreButton');
+						var eTextDisplay = document.getElementById('versionSelectedText');
+						function resetSelectionView() {
+							selectedTimestamp = null;
+							restoreButton.disabled = true;
+							eTextDisplay.textContent = 'No version selected';
+						}
 						list.innerHTML = '';
-
-						document.getElementById('versionSelectedText').innerHTML = 'No version selected';
 
 						var versions = historyManager.getAllVersions();
 						var selectedTimestamp = null;
+						resetSelectionView();
 
 						versions.forEach(function (version) {
 							var eListItem = document.createElement('a');
@@ -662,8 +669,8 @@
 							eListItem.appendChild(eDate);
 
 							eListItem.addEventListener('click', function (e) {
-								var eTextDisplay = document.getElementById('versionSelectedText');
 								selectedTimestamp = version.timestamp;
+								restoreButton.disabled = false;
 								eTextDisplay.textContent = version.text;
 								document.querySelectorAll('a.version-item.selected').forEach(function (eA) {
 									eA.classList.remove('selected');
@@ -681,10 +688,21 @@
 							dialog.close();
 						};
 
-						document.getElementById('versionRestoreButton').onclick = function () {
-							if (!selectedTimestamp) {
+						clearButton.onclick = function () {
+							if (!confirm('Are you sure you want to clear history?')) {
 								return;
 							}
+
+							historyManager.clearAllVersions();
+							versions = [];
+							list.innerHTML = '';
+							resetSelectionView();
+						};
+
+							restoreButton.onclick = function () {
+								if (!selectedTimestamp) {
+									return;
+								}
 
 							versions.forEach(function (version) {
 								if (version.timestamp === selectedTimestamp) {

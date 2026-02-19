@@ -713,7 +713,7 @@ body {
 	}
 }
 
-h1, h2, h3, #versionsDialog, #versionRestoreButton, #versionCloseButton {
+h1, h2, h3, #versionsDialog, #versionRestoreButton, #versionCloseButton, #versionClearButton {
 	font-family: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
 }
 
@@ -753,6 +753,20 @@ h1, h2, h3, #versionsDialog, #versionRestoreButton, #versionCloseButton {
 			height: 42px;
 			padding: 5px 16px;
 			}
+			#versionClearButton {
+				float: right;
+				padding: 0;
+				border: none;
+				color: #ffcf8a;
+				background: transparent;
+				font-size: 0.625em;
+				line-height: 1.8;
+				text-decoration: underline;
+				cursor: pointer;
+				}
+				#versionClearButton:hover {
+					color: #fff;
+					}
 		.version-list-items {
 			max-height: calc(100% - 42px);
 			scrollbar-width: thin;
@@ -797,7 +811,12 @@ h1, h2, h3, #versionsDialog, #versionRestoreButton, #versionCloseButton {
 		background: #8e3800;
 		border: none;
 		user-select: none;
+		cursor: pointer;
 		}
+		#versionRestoreButton:disabled {
+			opacity: 0.5;
+			cursor: default;
+			}
 		#versionRestoreButton {
 			left: 0;
 			}
