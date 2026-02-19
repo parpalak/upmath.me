@@ -772,6 +772,9 @@ h1, h2, h3, #versionsDialog, #versionRestoreButton, #versionCloseButton {
 				.version-list-items a.version-item:hover {
 					background: #8e3800;
 					}
+				.version-list-items a.version-item.selected:hover {
+					background: #b54711;
+					}
 				.version-list-items .version-date {
 					font-size: 0.625em;
 					line-height: 1;
