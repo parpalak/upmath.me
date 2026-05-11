@@ -542,9 +542,10 @@ function ImagePreloader(protocol) {
 /**
  *
  * @param preloader
+ * @param onImageInsert
  * @constructor
  */
-function ImageLoader(preloader) {
+function ImageLoader(preloader, onImageInsert) {
 	var curItems = [],  // current formula content
 		prevItems = [], // previous formula content
 		map = {},       // maps formula content to index
@@ -672,6 +673,10 @@ function ImageLoader(preloader) {
 
 		parentNode.insertBefore(newSvgNode, oldSvgNode);
 		parentNode.removeChild(oldSvgNode);
+
+		if (onImageInsert) {
+			onImageInsert();
+		}
 
 		if (finalOpacity != startOpacity) {
 			placeholderTimer = setTimeout(function () {

@@ -465,9 +465,12 @@
 
 		var scrollMap = new ScrollMap(domFindScrollMarks);
 		var syncScroll;
+		var refreshScrollMap = debounce(function () {
+			scrollMap.reset();
+		}, 100, {maxWait: 500});
 		var parserCollection = new ParserCollection(
 			defaults,
-			new ImageLoader(new ImagePreloader(location.protocol === 'https:' ? 'https:' : 'http:')),
+			new ImageLoader(new ImagePreloader(location.protocol === 'https:' ? 'https:' : 'http:'), refreshScrollMap),
 			window.markdownit,
 			domSetResultView,
 			function domGetSource() {
