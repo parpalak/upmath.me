@@ -375,9 +375,12 @@
 		}
 	}
 
+	var previewRenderer;
 	function domSetPreviewHTML(html) {
-		var result = document.getElementsByClassName('result-html');
-		result[0].innerHTML = html;
+		if (!previewRenderer) {
+			previewRenderer = new PreviewRenderer(document.getElementsByClassName('result-html')[0]);
+		}
+		previewRenderer.update(html);
 	}
 
 	function domGetPreviewHTML() {

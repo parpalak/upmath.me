@@ -545,6 +545,42 @@ function ImagePreloader(protocol) {
  * @param onImageInsert
  * @constructor
  */
+// Compare the generated markup, rather than the live DOM where formula stubs
+// have already been replaced with SVG. Keep unchanged blocks and their images.
+function PreviewRenderer(element) {
+	var blocks = [];
+
+	this.update = function (html) {
+		var container = document.createElement('div'), nextBlocks = [],
+			first = 0, lastOld = blocks.length - 1, lastNew, node, markup;
+		container.innerHTML = html;
+		for (node = container.firstChild; node; node = node.nextSibling) {
+			markup = node.nodeType === 1 ? node.outerHTML : node.nodeValue;
+			nextBlocks.push({html: markup, type: node.nodeType, node: node});
+		}
+		lastNew = nextBlocks.length - 1;
+		while (first <= lastOld && first <= lastNew && blocks[first].html === nextBlocks[first].html && blocks[first].type === nextBlocks[first].type) {
+			nextBlocks[first].node = blocks[first].node;
+			first++;
+		}
+		while (lastOld >= first && lastNew >= first && blocks[lastOld].html === nextBlocks[lastNew].html && blocks[lastOld].type === nextBlocks[lastNew].type) {
+			nextBlocks[lastNew].node = blocks[lastOld].node;
+			lastOld--;
+			lastNew--;
+		}
+		for (var i = first; i <= lastOld; i++) {
+			element.removeChild(blocks[i].node);
+		}
+		var fragment = document.createDocumentFragment(),
+			insertionPoint = nextBlocks[lastNew + 1] ? nextBlocks[lastNew + 1].node : null;
+		for (i = first; i <= lastNew; i++) {
+			fragment.appendChild(nextBlocks[i].node);
+		}
+		element.insertBefore(fragment, insertionPoint);
+		blocks = nextBlocks;
+	};
+}
+
 function ImageLoader(preloader, onImageInsert) {
 	var curItems = [],  // current formula content
 		prevItems = [], // previous formula content
@@ -650,8 +686,13 @@ function ImageLoader(preloader, onImageInsert) {
 	 */
 	function insertPicture(index, svg, baselineShift, mode) {
 		var id = 's2tex_' + index,
-			oldSvgNode = document.getElementById(id),
-			parentNode = oldSvgNode.parentNode,
+			oldSvgNode = document.getElementById(id);
+
+		if (mode === 'replace' && oldSvgNode.s2texSvg === svg && oldSvgNode.s2texBaseline === baselineShift) {
+			return;
+		}
+
+		var parentNode = oldSvgNode.parentNode,
 			startOpacity = '1', // mode == 'fade-in' ? '0.5' : '1', // sometimes images opacity can be '1' yet. How can one track it?
 			finalOpacity = mode == 'fade-out' ? '0.5' : '1',
 			newSvgAttrs = '<svg class="svg-preview" id="' + id + '" ';
@@ -670,6 +711,8 @@ function ImageLoader(preloader, onImageInsert) {
 
 		var newSvgNode = divNode.firstElementChild; // there can be comments before <svg>
 		divNode.removeChild(newSvgNode);
+		newSvgNode.s2texSvg = svg;
+		newSvgNode.s2texBaseline = baselineShift;
 
 		parentNode.insertBefore(newSvgNode, oldSvgNode);
 		parentNode.removeChild(oldSvgNode);
@@ -694,7 +737,11 @@ function ImageLoader(preloader, onImageInsert) {
 	this.getHtmlStub = function (formula) {
 		curItems[n] = formula;
 
-		var html = '<span id="s2tex_' + n + '"></span>';
+		// Include the formula in the generated markup so PreviewRenderer can
+		// distinguish changed formulas even when their indexes stay the same.
+		var html = '<span id="s2tex_' + n + '" data-formula="'
+			+ formula.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+			+ '"></span>';
 
 		n++;
 
@@ -708,7 +755,10 @@ function ImageLoader(preloader, onImageInsert) {
 		detectPlaceholderFormula();
 		buildMap();
 		for (var i = n; i--;) {
-			preloader.onLoad(curItems[i], callback);
+			// One callback inserts all occurrences of a formula.
+			if (map[curItems[i]][0] === i) {
+				preloader.onLoad(curItems[i], callback);
+			}
 		}
 
 		if (placeholderIndex !== null) {

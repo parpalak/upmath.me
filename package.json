@@ -20,7 +20,7 @@
   "author": "Roman Parpalak",
   "license": "MIT",
   "dependencies": {
-    "LDT": "https://github.com/parpalak/LDT.git#d27cbdb265d015ec5872b53e4235a965b8502d95",
+    "LDT": "https://github.com/parpalak/LDT.git#51f6ea332d983b35f42b1f50ea3d06e7d82932d3",
     "draggabilly": "^2",
     "file-saver": "^2.0.5",
     "markdown-it": "^14.1.0",
